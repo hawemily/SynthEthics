@@ -1,4 +1,4 @@
-# synthetics
+# SynthEthics 
 
 An Automatic Carbon Footprint Calculator
 
@@ -9,11 +9,11 @@ The organisation structure of this application is according to Connor Aldrich's
 
 The brief can be seen here:
 
-### `main.dart`
+#### `main.dart`
 
 The foundation of this Flutter app, aimed to be kept as lightweight as possible
 
-### `routes.dart`
+#### `routes.dart`
 
 Extracted from `main.dart` are the routes for this application, equivalent to routing controller in
 react. Contains routes to publicly accessible node pages, any pages accessible exclusively to a
