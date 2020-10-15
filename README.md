@@ -21,19 +21,19 @@ node page will not feature here
 
 *For example, see `image_taker_page/`*
 
-### `theme/`
+#### `theme`
 
 Contains a singular `style.dart` with the app's theme, to be accessed by `main.dart`
 
-### `services`
+#### `services`
 
 Holds web APIs and native interaction code
 
-### `components`
+#### `components`
 
 Custom widgets which are used by multiple different screens
 
-### `screens`
+#### `screens`
 
 Holds a folder for each screen subtree, pages accessible from the main routes are built here. Each
 directory holds the pages relevant to a specific group.
