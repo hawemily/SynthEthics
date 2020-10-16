@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "457040921305",
+    "firebase_url": "https://cfcalc.firebaseio.com",
+    "project_id": "cfcalc",
+    "storage_bucket": "cfcalc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457040921305:android:8872edfc7f5e9b278c34c8",
+        "android_client_info": {
+          "package_name": "com.segp.cfcalc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "457040921305-krks13pk17a0fijg9k319uv2fp2na0q5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_1_vrkA-0_rAHqBYPzoqtV859CHFeCeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "457040921305-krks13pk17a0fijg9k319uv2fp2na0q5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "457040921305-korutj3qeuht2ab4c965j2di8icn2i5s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.segp.cfcalc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
