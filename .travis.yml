@@ -18,7 +18,7 @@ notifications:
     on_failure: always
     on_pull_requests: false
     template:
-    - "%{repository_slug} (%{commit}) : %{message}"
+    - "%{repository_slug}@%{branch} (%{commit}) by %{author}: %{message}"
     - 'Build details: %{build_url}'
     rooms:
       secure: "E3sPP0ur6f5jaJDVDgauyw/XNtznkSqYyi3p1d7GJ/kaUNN5adLEc+xwSxLsUIrebmc2vxA8QO1CAT6vTBPAh6946XXzoq5YKZjtct4lDklhtvXfnjqOSU+/MV6KzfwjUwqGqSFYWXB2d+hly+Tuj2pDfIdANj2AV6YW1jz/1aUxh6uaqGZnI0i6OvIX19/wX9hTLJ3Q/x0vF+uOEcOhStFghgimZfcP1t5Z3aVNtPNIzFfYZMekTuFTWF78H3DXGY4Nw+N+PXNz6ue8TOtbnKM7KUwQDROrYGQS+uxEY3uzRdtIoNG0cVuUmRQPRJzQ5PAScSiHSrBSEipRRcUWA82ZAMGGt8nxdasc2VPCQDULiJKcmc+AvXdt11XwqXedbHFpBsKXsqcXMXMz79ZdeSH7I7IihI/YEHQF/OiMgO/VBHGz9Bow/iLR1d2BRIGRCm/HeCOYg6yfgG1vRpxjZhinpdvTRi/kRwT5Zm9JVsHtj8S2GDNxUG6qQGDs9oHAMTc2wxQ/fYAgUJU9OnIXkNUc0iHK4A0QoWr6Gc39AObrqstQfvXDgW938LcE0Ja5ZTPiTEcf1NOpdd8zW3ujaFU+r+ZWgefOfZ9pfhdsQDmr9b+Y9QZxeH2LhYhZFOMDQrzGFJksoH/iWh09LJOwe7htMOosXdl/tCPqKAWUsI4="
