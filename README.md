@@ -38,6 +38,12 @@ Custom widgets which are used by multiple different screens
 Holds a folder for each screen subtree, pages accessible from the main routes are built here. Each
 directory holds the pages relevant to a specific group.
 
+## Testing
+run flutter test locally to run all tests OR
+run flutter test test/<file_name_to_test> to test specifc file
+
+write all tests under test folder with test files named as <file_being_tested>_test
+
 ## Some resources to help familiarise yourselves with Flutter
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
