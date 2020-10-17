@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:synthetics/components/navbar/navbar.dart';
 
 class ExampleEmptyPage extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class ExampleEmptyPage extends StatelessWidget {
       body: Center(
         child: Text('This page is literally empty'),
       ),
+      bottomNavigationBar: NavBar(),
     );
   }
 }

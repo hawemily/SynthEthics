@@ -5,7 +5,8 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
+// Image display page for image taken from the scanner. To be replaced in the
+// future with constructing a item profile to be added to the closet.
 class ImageDisplayPage extends StatefulWidget {
   final File image;
 
