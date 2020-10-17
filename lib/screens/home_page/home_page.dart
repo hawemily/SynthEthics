@@ -7,18 +7,16 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   void _gotoScannerPage() {
-    Navigator.pushNamed(
-        context,
-        '/scanner'
-    );
+    Navigator.pushNamed(context, '/scanner');
   }
 
   void _gotoEmptyPage() {
-    Navigator.pushNamed(
-        context,
-        '/empty');
+    Navigator.pushNamed(context, '/empty');
+  }
+
+  void _gotoClosetPage() {
+    Navigator.pushNamed(context, '/closet');
   }
 
   @override
@@ -31,14 +29,22 @@ class HomePageState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            HomePageButton(
-              text: 'Go to scanner page',
-              onPressed: _gotoScannerPage,
-            ),
-            HomePageButton(
-              text: 'Go to empty page',
-              onPressed: _gotoEmptyPage,
-            )
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              HomePageButton(
+                text: 'Go to scanner page',
+                onPressed: _gotoScannerPage,
+              ),
+              HomePageButton(
+                text: 'Go to empty page',
+                onPressed: _gotoEmptyPage,
+              ),
+            ]),
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              HomePageButton(
+                text: 'Go to closet page',
+                onPressed: _gotoClosetPage,
+              )
+            ]),
           ],
         ),
       ),
