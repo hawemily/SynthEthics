@@ -40,11 +40,13 @@ directory holds the pages relevant to a specific group.
 
 ## Backend
 run 'npm install' in functions directory to install node dependencies on local machine
+
 run 'npm run start' in terminal to test api
 
 ## Testing
-run flutter test locally to run all tests OR
-run flutter test test/<file_name_to_test> to test specifc file
+run 'flutter test' locally to run all tests OR
+
+run 'flutter test' test/<file_name_to_test> to test specifc file
 
 write all tests under test folder with test files named as <file_being_tested>_test
 
