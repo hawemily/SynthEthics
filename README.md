@@ -40,6 +40,7 @@ directory holds the pages relevant to a specific group.
 
 ## Backend
 run 'npm install' in functions directory to install node dependencies on local machine
+run 'npm run start' in terminal to test api
 
 ## Testing
 run flutter test locally to run all tests OR
