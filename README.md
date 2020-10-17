@@ -38,6 +38,9 @@ Custom widgets which are used by multiple different screens
 Holds a folder for each screen subtree, pages accessible from the main routes are built here. Each
 directory holds the pages relevant to a specific group.
 
+## Backend
+run 'npm install' in functions directory to install node dependencies on local machine
+
 ## Testing
 run flutter test locally to run all tests OR
 run flutter test test/<file_name_to_test> to test specifc file
