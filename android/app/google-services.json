@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:457040921305:android:8872edfc7f5e9b278c34c8",
+        "mobilesdk_app_id": "1:457040921305:android:5b08c214a68165138c34c8",
         "android_client_info": {
-          "package_name": "com.segp.cfcalc"
+          "package_name": "com.cafooca.synthetics"
         }
       },
       "oauth_client": [
