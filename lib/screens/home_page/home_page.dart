@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/home_page/home_page_button.dart';
 
+// Home page, currently standing in for the user home page
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();

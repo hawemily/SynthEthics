@@ -6,7 +6,7 @@ import 'package:synthetics/screens/image_taker_page/image_taker_page.dart';
 
 import '../../routes.dart';
 
-// NavBar class, to be placed on pages as bottomNavigationBar
+// NavBar class, to be placed on pages as 'bottomNavigationBar'
 class NavBar extends StatefulWidget {
   @override
   _NavBarState createState() => _NavBarState();
@@ -27,6 +27,7 @@ class _NavBarState extends State<NavBar> {
     }
 
     return BottomNavigationBar(
+        key: Key('navbar'),
         selectedItemColor: _navBarItemColour,
         unselectedItemColor: _navBarItemColour,
         showSelectedLabels: false,

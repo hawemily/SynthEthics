@@ -3,6 +3,9 @@ import 'dart:io';
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 
+// Image Taker, called by the NavBar when adding items to the closet
+// Currently goes to image display page, in the future it should go to a
+// Confirmation page where an item instance is created
 class ImageTaker {
   static void settingModalBottomSheet(BuildContext context, Function callBack) {
     showModalBottomSheet(
@@ -35,12 +38,13 @@ class ImageTaker {
   static Future<File> _modalGetPictureWrapper(
       BuildContext context, ImageSource imageSource) {
     final image = _getPicture(context, imageSource);
+    // Remove the modal from the screen before returning
     Navigator.pop(context);
     return image;
   }
 
-  static Future<File> _getPicture(
-      BuildContext context, ImageSource imageSource) async {
+  static Future<File> _getPicture(BuildContext context,
+                                  ImageSource imageSource) async {
     File image;
     ImagePicker imagePicker = ImagePicker();
     final pickedFile =
@@ -49,6 +53,7 @@ class ImageTaker {
       image = File(pickedFile.path);
     }
 
+    // Debug messages
     if (image != null) {
       print("You selected  image : " + image.path);
     } else {
