@@ -8,14 +8,16 @@ class ClothingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
         onTap: () {
           print('You tapped on a clothing item');
         },
         child: Container(
-            color: Colors.blue,
-            margin: const EdgeInsets.all(5.0),
-            child:
-                Center(child: Text('Clothing ' + this.clothingId.toString()))));
+//              color: Colors.blue,
+              margin: const EdgeInsets.all(5.0),
+              child:
+              Center(child: Text('Clothing ' + this.clothingId.toString())))
+    );
+
   }
 }
