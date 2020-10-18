@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/image_taker_page/image_display_page.dart';
 import 'package:synthetics/screens/image_taker_page/image_taker_page.dart';
+import 'package:synthetics/screens/closet_page/closet_page.dart';
 
 import '../../routes.dart';
 
@@ -55,6 +56,8 @@ class _NavBarState extends State<NavBar> {
               } else {
                 // Goto closet page
                 print('GOTO CLOSET');
+                final categories = ["tops", "bottoms", "skirts", "dresses", "outerwear", "headgear"];
+                Navigator.push(context, MaterialPageRoute(builder:(context) => Closet(categories: categories,) ));
               }
               break;
 
