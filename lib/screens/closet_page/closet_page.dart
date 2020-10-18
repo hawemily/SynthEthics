@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/closet_page/closet_container.dart';
-import 'package:synthetics/screens/closet_page/clothing_card.dart';
+import 'package:synthetics/components/navbar/navbar.dart';
+
 
 
 class Closet extends StatefulWidget {
@@ -55,7 +56,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               final String label = tab.text;
               return ClosetContainer(clothingIds: List.generate(20, (index) => index));
             }).toList(),
-        )
+        ),
+        bottomNavigationBar: NavBar(),
     );
 //        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }
