@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/eco_bar.dart';
+import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 
 class ClothingCard extends StatelessWidget {
   const ClothingCard({Key key, this.clothingId}) : super(key: key);
@@ -13,6 +14,10 @@ class ClothingCard extends StatelessWidget {
             color: Colors.blue,
             margin: EdgeInsets.all(5.0),
             child: InkWell(
+              onLongPress: () {
+                Navigator.push(context, 
+                MaterialPageRoute(builder: (context) => ClothingItem()));
+              },
                 onTap: () => {print("object is being tapped")},
                 child: Padding(
                 padding: EdgeInsets.all(5.0),
