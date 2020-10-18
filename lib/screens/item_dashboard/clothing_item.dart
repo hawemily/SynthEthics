@@ -11,6 +11,11 @@ class ClothingItem extends StatefulWidget {
 }
 
 class _ClothingItemState extends State<ClothingItem> {
+
+  var totalTimesToWear = 30; //dummy number, to be filled in later
+  var timesWorn = 0;
+  var progress = 0.0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,7 +42,7 @@ class _ClothingItemState extends State<ClothingItem> {
                       height: 180,
                       child: new CircularProgressIndicator(
                         strokeWidth: 30,
-                        value: 0.6,
+                        value: this.progress,
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                         backgroundColor: Colors.grey,
                       ),
@@ -55,6 +60,39 @@ class _ClothingItemState extends State<ClothingItem> {
                 ],
               ),
             ),
+            Padding(padding: EdgeInsets.only(top: 80.0)),
+            OutlineButton(
+              onPressed: () {
+                timesWorn++;
+                print("Times worn is now " + timesWorn.toString());
+                setState(() {
+                  this.progress = timesWorn / totalTimesToWear;
+                });
+                if (timesWorn == totalTimesToWear) {
+                  showDialog(context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: Text("Congrats! You have used this piece of clothing sustainably!")
+                    );
+                  });
+                }
+              },
+              child: Text("I wore this today! :)")
+            ),
+            OutlineButton(
+              onPressed: () {
+                if (timesWorn != 0) {
+                  timesWorn--;
+                }
+                print("Times worn is now " + timesWorn.toString());
+                setState(() {
+                  this.progress = timesWorn / totalTimesToWear;
+                });
+              },
+              child: Text("Erase progress by 1 :(")
+            ),
+
+
           ],
         ),
         bottomNavigationBar: NavBar());
