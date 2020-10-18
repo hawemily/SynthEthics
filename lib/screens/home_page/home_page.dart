@@ -10,10 +10,16 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
 
+  void _gotoScannerPage() {
+    Navigator.pushNamed(context, '/scanner');
+  }
+
   void _gotoEmptyPage() {
-    Navigator.pushNamed(
-        context,
-        '/empty');
+    Navigator.pushNamed(context, '/empty');
+  }
+
+  void _gotoClosetPage() {
+    Navigator.pushNamed(context, '/closet');
   }
 
   @override
