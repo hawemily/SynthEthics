@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
+import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
 
 class ClothingItem extends StatefulWidget {
   ClothingItem({Key key, this.clothingId}) : super(key: key);
@@ -11,14 +12,29 @@ class ClothingItem extends StatefulWidget {
 }
 
 class _ClothingItemState extends State<ClothingItem> {
-
   var totalTimesToWear = 30; //dummy number, to be filled in later
   var timesWorn = 0;
   var progress = 0.0;
 
-  @override
-  void initState() {
-    // TODO: implement initState
+  void updateProgress(String action) {
+    setState(() {
+      if (action == 'INC') {
+        timesWorn++;
+      } else {
+        if (timesWorn > 0) timesWorn--;
+      }
+      this.progress = timesWorn / totalTimesToWear;
+    });
+    print("Times worn is now " + timesWorn.toString());
+    // if (timesWorn == totalTimesToWear) {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return Dialog(
+    //             child: Text(
+    //                 "Congrats! You have used this piece of clothing sustainably!"));
+    //       });
+    // }
   }
 
   @override
@@ -29,13 +45,20 @@ class _ClothingItemState extends State<ClothingItem> {
           iconTheme: IconThemeData(color: Colors.black),
           title: Text('Black Crop Top', style: TextStyle(color: Colors.black)),
         ),
-        body: Column(
+        body: ListView(
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 80.0)),
+            Padding(padding: EdgeInsets.only(top: 40.0)),
             SizedBox(
               height: 180.0,
               child: Stack(
                 children: <Widget>[
+                  Center(
+                    child: Image.asset(
+                      'lib/assets/closet_IT.jpg',
+                      width: double.maxFinite,
+                      height: 150.0,
+                    ),
+                  ),
                   Center(
                     child: Container(
                       width: 180,
@@ -51,48 +74,85 @@ class _ClothingItemState extends State<ClothingItem> {
                   Center(
                     child: Container(
                         decoration: new BoxDecoration(
+                            color: Colors.white,
                             shape: BoxShape.circle,
                             image: new DecorationImage(
-                                fit: BoxFit.fill,
+                                // fit: BoxFit.fitHeight,
                                 image: new NetworkImage(
                                     "https://cdn.endource.com/image/s3-49f2938a8e4d8f6c74bccbd2bf800c06/detail/and-other-stories-ribbed-square-neck-crop-top.jpg")))),
                   ),
                 ],
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 80.0)),
-            OutlineButton(
-              onPressed: () {
-                timesWorn++;
-                print("Times worn is now " + timesWorn.toString());
-                setState(() {
-                  this.progress = timesWorn / totalTimesToWear;
-                });
-                if (timesWorn == totalTimesToWear) {
-                  showDialog(context: context,
-                  builder: (context) {
-                    return Dialog(
-                      child: Text("Congrats! You have used this piece of clothing sustainably!")
-                    );
-                  });
-                }
-              },
-              child: Text("I wore this today! :)")
+            Padding(padding: EdgeInsets.only(top: 15.0)),
+            ButtonBar(
+              alignment: MainAxisAlignment.spaceAround,
+              buttonHeight: 60,
+              buttonMinWidth: 60,
+              children: [
+                RaisedButton(
+                  textColor: Colors.white,
+                  color: Colors.black,
+                  child: Text("Wear"),
+                  onPressed: () => updateProgress('INC'),
+                  shape: new CircleBorder(),
+                ),
+                IconButton(
+                  icon: Icon(Icons.undo),
+                  tooltip: 'Undo',
+                  onPressed: () => updateProgress('DEC'),
+                ),
+                RaisedButton(
+                  textColor: Colors.white,
+                  color: Colors.black,
+                  child: Text("Donate"),
+                  onPressed: () {},
+                  shape: new CircleBorder(),
+                ),
+              ],
             ),
-            OutlineButton(
-              onPressed: () {
-                if (timesWorn != 0) {
-                  timesWorn--;
-                }
-                print("Times worn is now " + timesWorn.toString());
-                setState(() {
-                  this.progress = timesWorn / totalTimesToWear;
-                });
-              },
-              child: Text("Erase progress by 1 :(")
+            Padding(padding: EdgeInsets.only(top: 20.0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InfoBlock(
+                  color: Colors.deepOrange,
+                  value: 'TOP SHOP',
+                  label: 'Shop',
+                ),
+                InfoBlock(
+                  color: Colors.blueGrey,
+                  value: 'Cotton',
+                  label: 'Material',
+                ),
+                InfoBlock(
+                  color: Colors.deepOrange,
+                  value: '50 Karma',
+                  label: 'Points',
+                ),
+              ],
             ),
-
-
+            Padding(padding: EdgeInsets.only(top: 20.0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InfoBlock(
+                  color: Colors.deepOrange,
+                  value: '$timesWorn/$totalTimesToWear',
+                  label: 'Times Worn',
+                ),
+                InfoBlock(
+                  color: Colors.blueGrey,
+                  value: '24 Aug 2020',
+                  label: 'Purchase Date',
+                ),
+                InfoBlock(
+                  color: Colors.deepOrange,
+                  value: '16 Sep 2020',
+                  label: 'Last Worn',
+                ),
+              ],
+            ),
           ],
         ),
         bottomNavigationBar: NavBar());
