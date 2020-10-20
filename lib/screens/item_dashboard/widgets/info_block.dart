@@ -18,16 +18,16 @@ class InfoBlock extends StatelessWidget {
           value,
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: Colors.deepOrange),
+              fontSize: 24, fontWeight: FontWeight.w800, color: color),
         ),
         Padding(padding: EdgeInsets.only(top: 10.0)),
         Text(
           label,
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w600, color: Colors.green),
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Colors.blueGrey),
         ),
       ])),
     );

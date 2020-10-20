@@ -12,7 +12,7 @@ class ClothingItem extends StatefulWidget {
 }
 
 class _ClothingItemState extends State<ClothingItem> {
-  var totalTimesToWear = 30; //dummy number, to be filled in later
+  var totalTimesToWear = 15; //dummy number, to be filled in later
   var timesWorn = 0;
   var progress = 0.0;
 
@@ -25,16 +25,16 @@ class _ClothingItemState extends State<ClothingItem> {
       }
       this.progress = timesWorn / totalTimesToWear;
     });
-    print("Times worn is now " + timesWorn.toString());
-    // if (timesWorn == totalTimesToWear) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (context) {
-    //         return Dialog(
-    //             child: Text(
-    //                 "Congrats! You have used this piece of clothing sustainably!"));
-    //       });
-    // }
+
+    if (timesWorn == totalTimesToWear) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+                child: Text(
+                    "Congrats! You have used this piece of clothing sustainably!"));
+          });
+    }
   }
 
   @override
@@ -56,7 +56,7 @@ class _ClothingItemState extends State<ClothingItem> {
                     child: Image.asset(
                       'lib/assets/closet_IT.jpg',
                       width: double.maxFinite,
-                      height: 150.0,
+                      height: 160.0,
                     ),
                   ),
                   Center(
@@ -116,17 +116,17 @@ class _ClothingItemState extends State<ClothingItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InfoBlock(
-                  color: Colors.deepOrange,
+                  color: Colors.deepOrange[600],
                   value: 'TOP SHOP',
                   label: 'Shop',
                 ),
                 InfoBlock(
-                  color: Colors.blueGrey,
+                  color: Colors.blue[600],
                   value: 'Cotton',
                   label: 'Material',
                 ),
                 InfoBlock(
-                  color: Colors.deepOrange,
+                  color: Colors.green[900],
                   value: '50 Karma',
                   label: 'Points',
                 ),
@@ -137,17 +137,17 @@ class _ClothingItemState extends State<ClothingItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InfoBlock(
-                  color: Colors.deepOrange,
-                  value: '$timesWorn/$totalTimesToWear',
+                  color: Colors.black,
+                  value: '$timesWorn / $totalTimesToWear',
                   label: 'Times Worn',
                 ),
                 InfoBlock(
-                  color: Colors.blueGrey,
+                  color: Colors.deepPurple[900],
                   value: '24 Aug 2020',
                   label: 'Purchase Date',
                 ),
                 InfoBlock(
-                  color: Colors.deepOrange,
+                  color: Colors.red[900],
                   value: '16 Sep 2020',
                   label: 'Last Worn',
                 ),
