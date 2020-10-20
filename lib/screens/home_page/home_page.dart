@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/home_page/home_page_button.dart';
 
+import '../../routes.dart';
+
 // Home page, currently standing in for the user home page
 class HomePage extends StatefulWidget {
   @override
@@ -10,16 +12,12 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
 
-  void _gotoScannerPage() {
-    Navigator.pushNamed(context, '/scanner');
-  }
-
   void _gotoEmptyPage() {
-    Navigator.pushNamed(context, '/empty');
+    Navigator.pushNamed(context, routeMapping[Screens.Empty]);
   }
 
   void _gotoClosetPage() {
-    Navigator.pushNamed(context, '/closet');
+    Navigator.pushNamed(context, routeMapping[Screens.Closet]);
   }
 
   @override
