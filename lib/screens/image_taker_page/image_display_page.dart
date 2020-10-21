@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -17,7 +18,11 @@ class ImageDisplayPage extends StatefulWidget {
 }
 
 class ImageDisplayPageState extends State<ImageDisplayPage> {
-  Widget detectedTextWidget = CircularProgressIndicator();
+  Widget _detectedTextWidget = CircularProgressIndicator();
+  Widget _carmaDisplay;
+  int _carmaPoints = -1;
+  String _placeOfOrigin = "";
+  String _clothingMaterial = "";
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -36,7 +41,17 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     // final VisionText visionText = await textRecognizer.processImage(visionImage);
     final visionText = null;
     setState(() {
-      detectedTextWidget = _buildDetectedText(visionText);
+      _detectedTextWidget = _buildDetectedText(visionText);
+    });
+  }
+
+  void _getCarmaPoints() {
+    // TODO: Replace with calls to calculator once that is complete
+    final carma = Random().nextInt(200);
+    print("gained $carma points");
+    setState(() {
+      _carmaPoints = _carmaPoints += carma;
+      _carmaDisplay = _CarmaPointDetails(points: _carmaPoints);
     });
   }
 
@@ -78,9 +93,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     //
     // for (int i = 0; i < visionText.blocks.length; i++) {
     //   String text = visionText.blocks[i].text;
-    //   // detectedTextBlocks.add(
-    //   //     Text(text)
-    //   // );
     //
     //   if (origin == null) {
     //     RegExpMatch originMatch = expSource.firstMatch(text.toUpperCase());
@@ -98,18 +110,39 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     //   }
     // }
 
-    // detectedTextBlocks.addAll([
-    //   Text("Place of Manufacture: ${_cleanOriginText(origin)}"),
-    //   Text("Material: ${_cleanMaterialText(material)}\n")
-    // ]);
+    // setState(() {
+    //   placeOfOrigin = _cleanOriginText(origin);
+    //   clothingMaterial = _cleanMaterialText(material);
+    // });
+    setState(() {
+      _placeOfOrigin = "MYANMAR";
+      _clothingMaterial = "POLYESTER";
+    });
+
+    _getCarmaPoints();
 
     detectedTextBlocks.addAll([
-      _CarmaPointDetails(points: -1),
+      _carmaDisplay,
       _ClothingLabelDetail(
-            text: "Place of Manufacture: MYANMAR"
+          text: _placeOfOrigin,
+          label: "Place of Manufacture",
+          getPoints: (s) {
+            setState(() {
+              _placeOfOrigin = s;
+            });
+            print("placeOfOrigin $_placeOfOrigin");
+            _getCarmaPoints();
+          }
       ),
       _ClothingLabelDetail(
-          text: "Material: POLYESTER"
+          text: _clothingMaterial,
+          label: "Material",
+          getPoints: (s) {
+            setState(() {
+              _clothingMaterial = s;
+            });
+            _getCarmaPoints();
+          }
       ),
       Container(
         padding: EdgeInsets.only(top: 30),
@@ -141,7 +174,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       body: Center(
         child: Container(
           padding: EdgeInsets.all(20),
-          child: detectedTextWidget
+          child: _detectedTextWidget
         )
       ),
     );
@@ -149,25 +182,68 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 }
 
 
-class _ClothingLabelDetail extends StatelessWidget {
+class _ClothingLabelDetail extends StatefulWidget {
   final text;
-  _ClothingLabelDetail({this.text});
+  final label;
+  final getPoints;
+  _ClothingLabelDetail({this.text, this.label, this.getPoints});
+
+  @override
+  _ClothingLabelDetailState createState() => _ClothingLabelDetailState();
+}
+
+class _ClothingLabelDetailState extends State<_ClothingLabelDetail> {
+  var text;
+  String labelText;
+
+  @override
+  void initState() {
+    this.labelText = "${widget.label}: ${widget.text}";
+    this.text = widget.text;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Card(
         child: Container(
-          padding: EdgeInsets.all(20),
-          child: Center(
-            child: Text(this.text)
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
           ),
+          child: Center(
+            // child: Text(this.label + " " + this.text)
+              child: TextField(
+                onSubmitted: (text) {
+                  if (text != "") {
+                    setState(() {
+                      this.text = text.toUpperCase();
+                      this.labelText = "${widget.label}";
+                    });
+                    widget.getPoints(this.text);
+                  } else {
+                    setState(() {
+                      this.labelText = "${widget.label}: ${this.text}";
+                    });
+                  }
+                },
+                decoration: InputDecoration(
+                  labelText: labelText,
+                  border: InputBorder.none,
+                  hintText: "$text",
+                  // labelText: "${widget.label}: $text",
+                ),
+            )
+          )
         )
     );
   }
 }
 
+
 class _CarmaPointDetails extends StatefulWidget {
-  var points;
+  final points;
   _CarmaPointDetails({this.points});
 
   @override
@@ -192,7 +268,7 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
     } else {
       // Display failed
       carmaWidgetColour = Colors.red;
-      carmaText = "Oops. We can't get accurate readings, are the information correct?";
+      carmaText = "Oops. We can't seem to get accurate readings, is the information below correct?";
     }
   }
 
