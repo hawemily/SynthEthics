@@ -5,6 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
+
+import 'package:synthetics/theme/custom_colours.dart';
+
 
 // Image display page for image taken from the scanner. To be replaced in the
 // future with constructing a item profile to be added to the closet.
@@ -144,13 +149,33 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
             _getCarmaPoints();
           }
       ),
-      Container(
-        padding: EdgeInsets.only(top: 30),
-        child: Center(
-          child: RaisedButton(
-            child: Text("Add to Closet"),
-          ),
-        ),
+      ((_carmaPoints >= 0)
+          ? Container(
+              padding: EdgeInsets.only(top: 30),
+              child: Center(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                  backgroundColor:
+                    MaterialStateColor.resolveWith((states) => CustomColours.iconGreen()),
+                  padding:
+                    MaterialStateProperty.resolveWith((states) => EdgeInsets.only(
+                      top: 15, bottom: 15, left: 20, right: 20))),
+                  child: Text("Add to Closet", style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    // TODO: link with finalise item page
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        AddToClosetPage(
+                          placeOfOrigin: _placeOfOrigin,
+                          clothingMaterial: _clothingMaterial,
+                          carmaPoints: _carmaPoints,
+                        )));
+                  },
+                ),
+              ),
+            )
+          : Container()
       )
     ]);
     return Column(
@@ -263,7 +288,7 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
   void _getCarmaInfo() {
     if (widget.points > 0) {
       // Have some carma points
-      carmaWidgetColour = Colors.green;
+      carmaWidgetColour = CustomColours.iconGreen();
       carmaText = "${widget.points} Carma Points!";
     } else {
       // Display failed
