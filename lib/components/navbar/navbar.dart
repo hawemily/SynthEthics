@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:synthetics/screens/donation/donation.dart';
 import 'package:synthetics/screens/image_taker_page/image_display_page.dart';
 import 'package:synthetics/screens/image_taker_page/image_taker_page.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
@@ -14,7 +15,6 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-
   @override
   Widget build(BuildContext context) {
     final double _iconSize = 30.0;
@@ -56,8 +56,20 @@ class _NavBarState extends State<NavBar> {
               } else {
                 // Goto closet page
                 print('GOTO CLOSET');
-                final categories = ["tops", "bottoms", "skirts", "dresses", "outerwear", "headgear"];
-                Navigator.push(context, MaterialPageRoute(builder:(context) => Closet(categories: categories,) ));
+                final categories = [
+                  "tops",
+                  "bottoms",
+                  "skirts",
+                  "dresses",
+                  "outerwear",
+                  "headgear"
+                ];
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Closet(
+                              categories: categories,
+                            )));
               }
               break;
 
@@ -70,6 +82,8 @@ class _NavBarState extends State<NavBar> {
             case 2:
               // Go to Donations Page
               print('GOTO DONATIONS');
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DonationPage()));
               break;
           }
         });
@@ -82,8 +96,8 @@ class _NavBarState extends State<NavBar> {
       if (value != null) {
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>
-                ImageDisplayPage(image: value)));
+            MaterialPageRoute(
+                builder: (context) => ImageDisplayPage(image: value)));
       }
     });
   }
