@@ -20,7 +20,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     List<String> categories = widget.categories;
     print(categories);
     _tabs = <Tab>[
