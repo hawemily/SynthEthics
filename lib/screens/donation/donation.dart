@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
-import 'package:synthetics/screens/donation/donation_card.dart';
+import 'bottomsheet.dart';
 
 class DonationPage extends StatefulWidget {
   @override
@@ -33,16 +33,8 @@ class _DonationPageState extends State<DonationPage> {
           ),
         ),
       ),
-      //   ListView(
-      //     children: [
-      //       DonationCard(
-      //         name: 'Name',
-      //         address: 'address',
-      //         distance: 8.0,
-      //       )
-      //     ],
-      //   )
-
+      floatingActionButton:
+          Align(child: BottomSheetButton(), alignment: Alignment(1, 0.7)),
       bottomNavigationBar: NavBar(),
     );
   }

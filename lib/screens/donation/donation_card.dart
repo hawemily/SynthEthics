@@ -19,29 +19,25 @@ class DonationCard extends StatelessWidget {
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(
-              '$this.name',
-              textAlign: TextAlign.right,
+              name,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                   color: Colors.black),
             ),
             Text(
-              '$this.address \n $this.distance',
-              textAlign: TextAlign.right,
+              address + '\n' + '$distance miles',
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: Colors.black),
             ),
           ]),
-          RaisedButton.icon(
-            color: Colors.black,
-            icon: Icon(Icons.navigation),
-            label: Text('Navigate'),
-            onPressed: () => print('Get directions'),
-            shape: new CircleBorder(),
-          ),
+          IconButton(
+              icon: Icon(Icons.navigation, color: Colors.blue),
+              onPressed: null),
         ]),
       ),
     );
