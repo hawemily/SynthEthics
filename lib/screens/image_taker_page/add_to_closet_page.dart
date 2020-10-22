@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:synthetics/routes.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 import 'image_taker_page.dart';
@@ -27,6 +28,12 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
   
   void _saveToCloset() {
     print('Save to closet');
+    Navigator.popUntil(
+        context,
+        ModalRoute.withName(routeMapping[Screens.Home])
+    );
+    // TODO: Replace with closet page once the constructor is fixed
+    Navigator.pushNamed(context, routeMapping[Screens.Empty]);
   }
 
   @override
@@ -96,13 +103,23 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                         ),
                         child: clothingImageWidget,
                         onPressed: () => ImageTaker.settingModalBottomSheet(
-                            context, imageGetterCallback
+                            context, _imageGetterCallback
                         ),
                       ),
                     ),
                     carmaDisplay,
-                    _WritableCard(label: "Name"),
-                    _WritableCard(label: "Brand"),
+                    _WritableCard(label: "Name", func: (text) {
+                      setState(() {
+                        clothingName = text;
+                      });
+                      print("clothingName: $clothingName");
+                    }),
+                    _WritableCard(label: "Brand", func: (text) {
+                      setState(() {
+                        clothingBrand = text;
+                      });
+                      print("clothingBrand: $clothingBrand");
+                    }),
                     _ReadOnlyCards(
                         text: "Material: ${widget.clothingMaterial}"),
                     _ReadOnlyCards(text: "Origin: ${widget.placeOfOrigin}"),
@@ -113,7 +130,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
     );
   }
 
-  void imageGetterCallback(Future<File> futureFile) {
+  void _imageGetterCallback(Future<File> futureFile) {
     futureFile.then((value) {
       if (value != null) {
         setState(() {
@@ -127,7 +144,8 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
 
 class _WritableCard extends StatefulWidget {
   final label;
-  _WritableCard({this.label});
+  final func;
+  _WritableCard({this.label, this.func});
 
   @override
   _WritableCardState createState() => _WritableCardState();
@@ -159,8 +177,11 @@ class _WritableCardState extends State<_WritableCard> {
                 decoration: InputDecoration(
                     labelText: labelText,
                     border: InputBorder.none,
-                    hintText: "${text}"
+                    hintText: "$text"
                 ),
+                onSubmitted: (text) {
+                  widget.func(text);
+                },
               )
           )
       ),
