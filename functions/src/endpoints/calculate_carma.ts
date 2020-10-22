@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { LatLng } from "../helper_components/coordinates";
-import { MaterialCF } from "../helper_components/materials_cf";
+import { MaterialVariants, getMaterialCF } from "../helper_components/materials_cf";
 
 const DEFAULT_LAT = 51.5074;
 const DEFAULT_LONG = 0.1278;
@@ -39,11 +39,11 @@ export const calculateCarma = (
 };
 
 const calculateMaterialsCarma = (materials: any) => {
-  // assume materials is a list of name-percentage pairs, with material to %
+  // assume materials is a list of name-variant-percentage, with material to %
   let total = 0;
 
   materials.forEach((each: any) => {
-    total += MaterialCF[each.name] * (each.percentage || 1);
+    total += getMaterialCF(each.name, each.variant) * (each.percentage || 1);
   });
 
   return total;
