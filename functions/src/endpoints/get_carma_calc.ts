@@ -1,17 +1,16 @@
 import { Request, Response } from "express";
 import { LatLng } from "../helper_components/coordinates";
 import { getMaterialCF } from "../helper_components/materials_cf";
-import axios from "axios";
-import { googleMapsApiKey, googleMapsApiUri } from "../maps_api";
+import { callMapsApi } from "../helper_components/carma_api";
 import {
-  DistanceMatrixRespObj,
-  Status,
-  Element,
-} from "../helper_components/response_object";
+  findSeaDistance,
+  findCountryCode,
+  initCSVs,
+} from "../helper_components/cf_calculations";
 
 const DEFAULT_LAT = 51.5074;
 const DEFAULT_LONG = 0.1278;
-const CO2_PER_TONNE_KM_FLIGHT = 0.755;
+const CO2_PER_TONNE_KM_SHIP = 0.012;
 
 const Weights: { [key: string]: number } = {
   tops: 1.0,
@@ -22,12 +21,12 @@ const Weights: { [key: string]: number } = {
   headgear: 0.8,
 };
 
-export const calculateCarmaAPI = async (req: Request, res: Response) => {
+export const getCarmaValue = async (req: Request, res: Response) => {
   const { category, materials, currLocation, origin } = req.body;
 
   let preWeighted = calculateCarma(materials, currLocation, origin);
 
-  res.status(200).send(preWeighted * Weights[category]);
+  res.sendStatus(200).send(preWeighted * Weights[category]);
 };
 
 export const calculateCarma = (
@@ -67,77 +66,24 @@ const calculateManufacturingCarma = (origin: any) => {
 const calculateTransportCarma = (cdts: LatLng, origin: any): number => {
   let res = 0;
 
-  callMapsApi(cdts, origin).then((distanceMatrix) => {
-    if (distanceMatrix.status == Status.Ok) {
-      if (distanceMatrix.rows != null) {
-        const dist = distanceMatrix.rows[0][0].distanceInMeters;
-        res = calculateCFOfFlight(dist);
-      }
-    }
-  });
-
-  return res;
-};
-
-const calculateCFOfFlight = (dist: any) => {
-  return dist * CO2_PER_TONNE_KM_FLIGHT;
-};
-
-const callMapsApi = async (
-  cdts: LatLng,
-  origin: any
-): Promise<DistanceMatrixRespObj> => {
-  const reqUri = createReqURI(cdts, origin);
-  const resp = await axios.get(reqUri);
-
-  console.log("response received with code");
-  console.log(resp.data);
-
-  const { status, rows } = resp["data"];
-
-  const distances = parseRowsAsElements(rows);
-
-  const distanceMatrix: DistanceMatrixRespObj = {
-    status: (<any>Status)[status],
-    rows: distances,
-  };
-  return distanceMatrix;
-};
-
-const parseRowsAsElements = (rows: Array<any>): Array<Element[]> => {
-  const res: Array<Element[]> = [];
-
-  rows.forEach((row) => {
-    const list: Element[] = [];
-    const elements: Array<any> = row["elements"];
-
-    elements.forEach((e) => {
-      const { status, distance } = e;
-
-      const elem: Element = {
-        status = (<any>Status)[status],
-        distanceInMeters = distance["value"],
-        distanceInText = distance["text"],
-      };
-
-      list.push(elem);
+  initCSVs()
+    .then((succ) => {
+      console.log(succ);
+      return callMapsApi(cdts);
+    })
+    .then((address) => {
+      const currLoc = findCountryCode(address.longName || "");
+      const org = findCountryCode(origin);
+      const dist = findSeaDistance(currLoc, org);
+      res = dist;
+    })
+    .catch((e) => {
+      console.log(e);
     });
-    res.push(list);
-  });
-  return res;
+
+  return calculateCFOfShip(res);
 };
 
-const createReqURI = (cdts: LatLng, origin: string): string => {
-  return (
-    googleMapsApiUri +
-    "origins=" +
-    cdts.latitude +
-    "," +
-    cdts.longitude +
-    "&" +
-    "&destinations=" +
-    origin +
-    "&key=" +
-    googleMapsApiKey
-  );
+const calculateCFOfShip = (dist: any) => {
+  return dist * CO2_PER_TONNE_KM_SHIP;
 };

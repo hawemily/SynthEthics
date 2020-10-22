@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { clothingItem } from "../models/clothing_item_schema";
-import { calculateCarma } from "./calculate_carma";
+import { calculateCarma } from "./get_carma_calc";
 
 const calcTimesToBeWorn = (cf: number) => {
   const c = Math.random() * 20;
