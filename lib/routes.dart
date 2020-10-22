@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+import 'package:synthetics/screens/donation/donation.dart';
 import 'package:synthetics/screens/home_page/home_page.dart';
 import 'package:synthetics/screens/example_pages/example_empty_page.dart';
-import 'package:synthetics/screens/image_taker_page/image_taker_page.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
 
 // categories to be passed in from backend
@@ -12,6 +12,7 @@ final categories = ["tops", "bottoms", "skirts", "dresses", "outerwear", "headge
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   routeMapping[Screens.Home]: (BuildContext context) => HomePage(),
   routeMapping[Screens.Empty]: (BuildContext context) => ExampleEmptyPage(),
+  routeMapping[Screens.Donation]: (BuildContext context) => DonationPage(),
   routeMapping[Screens.Closet]: (BuildContext context) => Closet(categories: categories),
 };
 
@@ -20,6 +21,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
 enum Screens {
   Home,
   Closet,
+  Donation,
   Empty,
 }
 
@@ -27,7 +29,8 @@ enum Screens {
 Map<Screens, String> routeMapping = {
   Screens.Home: '/',
   Screens.Closet: '/closet',
-  Screens.Empty: '/empty'
+  Screens.Donation: '/donation',
+  Screens.Empty: '/empty',
 };
 
 

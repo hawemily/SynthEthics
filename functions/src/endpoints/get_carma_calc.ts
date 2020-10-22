@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { LatLng } from "../helper_components/coordinates";
-import { MaterialCF } from "../helper_components/materials_cf";
+import { getMaterialCF } from "../helper_components/materials_cf";
 import axios from "axios";
 import { googleMapsApiKey, googleMapsApiUri } from "../maps_api";
 import {
@@ -15,7 +15,11 @@ const CO2_PER_TONNE_KM_FLIGHT = 0.755;
 
 const Weights: { [key: string]: number } = {
   tops: 1.0,
-  bottoms: 1.3,
+  bottoms: 1.5,
+  skirts: 1.5,
+  dresses: 2.0,
+  outerwear: 3.0,
+  headgear: 0.8,
 };
 
 export const calculateCarmaAPI = async (req: Request, res: Response) => {
@@ -44,11 +48,13 @@ export const calculateCarma = (
 };
 
 const calculateMaterialsCarma = (materials: any) => {
-  // assume materials is a list of name-percentage pairs, with material to %
+  // assume materials is a list of name-variant-percentage, with material to %
   let total = 0;
 
   materials.forEach((each: any) => {
-    total += MaterialCF[each.name] * (each.percentage || 1);
+    total +=
+      getMaterialCF(each.name, each.variant) *
+      (each.percentage || 100 / materials.length);
   });
 
   return total;

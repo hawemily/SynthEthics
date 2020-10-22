@@ -1,4 +1,4 @@
-type ClothingType =
+export type ClothingType =
   | "tops"
   | "bottoms"
   | "dresses"
