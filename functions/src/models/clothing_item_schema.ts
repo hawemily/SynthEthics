@@ -1,8 +1,13 @@
-type ClothingType = "top" | "bottom" | "dress" | "hat" | "outer"| "skirt";
+type ClothingType = "top" | "bottom" | "dress" | "hat" | "outer" | "skirt";
 
 export interface clothingItem {
-    name: string,
-    brand: string,
-    materials?: string[],
-    clothingType: ClothingType
+  name: string;
+  brand: string;
+  placeOfOrigin?: string;
+  materials?: string[];
+  cF: number;
+  maxNoOfTimesToBeWorn: number;
+  carmaPerWear: number;
+  currentTimesWorn: number;
+  clothingType: ClothingType;
 }

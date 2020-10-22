@@ -8,7 +8,7 @@ const firebase_1 = require("./firebase");
 const express = rest_api_1.rest(firebase_1.db);
 const settings = {
     timeoutSeconds: 60,
-    memory: '512MB'
+    memory: "512MB",
 };
 // add firebase functions here
 exports.api = firebase_functions_1.runWith(settings).https.onRequest(express);

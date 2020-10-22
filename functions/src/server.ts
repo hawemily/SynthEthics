@@ -1,14 +1,13 @@
-import { RuntimeOptions, runWith } from 'firebase-functions';
-import { rest } from './rest_api';
-import { db } from './firebase'
+import { RuntimeOptions, runWith } from "firebase-functions";
+import { rest } from "./rest_api";
+import { db } from "./firebase";
 
 // Initialize Rest API
 const express = rest(db);
 const settings: RuntimeOptions = {
-    timeoutSeconds: 60,
-    memory: '512MB'
+  timeoutSeconds: 60,
+  memory: "512MB",
 };
-
 // add firebase functions here
 export const api = runWith(settings).https.onRequest(express);
 
