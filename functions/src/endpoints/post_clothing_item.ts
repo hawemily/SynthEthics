@@ -20,6 +20,8 @@ export const postClothingItem = async (
       clothingType,
       currLocation,
       origin,
+      lastWornDate,
+      purchaseDate,
     } = req.body;
 
     const cf = calculateCarma(materials, currLocation, origin);
@@ -35,6 +37,8 @@ export const postClothingItem = async (
       carmaPerWear: cPerWear,
       currentTimesWorn: 0,
       clothingType: clothingType,
+      lastWornDate: lastWornDate,
+      purchaseDate: purchaseDate,
     };
 
     const newClothingItem = await db.collection("closet").add(apparel);
