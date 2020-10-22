@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:synthetics/screens/donation/donation.dart';
 import 'package:synthetics/screens/image_taker_page/image_display_page.dart';
 import 'package:synthetics/screens/image_taker_page/image_taker_page.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 
 import '../../routes.dart';
 
@@ -27,7 +27,7 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     final double _iconSize = 30.0;
-    final Color _navBarItemColour = Color(0xFF99BF69);
+    final Color _navBarItemColour = CustomColours.iconGreen();
     final String _currentRoute = ModalRoute.of(context).settings.name;
 
     IconData _firstButtonIcon = Icons.sensor_window;
@@ -85,8 +85,6 @@ class _NavBarState extends State<NavBar> {
 
             case 1:
               ImageTaker.settingModalBottomSheet(context, imageGetterCallback);
-              // Currently only goes to display image page, once file storage is
-              // designed, we'll save/pass data from there
               break;
 
             case 2:
