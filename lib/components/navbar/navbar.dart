@@ -17,11 +17,13 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
 
   void _clearStackAndPush(Screens screen) {
-    Navigator.popUntil(
-        context,
-        ModalRoute.withName(routeMapping[Screens.Home])
-    );
-    Navigator.pushNamed(context, routeMapping[screen]);
+    if (ModalRoute.of(context).settings.name != routeMapping[screen]) {
+      Navigator.popUntil(
+          context,
+          ModalRoute.withName(routeMapping[Screens.Home])
+      );
+      Navigator.pushNamed(context, routeMapping[screen]);
+    }
   }
 
   @override
@@ -61,6 +63,7 @@ class _NavBarState extends State<NavBar> {
             case 0:
               if (isClosetScreen) {
                 // We will go to outfits page
+                // TODO: Implement outfits page
                 print('GOTO OUTFITS');
               } else {
                 // Goto closet page
@@ -84,6 +87,8 @@ class _NavBarState extends State<NavBar> {
               break;
 
             case 1:
+              // Produces a modal for taking a picture, then goes to image
+              // display page via a callback function given to the image taker
               ImageTaker.settingModalBottomSheet(context, imageGetterCallback);
               break;
 
