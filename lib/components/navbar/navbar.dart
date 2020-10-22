@@ -15,6 +15,15 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
+
+  void _clearStackAndPush(Screens screen) {
+    Navigator.popUntil(
+        context,
+        ModalRoute.withName(routeMapping[Screens.Home])
+    );
+    Navigator.pushNamed(context, routeMapping[screen]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double _iconSize = 30.0;
@@ -55,7 +64,7 @@ class _NavBarState extends State<NavBar> {
                 print('GOTO OUTFITS');
               } else {
                 // Goto closet page
-                print('GOTO CLOSET');
+                // TODO: Remove this variable from the navbar, should be fetched in initState of its target page
                 final categories = [
                   "tops",
                   "bottoms",
@@ -64,6 +73,7 @@ class _NavBarState extends State<NavBar> {
                   "outerwear",
                   "headgear"
                 ];
+                // TODO: Replace this with a _clearStackAndPush, add a corr. route in routes
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -81,9 +91,7 @@ class _NavBarState extends State<NavBar> {
 
             case 2:
               // Go to Donations Page
-              print('GOTO DONATIONS');
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DonationPage()));
+              _clearStackAndPush(Screens.Donation);
               break;
           }
         });
