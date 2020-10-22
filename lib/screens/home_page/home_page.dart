@@ -16,10 +16,6 @@ class HomePageState extends State<HomePage> {
     Navigator.pushNamed(context, routeMapping[Screens.Empty]);
   }
 
-  void _gotoClosetPage() {
-    Navigator.pushNamed(context, routeMapping[Screens.Closet]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
