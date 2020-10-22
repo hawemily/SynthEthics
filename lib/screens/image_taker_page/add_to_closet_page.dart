@@ -73,7 +73,10 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
     }
 
     return Scaffold(
-        appBar: AppBar(title: Text('Add To Closet')),
+        appBar: AppBar(
+            title: Text('Add To Closet'),
+            backgroundColor: CustomColours.greenNavy(),
+        ),
         body: Container(
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 20),
             child: Center(

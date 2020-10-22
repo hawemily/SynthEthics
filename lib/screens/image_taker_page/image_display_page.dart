@@ -195,6 +195,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Recognised Text'),
+        backgroundColor: CustomColours.greenNavy(),
       ),
       body: Center(
         child: Container(

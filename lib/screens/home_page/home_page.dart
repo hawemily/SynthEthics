@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/home_page/home_page_button.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 
 import '../../routes.dart';
 
@@ -21,6 +22,7 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
+        backgroundColor: CustomColours.greenNavy(),
       ),
       body: Center(
         child: Row(

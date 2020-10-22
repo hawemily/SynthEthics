@@ -11,4 +11,8 @@ class CustomColours {
   static Color offWhite() {
     return Color(0xFFF6F4F3);
   }
+
+  static Color greenNavy() {
+    return Color(0xFF22333B);
+  }
 }
