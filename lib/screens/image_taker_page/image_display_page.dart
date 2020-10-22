@@ -79,7 +79,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
         height: 250,
         width: 250,
         margin: EdgeInsets.only(
-            top: 50,
+            top: 20,
             left: 20,
             right: 20,
             bottom: 20
