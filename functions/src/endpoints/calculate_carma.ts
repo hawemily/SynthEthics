@@ -7,7 +7,11 @@ const DEFAULT_LONG = 0.1278;
 
 const Weights: { [key: string]: number } = {
   tops: 1.0,
-  bottoms: 1.3,
+  bottoms: 1.5,
+  skirts: 1.5,
+  dresses: 2.0,
+  outerwear: 3.0,
+  headgear: 0.8
 };
 
 export const calculateCarmaAPI = async (
