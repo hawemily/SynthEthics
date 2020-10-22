@@ -26,13 +26,13 @@ const MaterialCFRatio: { [key: string]: number } = {
   leather_synthetic: 1.6,
 };
 
-export enum MaterialVariants {
-  ORGANIC = 'organic',
-  RECYCLED = 'recycled',
-  SYNTHETIC = 'synthetic'
-}
+// export enum MaterialVariants {
+//   ORGANIC = 'organic',
+//   RECYCLED = 'recycled',
+//   SYNTHETIC = 'synthetic'
+// }
 
-export const getMaterialCF = (material: string, variant?: MaterialVariants) => {
+export const getMaterialCF = (material: string, variant?: string) => {
   let key = material;
   if (variant) {
     key = key + "_" + variant;

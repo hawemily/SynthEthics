@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { LatLng } from "../helper_components/coordinates";
-import { MaterialVariants, getMaterialCF } from "../helper_components/materials_cf";
+import { getMaterialCF } from "../helper_components/materials_cf";
 
 const DEFAULT_LAT = 51.5074;
 const DEFAULT_LONG = 0.1278;
@@ -47,7 +47,7 @@ const calculateMaterialsCarma = (materials: any) => {
   let total = 0;
 
   materials.forEach((each: any) => {
-    total += getMaterialCF(each.name, each.variant) * (each.percentage || 1);
+    total += getMaterialCF(each.name, each.variant) * (each.percentage || (100 / materials.length));
   });
 
   return total;
