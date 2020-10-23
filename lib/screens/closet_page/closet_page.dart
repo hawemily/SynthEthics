@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/screens/closet_page/closet_container.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 
-
+import 'package:cloud_functions/cloud_functions.dart';
 
 class Closet extends StatefulWidget {
   Closet({Key key, this.categories}) : super(key:key);
@@ -35,8 +35,16 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  Future<void> tryCallAPI() async {
+    print("trying");
+    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('http://localhost:5001/cfcalc/us-central1/api/dummy');
+    final results = await callable();
+    print(results);
+  }
+
   @override
   Widget build(BuildContext context) {
+    tryCallAPI();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white70,
