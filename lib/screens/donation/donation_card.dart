@@ -16,28 +16,36 @@ class DonationCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         margin: EdgeInsets.all(5.0),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text(
-              name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
-            ),
-            Text(
-              address + '\n' + '$distance miles',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
-            ),
-          ]),
-          IconButton(
-              icon: Icon(Icons.navigation, color: Colors.blue),
-              onPressed: null),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Expanded(
+              flex: 8,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black),
+                      softWrap: true,
+                    ),
+                    Text(
+                      address + '\n' + '$distance miles',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black),
+                    ),
+                  ])),
+          Expanded(
+              flex: 2,
+              child: IconButton(
+                  icon: Icon(Icons.navigation, color: Colors.blue),
+                  onPressed: null)),
         ]),
       ),
     );

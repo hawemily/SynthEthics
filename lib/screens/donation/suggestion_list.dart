@@ -9,18 +9,17 @@ class SuggestionsList extends StatefulWidget {
 }
 
 class _SuggestionsListState extends State<SuggestionsList> {
-
   var names = new List(5);
   var addresses = new List(5);
   var distances = new List(5);
 
   Future getClothingCharities() async {
-    var str = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=51.497311,-0.179720&radius=5000&type=establishment&keyword=clothes+donation&key=AIzaSyAs4k7r81L8a_kk51E_piDGxHjkNS-EVp0";
+    var str =
+        "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=51.497311,-0.179720&rankby=distance&type=establishment&keyword=clothes+donation&key=AIzaSyAjd1nv48FAp72dRwalhcQWRAJ7oikwU2E";
     http.Response response = await http.get(str);
     var results = jsonDecode(response.body);
     setState(() {
-
-      for (var i = 0 ; i < 5; i++) {
+      for (var i = 0; i < 5; i++) {
         this.names[i] = results['results'][i]['name'];
         this.addresses[i] = results['results'][i]['vicinity'];
       }
@@ -29,11 +28,9 @@ class _SuggestionsListState extends State<SuggestionsList> {
 
   @override
   void initState() {
-
     this.getClothingCharities();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +45,11 @@ class _SuggestionsListState extends State<SuggestionsList> {
                 'Swipe down to hide',
                 textAlign: TextAlign.center,
               )),
-          for (var i = 0; i < 5; i++) DonationCard(name: (names[i] != null ? names[i] : "Loading"), address: (addresses[i] != null ? addresses[i] : "Loading"), distance: 5.0)
+          for (var i = 0; i < 5; i++)
+            DonationCard(
+                name: (names[i] != null ? names[i] : "Loading"),
+                address: (addresses[i] != null ? addresses[i] : "Loading"),
+                distance: 5.0)
         ],
       ),
     );

@@ -11,7 +11,7 @@ class DonationPage extends StatefulWidget {
 class _DonationPageState extends State<DonationPage> {
   GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(51.497311, -0.179720);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
