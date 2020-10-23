@@ -19,4 +19,9 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     postClothingItem(req, res, db);
     return;
   });
+
+
+  app.get("/dummy", (req: Request, res: Response) => {
+    return res.send("hehe");
+  })
 };
