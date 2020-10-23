@@ -24,13 +24,16 @@ class ImageDisplayPage extends StatefulWidget {
 
 class ImageDisplayPageState extends State<ImageDisplayPage> {
   Widget _detectedTextWidget = CircularProgressIndicator();
-  Widget _carmaDisplay;
+  _CarmaPointDetails _carmaDisplay;
 
+  bool _hasBuilt = false;
   int _carmaPoints = -1;
   int _countryIndex = 0;
 
   String _placeOfOrigin = "";
   String _clothingMaterial = "";
+
+  VisionText _visionText;
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -48,10 +51,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     // final VisionText visionText = await textRecognizer.processImage(visionImage);
     final visionText = null;
-    _buildDetectedText(visionText).then((result) {
-      setState(() {
-        _detectedTextWidget = result;
-      });
+    setState(() {
+      _visionText = visionText;
     });
   }
 
@@ -63,8 +64,11 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     setState(() {
       _carmaPoints = _carmaPoints += carma;
-      _carmaDisplay = _CarmaPointDetails(points: _carmaPoints);
+      // _carmaDisplay = _CarmaPointDetails(points: _carmaPoints);
     });
+    if (_carmaDisplay != null) {
+
+    }
   }
 
   bool _match(String origin, List data) {
@@ -91,7 +95,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     return materialMatch.split(' ').last.substring(1);
   }
 
-  Future<Widget> _buildDetectedText(VisionText visionText) async {
+  Future<Widget> _buildDetectedText() async {
     String material;
     String origin;
 
@@ -176,10 +180,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
               _clothingMaterial = s;
             });
             _getCarmaPoints();
-            setState(() {
-              _carmaDisplay = Container();
-            });
-            print(_carmaDisplay);
+
           }),
       ((_carmaPoints >= 0)
           ? Container(
@@ -210,6 +211,10 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           : Container())
     ]);
 
+    setState(() {
+      _hasBuilt = true;
+    });
+
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Flexible(
           child: ListView(
@@ -220,6 +225,14 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_hasBuilt) {
+      _buildDetectedText().then((value) {
+        setState(() {
+          _detectedTextWidget = value;
+        });
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Recognised Text'),
@@ -227,7 +240,9 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       ),
       body: Center(
           child: Container(
-              padding: EdgeInsets.all(20), child: _detectedTextWidget)),
+        padding: EdgeInsets.all(20),
+        child: _detectedTextWidget,
+      )),
     );
   }
 }
@@ -339,7 +354,6 @@ class _ClothingLabelDetailState extends State<_ClothingLabelDetail> {
   }
 }
 
-
 class _CarmaPointDetails extends StatefulWidget {
   final points;
   _CarmaPointDetails({this.points});
@@ -351,36 +365,48 @@ class _CarmaPointDetails extends StatefulWidget {
 class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
   Color carmaWidgetColour;
   String carmaText;
+  int localPoints;
 
   @override
   void initState() {
-    _getCarmaInfo();
+    localPoints = widget.points;
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant _CarmaPointDetails oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("UPDATED WIDGET");
+    localPoints = widget.points;
+  }
+
   void _getCarmaInfo() {
-    if (widget.points > 0) {
+    if (localPoints > 0) {
       // Have some carma points
-      carmaWidgetColour = CustomColours.iconGreen();
-      carmaText = "${widget.points} Carma Points!";
+      setState(() {
+        carmaWidgetColour = CustomColours.iconGreen();
+        carmaText = "$localPoints Carma Points!";
+      });
     } else {
       // Display failed
-      carmaWidgetColour = Colors.red;
-      carmaText = "Oops. We can't seem to get accurate readings, is the information below correct?";
+      setState(() {
+        carmaWidgetColour = Colors.red;
+        carmaText =
+        "Oops. We can't seem to get accurate readings, is the information below correct?";
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _getCarmaInfo();
     return Card(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Center(
-              child: Text(carmaText, style: TextStyle(color: Colors.white))
-          ),
-        ),
+      child: Container(
+        padding: EdgeInsets.all(20),
+        child: Center(
+            child: Text(carmaText, style: TextStyle(color: Colors.white))),
+      ),
       color: carmaWidgetColour,
     );
   }
 }
-
