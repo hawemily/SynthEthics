@@ -28,6 +28,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   int _carmaPoints = -1;
   String _placeOfOrigin = "";
   String _clothingMaterial = "";
+  VisionText _visionText;
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -46,7 +47,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     // final VisionText visionText = await textRecognizer.processImage(visionImage);
     final visionText = null;
     setState(() {
-      _detectedTextWidget = _buildDetectedText(visionText);
+      _visionText = visionText;
     });
   }
 
@@ -70,7 +71,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     return materialMatch.split(' ').last.substring(1);
   }
 
-  Widget _buildDetectedText(VisionText visionText) {
+  Widget _buildDetectedText() {
     String material;
     String origin;
 
@@ -200,7 +201,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       body: Center(
         child: Container(
           padding: EdgeInsets.all(20),
-          child: _detectedTextWidget
+          child: _buildDetectedText()
         )
       ),
     );
@@ -282,7 +283,6 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
 
   @override
   void initState() {
-    _getCarmaInfo();
     super.initState();
   }
 
@@ -300,6 +300,7 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
 
   @override
   Widget build(BuildContext context) {
+    _getCarmaInfo();
     return Card(
         child: Container(
           padding: EdgeInsets.all(20),
