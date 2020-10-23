@@ -5,7 +5,6 @@ import { callMapsApi } from "../helper_components/carma_api";
 import {
   findSeaDistance,
   findCountryCode,
-  initCSVs,
 } from "../helper_components/cf_calculations";
 
 const DEFAULT_LAT = 51.5074;
@@ -26,7 +25,10 @@ export const getCarmaValue = async (req: Request, res: Response) => {
 
   let preWeighted = calculateCarma(materials, currLocation, origin);
 
-  res.sendStatus(200).send(preWeighted * Weights[category]);
+  const returnVal = {
+    carma: preWeighted * Weights[category],
+  };
+  res.sendStatus(200).json(returnVal);
 };
 
 export const calculateCarma = (
@@ -66,11 +68,7 @@ const calculateManufacturingCarma = (origin: any) => {
 const calculateTransportCarma = (cdts: LatLng, origin: any): number => {
   let res = 0;
 
-  initCSVs()
-    .then((succ) => {
-      console.log(succ);
-      return callMapsApi(cdts);
-    })
+  callMapsApi(cdts)
     .then((address) => {
       const currLoc = findCountryCode(address.longName || "");
       const org = findCountryCode(origin);

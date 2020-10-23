@@ -18,7 +18,10 @@ const Weights = {
 exports.getCarmaValue = async (req, res) => {
     const { category, materials, currLocation, origin } = req.body;
     let preWeighted = exports.calculateCarma(materials, currLocation, origin);
-    res.sendStatus(200).send(preWeighted * Weights[category]);
+    const returnVal = {
+        carma: preWeighted * Weights[category],
+    };
+    res.sendStatus(200).json(returnVal);
 };
 exports.calculateCarma = (materials, currLocation, org) => {
     const cdts = {
@@ -45,11 +48,7 @@ const calculateManufacturingCarma = (origin) => {
 };
 const calculateTransportCarma = (cdts, origin) => {
     let res = 0;
-    cf_calculations_1.initCSVs()
-        .then((succ) => {
-        console.log(succ);
-        return carma_api_1.callMapsApi(cdts);
-    })
+    carma_api_1.callMapsApi(cdts)
         .then((address) => {
         const currLoc = cf_calculations_1.findCountryCode(address.longName || "");
         const org = cf_calculations_1.findCountryCode(origin);

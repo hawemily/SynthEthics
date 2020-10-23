@@ -2,22 +2,50 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findCountryCode = exports.findSeaDistance = exports.initCSVs = void 0;
 const df = require("dataframe-js").DataFrame;
-const functions = require("firebase-functions");
-var countryCapitalDF = new df([], []);
-var seaDistanceDF = new df([], []);
+const fs = require("fs");
+const csv = require("csv-parser");
+var countryCapitalDF = null;
+var seaDistanceDF = null;
+const mapping = {};
+const createDF = (filePath, string) => new Promise((resolve, reject) => {
+    var ls = [];
+    var keys = [];
+    var keysFilled = false;
+    var data = null;
+    fs.createReadStream(filePath)
+        .pipe(csv())
+        .on("data", (row) => {
+        var innerLs = [];
+        for (const [key, value] of Object.entries(row)) {
+            if (!keysFilled) {
+                keys.push(key);
+            }
+            innerLs.push(value);
+        }
+        keysFilled = true;
+        ls.push(innerLs);
+    })
+        .on("end", () => {
+        console.log("read from csv using parser complete");
+        data = new df(ls, keys);
+        mapping[string] = data;
+        console.log(`count: ${data.count()}`);
+    })
+        .on("end", resolve);
+});
 exports.initCSVs = async () => {
-    countryCapitalDF = await df
-        .fromCSV("../../data/country_capital_dataset.csv")
-        .then((df) => df);
-    seaDistanceDF = await df
-        .fromCSV("../../data/seadistance.csv")
-        .then((df) => df);
-    return "success";
+    await createDF("data/country_capital_dataset.csv", "countryCapital");
+    countryCapitalDF = mapping["countryCapital"];
+    await createDF("data/sea_distance.csv", "seaDistance");
+    seaDistanceDF = mapping["seaDistance"];
+    return "successfully loaded csvs";
 };
 exports.findSeaDistance = (currLoc, origin) => {
+    console.log(`origin: ${origin}`);
+    console.log(`currLoc: ${currLoc}`);
     if (origin !== "") {
-        var resDf = seaDistanceDF.filter((row) => row.get("iso1") === currLoc && row.get("iso2") === origin);
-        return resDf.getRow().get("seadistance");
+        var resDf = seaDistanceDF.filter((row) => row.get("iso1") == currLoc && row.get("iso2") === origin);
+        return resDf.getRow(0).get("seadistance");
     }
     return 0;
 };
@@ -25,7 +53,6 @@ exports.findCountryCode = (countryName) => {
     if (countryName === "") {
         return "";
     }
-    functions.logger.log(countryCapitalDF.count());
     let resRow = countryCapitalDF.filter((row) => row.get("Country") === countryName);
     let indivStrs = countryName.split(" ");
     // when there are no direct matches of the country name, check if the country is known by some other name

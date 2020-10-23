@@ -1,35 +1,65 @@
 const df = require("dataframe-js").DataFrame;
-const functions = require("firebase-functions");
+import fs = require("fs");
+const csv = require("csv-parser");
 
-var countryCapitalDF = new df([], []);
-var seaDistanceDF = new df([], []);
+var countryCapitalDF: any = null;
+var seaDistanceDF: any = null;
+
+const mapping: any = {};
+
+const createDF = (filePath: string, string: string) =>
+  new Promise((resolve, reject) => {
+    var ls: any = [];
+    var keys: any = [];
+    var keysFilled = false;
+    var data = null;
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on("data", (row: any) => {
+        var innerLs = [];
+        for (const [key, value] of Object.entries(row)) {
+          if (!keysFilled) {
+            keys.push(key);
+          }
+          innerLs.push(value);
+        }
+        keysFilled = true;
+        ls.push(innerLs);
+      })
+      .on("end", () => {
+        console.log("read from csv using parser complete");
+        data = new df(ls, keys);
+        mapping[string] = data;
+        console.log(`count: ${data.count()}`);
+      })
+      .on("end", resolve);
+  });
 
 export const initCSVs = async () => {
-  countryCapitalDF = await df
-    .fromCSV("../../data/country_capital_dataset.csv")
-    .then((df: any) => df);
-  seaDistanceDF = await df
-    .fromCSV("../../data/seadistance.csv")
-    .then((df: any) => df);
-  return "success";
+  await createDF("data/country_capital_dataset.csv", "countryCapital");
+  countryCapitalDF = mapping["countryCapital"];
+  await createDF("data/sea_distance.csv", "seaDistance");
+  seaDistanceDF = mapping["seaDistance"];
+
+  return "successfully loaded csvs";
 };
 
-export const findSeaDistance = (currLoc: string, origin: string): number => {
+export const findSeaDistance = (currLoc: string, origin: string) => {
+  console.log(`origin: ${origin}`);
+  console.log(`currLoc: ${currLoc}`);
   if (origin !== "") {
     var resDf = seaDistanceDF.filter(
-      (row: any) => row.get("iso1") === currLoc && row.get("iso2") === origin
+      (row: any) => row.get("iso1") == currLoc && row.get("iso2") === origin
     );
-    return resDf.getRow().get("seadistance");
+    return resDf.getRow(0).get("seadistance");
   }
   return 0;
 };
 
-export const findCountryCode = (countryName: string): string => {
+export const findCountryCode = (countryName: string) => {
   if (countryName === "") {
     return "";
   }
-
-  functions.logger.log(countryCapitalDF.count());
 
   let resRow = countryCapitalDF.filter(
     (row: any) => row.get("Country") === countryName
