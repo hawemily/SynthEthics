@@ -9,9 +9,10 @@ class SuggestionsList extends StatefulWidget {
 }
 
 class _SuggestionsListState extends State<SuggestionsList> {
-  var names = new List(5);
-  var addresses = new List(5);
-  var distances = new List(5);
+  /* For testing: changed to 2 from 5*/
+  var names = new List(2);
+  var addresses = new List(2);
+  var distances = new List(2);
 
   Future getClothingCharities() async {
     var str =
@@ -19,9 +20,11 @@ class _SuggestionsListState extends State<SuggestionsList> {
     http.Response response = await http.get(str);
     var results = jsonDecode(response.body);
     setState(() {
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 2; i++) {
         this.names[i] = results['results'][i]['name'];
         this.addresses[i] = results['results'][i]['vicinity'];
+
+        /* Calculate distance from curr LatLng and one derived from geolocator */
       }
     });
   }
@@ -45,7 +48,7 @@ class _SuggestionsListState extends State<SuggestionsList> {
                 'Swipe down to hide',
                 textAlign: TextAlign.center,
               )),
-          for (var i = 0; i < 5; i++)
+          for (var i = 0; i < 2; i++)
             DonationCard(
                 name: (names[i] != null ? names[i] : "Loading"),
                 address: (addresses[i] != null ? addresses[i] : "Loading"),
