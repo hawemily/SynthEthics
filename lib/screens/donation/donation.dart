@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'bottomsheet.dart';
+import 'package:geolocator/geolocator.dart';
 
 class DonationPage extends StatefulWidget {
   @override
@@ -11,10 +12,24 @@ class DonationPage extends StatefulWidget {
 class _DonationPageState extends State<DonationPage> {
   GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(51.497311, -0.179720);
+  LatLng center;
+
+  @override
+  void initState() {
+    super.initState();
+    this.getDistance();
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  Future getDistance() async {
+    Position coords = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      this.center = LatLng(coords.latitude, coords.longitude);
+    });
   }
 
   @override
@@ -28,7 +43,8 @@ class _DonationPageState extends State<DonationPage> {
         child: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: _center,
+            target:
+                center != null ? center : const LatLng(51.497311, -0.179720),
             zoom: 11.0,
           ),
         ),
