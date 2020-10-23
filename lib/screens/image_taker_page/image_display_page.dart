@@ -25,13 +25,21 @@ class ImageDisplayPage extends StatefulWidget {
 class ImageDisplayPageState extends State<ImageDisplayPage> {
   Widget _detectedTextWidget = CircularProgressIndicator();
   _CarmaPointDetails _carmaDisplay;
+  _ClothingLabelDropdown _clothingOriginDropdown = _ClothingLabelDropdown(
+      data: [],
+      selected: 0
+      );
 
-  bool _hasBuilt = false;
   int _carmaPoints = -1;
   int _countryIndex = 0;
 
   String _placeOfOrigin = "";
   String _clothingMaterial = "";
+  String _preMatchOrigin = "";
+
+  List<dynamic> _countryNames = [];
+  List<Map<String, dynamic>> _countryData;
+  bool _countryLabelMatched = false;
 
   VisionText _visionText;
 
@@ -42,11 +50,12 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   @override
   void initState() {
     initFirebase();
-    _detectText();
+    _detectText()
+        .then((value) => _fetchCountries());
     super.initState();
   }
 
-  void _detectText() async {
+  Future<void> _detectText() async {
     // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
     // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     // final VisionText visionText = await textRecognizer.processImage(visionImage);
@@ -54,64 +63,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     setState(() {
       _visionText = visionText;
     });
-  }
 
-  void _getCarmaPoints() {
-    // TODO: Replace with calls to calculator once that is complete
-    final carma = Random().nextInt(200);
-    print("gained $carma points");
-    print("carma points: ${_carmaPoints + carma}");
-
-    setState(() {
-      _carmaPoints = _carmaPoints += carma;
-      // _carmaDisplay = _CarmaPointDetails(points: _carmaPoints);
-    });
-    if (_carmaDisplay != null) {
-
-    }
-  }
-
-  bool _match(String origin, List data) {
-    bool foundMatch = false;
-    for (int i = 0; i < data.length; i++) {
-      print(data[i]);
-      if (origin.toUpperCase() == data[i]['country'].toUpperCase()) {
-        foundMatch = true;
-        setState(() {
-          _countryIndex = i;
-        });
-      }
-    }
-    return foundMatch;
-  }
-
-  String _cleanOriginText(String originMatch) {
-    if (originMatch == null) return null;
-    return originMatch.split(' ').last;
-  }
-
-  String _cleanMaterialText(String materialMatch) {
-    if (materialMatch == null) return null;
-    return materialMatch.split(' ').last.substring(1);
-  }
-
-  Future<Widget> _buildDetectedText() async {
-    String material;
-    String origin;
-
-    List<Widget> detectedTextBlocks = [
-      Container(
-        height: 250,
-        width: 250,
-        margin: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: FileImage(widget.image),
-            )),
-      ),
-    ];
     // RegExp expSource = RegExp(r"MADE IN (\w+)");
     // RegExp expMaterial = RegExp(r"%\s?(\w+)");
     //
@@ -134,44 +86,107 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     //   }
     // }
 
-    // String preMatchOrigin = _cleanOriginText(origin);
-    // TODO: Remove placeholder once deployed
-    String preMatchOrigin = "MYANMA";
-    //
-
-    final countryData = await CountryData.getInstance().countryData;
-    List countryNames = countryData.map((e) {
-      return e['country'];
-    }).toList();
-    print(countryNames);
-
-    bool hasMatch = _match(preMatchOrigin, countryData);
-    if (!hasMatch) {
-      countryNames.insert(0, preMatchOrigin);
-    }
-
+    // String _preMatchOrigin = _cleanOriginText(origin);
     setState(() {
-      _placeOfOrigin = preMatchOrigin;
       //   _clothingMaterial = _cleanMaterialText(material);
 
       // TODO: Remove placeholder once deployed
       _clothingMaterial = "POLYESTER";
-      //
     });
+  }
+
+  void _fetchCountries() async {
+    _countryData = await CountryData.getInstance().countryData;
+    List<dynamic> countryNames = _countryData.map((e) {
+      return e['country'];
+    }).toList();
+
+    setState(() {
+      _countryNames = countryNames;
+    });
+
+    _preMatchOrigin = "MYANMAR";
+    _countryLabelMatched = _match(_preMatchOrigin);
+
+    setState(() {
+      _placeOfOrigin = _preMatchOrigin;
+    });
+  }
+
+  void _getCarmaPoints() async {
+    // TODO: Replace with calls to calculator once that is complete
+    final carma = Random().nextInt(200);
+    print("gained $carma points");
+    print("carma points: ${_carmaPoints + carma}");
+
+    setState(() {
+      _carmaPoints = _carmaPoints += carma;
+      _carmaDisplay = _CarmaPointDetails(points: _carmaPoints);
+    });
+  }
+
+  bool _match(String origin) {
+    bool foundMatch = false;
+    for (int i = 0; i < _countryNames.length; i++) {
+      if (origin.toUpperCase() == _countryNames[i].toUpperCase()) {
+        foundMatch = true;
+        print("FOund");
+        setState(() {
+          _countryIndex = i;
+        });
+      }
+    }
+
+    if (!foundMatch)
+      _countryNames.insert(0, _preMatchOrigin);
+
+    return foundMatch;
+  }
+
+  String _cleanOriginText(String originMatch) {
+    if (originMatch == null) return null;
+    return originMatch.split(' ').last;
+  }
+
+  String _cleanMaterialText(String materialMatch) {
+    if (materialMatch == null) return null;
+    return materialMatch.split(' ').last.substring(1);
+  }
+
+  Widget _buildDetectedText() {
+    print("Building");
+    String material;
+    String origin;
+
+    List<Widget> detectedTextBlocks = [
+      Container(
+        height: 250,
+        width: 250,
+        margin: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: FileImage(widget.image),
+            )),
+      ),
+    ];
 
     _getCarmaPoints();
 
+    print("Country index " + _countryIndex.toString());
     detectedTextBlocks.addAll([
       _carmaDisplay,
-      _ClothingLabelDropdown(
-          data: countryNames,
-          selected: _countryIndex,
-          onChange: (value) {
-            setState(() {
-              _countryIndex = value - ((hasMatch) ? 0 : 1);
-            });
-            print(_countryIndex);
-          }),
+      _clothingOriginDropdown = _ClothingLabelDropdown(
+        data: _countryNames,
+        selected: _countryIndex,
+        onChange: (value) {
+          setState(() {
+            _countryIndex = value - ((_countryLabelMatched) ? 0 : 1);
+            _placeOfOrigin = _countryNames[value];
+          });
+          print(_placeOfOrigin);
+        }),
       _ClothingLabelDetail(
           text: _clothingMaterial,
           label: "Material",
@@ -211,27 +226,17 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           : Container())
     ]);
 
-    setState(() {
-      _hasBuilt = true;
-    });
-
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Flexible(
           child: ListView(
-        children: detectedTextBlocks,
-      ))
+            children: detectedTextBlocks,
+          )
+      )
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_hasBuilt) {
-      _buildDetectedText().then((value) {
-        setState(() {
-          _detectedTextWidget = value;
-        });
-      });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -241,7 +246,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       body: Center(
           child: Container(
         padding: EdgeInsets.all(20),
-        child: _detectedTextWidget,
+        child: _buildDetectedText(),
       )),
     );
   }
@@ -259,11 +264,9 @@ class _ClothingLabelDropdown extends StatefulWidget {
 }
 
 class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
-  var _value;
 
   @override
   void initState() {
-    _value = widget.selected;
     super.initState();
   }
 
@@ -276,7 +279,6 @@ class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
         value: widget.data.indexOf(entry),
       ));
     }
-    print(dropDownMenuItems);
     return Card(
       child: Container(
           padding: EdgeInsets.only(
@@ -285,12 +287,9 @@ class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
           ),
           child: DropdownButton(
             isExpanded: true,
-            value: _value,
+            value: widget.selected,
             items: dropDownMenuItems,
             onChanged: ((value) {
-              setState(() {
-                _value = value;
-              });
               widget.onChange(value);
             }),
           )),
@@ -371,13 +370,6 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
   void initState() {
     localPoints = widget.points;
     super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant _CarmaPointDetails oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print("UPDATED WIDGET");
-    localPoints = widget.points;
   }
 
   void _getCarmaInfo() {
