@@ -5,21 +5,20 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CountryData {
-  List<Map<String, dynamic>> countryData;
+  Future<List<Map<String, dynamic>>> countryData;
   static CountryData _instance;
-  
+
   CountryData._internal();
   
   static CountryData getInstance() {
     if (_instance == null) {
       _instance = CountryData._internal();
-      _initDb();
+      _instance.countryData = _initDb();
     }
-    
     return _instance;
   }
 
-  static void _initDb() async {
+  static Future<List<Map<String, dynamic>>> _initDb() async {
     final localPath = "lib/assets/countries.db";
     final dbPath = await getDatabasesPath();
     final databasePath = join(dbPath, "countries.db");
@@ -36,8 +35,6 @@ class CountryData {
     // Wait for the write to complete
     await File(databasePath).writeAsBytes(bytes, flush: true);
     
-    _instance.countryData = await (await openDatabase(databasePath,
-                                                      readOnly: true)
-                                  ).query('country_data');
+    return (await openDatabase(databasePath, readOnly: true)).query('country_data');
   }
 }
