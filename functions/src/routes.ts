@@ -20,8 +20,8 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
-
   app.get("/dummy", (req: Request, res: Response) => {
-    return res.send("hehe");
-  })
+    res.send("hehe");
+    return;
+  });
 };

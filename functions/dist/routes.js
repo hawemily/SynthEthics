@@ -18,5 +18,9 @@ exports.routes = (app, db) => {
         post_clothing_item_1.postClothingItem(req, res, db);
         return;
     });
+    app.get("/dummy", (req, res) => {
+        res.send("hehe");
+        return;
+    });
 };
 //# sourceMappingURL=routes.js.map
