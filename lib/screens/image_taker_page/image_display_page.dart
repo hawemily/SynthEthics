@@ -39,6 +39,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   bool _countryLabelMatched = false;
   bool _completedLoading = false;
+  bool _loadingCarma = false;
 
   VisionText _visionText;
 
@@ -131,11 +132,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 
   void _getCarmaPoints() async {
+    _loadingCarma = true;
     // TODO: Replace with calls to calculator once that is complete
     final carma = Random().nextInt(200);
     print("gained $carma points");
     print("carma points: ${_carmaPoints + carma}");
 
+    _loadingCarma = false;
     setState(() {
       _carmaPoints = _carmaPoints += carma;
     });
@@ -169,13 +172,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     ];
 
     // Avoid making unnecessary backend calls
-    if (_placeOfOrigin != "") {
+    if (_completedLoading && !_loadingCarma) {
       _getCarmaPoints();
     }
 
     print("Country index " + _countryIndex.toString());
     detectedTextBlocks.addAll([
-      _CarmaPointDetails(points: _carmaPoints),
+      _CarmaPointDetails(points: _carmaPoints, loading: _loadingCarma),
       _ClothingLabelDropdown(
         data: _countryNames,
         selected: _countryIndex,
@@ -364,7 +367,8 @@ class _ClothingLabelDetailState extends State<_ClothingLabelDetail> {
 
 class _CarmaPointDetails extends StatefulWidget {
   final points;
-  _CarmaPointDetails({this.points});
+  final loading;
+  _CarmaPointDetails({this.points, this.loading});
 
   @override
   _CarmaPointDetailsState createState() => _CarmaPointDetailsState();
@@ -393,14 +397,25 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
 
   @override
   Widget build(BuildContext context) {
-    _getCarmaInfo();
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: Center(
-            child: Text(carmaText, style: TextStyle(color: Colors.white))),
-      ),
-      color: carmaWidgetColour,
-    );
+    if (!widget.loading) {
+      _getCarmaInfo();
+      return Card(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Center(
+              child: Text(carmaText, style: TextStyle(color: Colors.white))),
+        ),
+        color: carmaWidgetColour,
+      );
+    } else {
+      return Card(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Center(
+            child: CircularProgressIndicator()
+          )
+        )
+      );
+    }
   }
 }
