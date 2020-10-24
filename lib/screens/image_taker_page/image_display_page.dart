@@ -23,11 +23,6 @@ class ImageDisplayPage extends StatefulWidget {
 }
 
 class ImageDisplayPageState extends State<ImageDisplayPage> {
-  Widget _detectedTextWidget = CircularProgressIndicator();
-  _CarmaPointDetails _carmaDisplay;
-  _ClothingLabelDropdown _clothingOriginDropdown =
-      _ClothingLabelDropdown(data: [], selected: 0);
-
   int _carmaPoints = -1;
   int _countryIndex = 0;
 
@@ -40,8 +35,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   bool _countryLabelMatched = false;
   bool _completedLoading = false;
   bool _loadingCarma = false;
-
-  VisionText _visionText;
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -58,10 +51,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     final VisionText visionText = await textRecognizer.processImage(visionImage);
-    // final visionText = null;
-    setState(() {
-      _visionText = visionText;
-    });
 
     RegExp expSource = RegExp(r"MADE IN (\w+)");
     RegExp expMaterial = RegExp(r"%\s?(\w+)");
@@ -80,7 +69,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
         }
       }
       if (material == null) {
-        RegExpMatch materialMatches = expMaterial.firstMatch(text.toUpperCase());
+        RegExpMatch materialMatches =
+            expMaterial.firstMatch(text.toUpperCase());
         if (materialMatches != null) {
           material = materialMatches.group(0);
           print("Material $material");
@@ -96,8 +86,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
       _clothingMaterial = _cleanMaterialText(material);
       _completedLoading = true;
-      // TODO: Remove placeholder with above once deployed
-      // _clothingMaterial = "POLYESTER";
     });
 
     _countryData = await CountryData.getInstance().countryData;
@@ -125,8 +113,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       }
     }
 
-    if (!foundMatch)
-      _countryNames.insert(0, origin);
+    if (!foundMatch) _countryNames.insert(0, origin);
 
     return foundMatch;
   }
@@ -180,15 +167,14 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     detectedTextBlocks.addAll([
       _CarmaPointDetails(points: _carmaPoints, loading: _loadingCarma),
       _ClothingLabelDropdown(
-        data: _countryNames,
-        selected: _countryIndex,
-        onChange: (value) {
-          setState(() {
-          _countryIndex = value - ((_countryLabelMatched) ? 0 : 1);
-          _placeOfOrigin = _countryNames[value];
-          });
-        }
-      ),
+          data: _countryNames,
+          selected: _countryIndex,
+          onChange: (value) {
+            setState(() {
+              _countryIndex = value - ((_countryLabelMatched) ? 0 : 1);
+              _placeOfOrigin = _countryNames[value];
+            });
+          }),
       _ClothingLabelDetail(
           text: _clothingMaterial,
           label: "Material",
@@ -197,49 +183,46 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
               _clothingMaterial = s;
             });
             _getCarmaPoints();
-
           }),
       ((_carmaPoints >= 0)
           ? Container(
-                       padding: EdgeInsets.only(top: 30),
-                       child: Center(
-                       child: ElevatedButton(
-                       style: ButtonStyle(
-                       backgroundColor: MaterialStateColor.resolveWith(
-                       (states) => CustomColours.iconGreen()),
-                       padding: MaterialStateProperty.resolveWith((states) =>
-                       EdgeInsets.only(
-                       top: 15, bottom: 15, left: 20, right: 20))),
-                       child: Text("Add to Closet",
-                       style: TextStyle(color: Colors.white)),
-                       onPressed: () {
-                       Navigator.push(
-                       context,
-                       MaterialPageRoute(
-                       builder: (context) => AddToClosetPage(
-                       placeOfOrigin: _placeOfOrigin.toUpperCase(),
-                       clothingMaterial: _clothingMaterial,
-                       carmaPoints: _carmaPoints,
-                       )));
-                       },
-                       ),
-                       ),
-                       )
+              padding: EdgeInsets.only(top: 30),
+              child: Center(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => CustomColours.iconGreen()),
+                      padding: MaterialStateProperty.resolveWith((states) =>
+                          EdgeInsets.only(
+                              top: 15, bottom: 15, left: 20, right: 20))),
+                  child: Text("Add to Closet",
+                      style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddToClosetPage(
+                                  placeOfOrigin: _placeOfOrigin.toUpperCase(),
+                                  clothingMaterial: _clothingMaterial,
+                                  carmaPoints: _carmaPoints,
+                                )));
+                  },
+                ),
+              ),
+            )
           : Container())
     ]);
 
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Flexible(
           child: ListView(
-            children: detectedTextBlocks,
-          )
-      )
+        children: detectedTextBlocks,
+      ))
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Recognised Text'),
@@ -256,7 +239,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 }
 
-
 class _ClothingLabelDropdown extends StatefulWidget {
   final data;
   final selected;
@@ -269,13 +251,6 @@ class _ClothingLabelDropdown extends StatefulWidget {
 }
 
 class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
-  // int localSelected;
-  //
-  // @override
-  // void initState() {
-  //   localSelected = widget.selected;
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -297,16 +272,12 @@ class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
             value: widget.selected,
             items: dropDownMenuItems,
             onChanged: ((value) {
-              // setState(() {
-              //   localSelected = value;
-              // });
               widget.onChange(value);
             }),
           )),
     );
   }
 }
-
 
 class _ClothingLabelDetail extends StatefulWidget {
   final text;
@@ -339,35 +310,37 @@ class _ClothingLabelDetailState extends State<_ClothingLabelDetail> {
               right: 20,
             ),
             child: Center(
-                // child: Text(this.label + " " + this.text)
-                child: TextField(
-              onSubmitted: (text) {
-                if (text != "") {
-                  setState(() {
-                    this.text = text.toUpperCase();
-                    this.labelText = "${widget.label}";
-                  });
-                  widget.getPoints(this.text);
-                } else {
-                  setState(() {
-                    this.labelText = "${widget.label}: ${this.text}";
-                  });
-                }
-              },
-              decoration: InputDecoration(
-                labelText: labelText,
-                border: InputBorder.none,
-                hintText: "$text",
-                // labelText: "${widget.label}: $text",
-              ),
-            ))));
+              child: TextField(
+                onSubmitted: (text) {
+                  if (text != "") {
+                    setState(() {
+                      this.text = text.toUpperCase();
+                      this.labelText = "${widget.label}";
+                    });
+                    widget.getPoints(this.text);
+                  } else {
+                    setState(() {
+                      this.labelText = "${widget.label}: ${this.text}";
+                    });
+                  }
+                },
+                decoration: InputDecoration(
+                  labelText: labelText,
+                  border: InputBorder.none,
+                  hintText: "$text",
+                  // labelText: "${widget.label}: $text",
+                ),
+              )
+            )
+        )
+    );
   }
 }
-
 
 class _CarmaPointDetails extends StatefulWidget {
   final points;
   final loading;
+
   _CarmaPointDetails({this.points, this.loading});
 
   @override
@@ -390,7 +363,7 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
       setState(() {
         carmaWidgetColour = Colors.red;
         carmaText =
-        "Oops. We can't seem to get accurate readings, is the information below correct?";
+            "Oops. We can't seem to get accurate readings, is the information below correct?";
       });
     }
   }
@@ -409,13 +382,9 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
       );
     } else {
       return Card(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Center(
-            child: CircularProgressIndicator()
-          )
-        )
-      );
+          child: Container(
+              padding: EdgeInsets.all(20),
+              child: Center(child: CircularProgressIndicator())));
     }
   }
 }
