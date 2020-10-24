@@ -125,10 +125,10 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     print("gained $carma points");
     print("carma points: ${_carmaPoints + carma}");
 
-    _loadingCarma = false;
     setState(() {
       _carmaPoints = _carmaPoints += carma;
     });
+    _loadingCarma = false;
   }
 
   String _cleanOriginText(String originMatch) {
