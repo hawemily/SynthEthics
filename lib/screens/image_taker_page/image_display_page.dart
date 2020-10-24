@@ -25,21 +25,20 @@ class ImageDisplayPage extends StatefulWidget {
 class ImageDisplayPageState extends State<ImageDisplayPage> {
   Widget _detectedTextWidget = CircularProgressIndicator();
   _CarmaPointDetails _carmaDisplay;
-  _ClothingLabelDropdown _clothingOriginDropdown = _ClothingLabelDropdown(
-      data: [],
-      selected: 0
-      );
+  _ClothingLabelDropdown _clothingOriginDropdown =
+      _ClothingLabelDropdown(data: [], selected: 0);
 
   int _carmaPoints = -1;
   int _countryIndex = 0;
 
   String _placeOfOrigin = "";
   String _clothingMaterial = "";
-  String _preMatchOrigin = "";
 
   List<dynamic> _countryNames = [];
   List<Map<String, dynamic>> _countryData;
+
   bool _countryLabelMatched = false;
+  bool _completedLoading = false;
 
   VisionText _visionText;
 
@@ -50,52 +49,56 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   @override
   void initState() {
     initFirebase();
-    _detectText()
-        .then((value) => _fetchCountries());
+    _detectText();
     super.initState();
   }
 
-  Future<void> _detectText() async {
-    // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-    // final VisionText visionText = await textRecognizer.processImage(visionImage);
-    final visionText = null;
+  void _detectText() async {
+    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
+    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    final VisionText visionText = await textRecognizer.processImage(visionImage);
+    // final visionText = null;
     setState(() {
       _visionText = visionText;
     });
 
-    // RegExp expSource = RegExp(r"MADE IN (\w+)");
-    // RegExp expMaterial = RegExp(r"%\s?(\w+)");
-    //
-    // for (int i = 0; i < visionText.blocks.length; i++) {
-    //   String text = visionText.blocks[i].text;
-    //
-    //   if (origin == null) {
-    //     RegExpMatch originMatch = expSource.firstMatch(text.toUpperCase());
-    //     if (originMatch != null) {
-    //       origin = originMatch.group(0);
-    //       print("Source ${origin}");
-    //     }
-    //   }
-    //   if (material == null) {
-    //     RegExpMatch materialMatches = expMaterial.firstMatch(text.toUpperCase());
-    //     if (materialMatches != null) {
-    //       material = materialMatches.group(0);
-    //       print("Material ${material}");
-    //     }
-    //   }
-    // }
+    RegExp expSource = RegExp(r"MADE IN (\w+)");
+    RegExp expMaterial = RegExp(r"%\s?(\w+)");
 
-    // String _preMatchOrigin = _cleanOriginText(origin);
+    String origin;
+    String material;
+
+    for (int i = 0; i < visionText.blocks.length; i++) {
+      String text = visionText.blocks[i].text;
+
+      if (origin == null) {
+        RegExpMatch originMatch = expSource.firstMatch(text.toUpperCase());
+        if (originMatch != null) {
+          origin = originMatch.group(0);
+          print("Source $origin");
+        }
+      }
+      if (material == null) {
+        RegExpMatch materialMatches = expMaterial.firstMatch(text.toUpperCase());
+        if (materialMatches != null) {
+          material = materialMatches.group(0);
+          print("Material $material");
+        }
+      }
+      if (origin != null && material != null) {
+        break;
+      }
+    }
+
     setState(() {
-      //   _clothingMaterial = _cleanMaterialText(material);
+      _placeOfOrigin = _cleanOriginText(origin);
 
-      // TODO: Remove placeholder once deployed
-      _clothingMaterial = "POLYESTER";
+      _clothingMaterial = _cleanMaterialText(material);
+      _completedLoading = true;
+      // TODO: Remove placeholder with above once deployed
+      // _clothingMaterial = "POLYESTER";
     });
-  }
 
-  void _fetchCountries() async {
     _countryData = await CountryData.getInstance().countryData;
     List<dynamic> countryNames = _countryData.map((e) {
       return e['country'];
@@ -105,12 +108,26 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       _countryNames = countryNames;
     });
 
-    _preMatchOrigin = "MYANMAR";
-    _countryLabelMatched = _match(_preMatchOrigin);
+    _countryLabelMatched = _match(_placeOfOrigin);
+  }
 
-    setState(() {
-      _placeOfOrigin = _preMatchOrigin;
-    });
+  bool _match(String origin) {
+    bool foundMatch = false;
+    for (int i = 0; i < _countryNames.length; i++) {
+      if (origin.toUpperCase() == _countryNames[i].toUpperCase()) {
+        print("matched");
+        foundMatch = true;
+        setState(() {
+          _countryIndex = i;
+        });
+        break;
+      }
+    }
+
+    if (!foundMatch)
+      _countryNames.insert(0, origin);
+
+    return foundMatch;
   }
 
   void _getCarmaPoints() async {
@@ -121,26 +138,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     setState(() {
       _carmaPoints = _carmaPoints += carma;
-      _carmaDisplay = _CarmaPointDetails(points: _carmaPoints);
     });
-  }
-
-  bool _match(String origin) {
-    bool foundMatch = false;
-    for (int i = 0; i < _countryNames.length; i++) {
-      if (origin.toUpperCase() == _countryNames[i].toUpperCase()) {
-        foundMatch = true;
-        print("FOund");
-        setState(() {
-          _countryIndex = i;
-        });
-      }
-    }
-
-    if (!foundMatch)
-      _countryNames.insert(0, _preMatchOrigin);
-
-    return foundMatch;
   }
 
   String _cleanOriginText(String originMatch) {
@@ -155,8 +153,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   Widget _buildDetectedText() {
     print("Building");
-    String material;
-    String origin;
 
     List<Widget> detectedTextBlocks = [
       Container(
@@ -172,21 +168,24 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       ),
     ];
 
-    _getCarmaPoints();
+    // Avoid making unnecessary backend calls
+    if (_placeOfOrigin != "") {
+      _getCarmaPoints();
+    }
 
     print("Country index " + _countryIndex.toString());
     detectedTextBlocks.addAll([
-      _carmaDisplay,
-      _clothingOriginDropdown = _ClothingLabelDropdown(
+      _CarmaPointDetails(points: _carmaPoints),
+      _ClothingLabelDropdown(
         data: _countryNames,
         selected: _countryIndex,
         onChange: (value) {
           setState(() {
-            _countryIndex = value - ((_countryLabelMatched) ? 0 : 1);
-            _placeOfOrigin = _countryNames[value];
+          _countryIndex = value - ((_countryLabelMatched) ? 0 : 1);
+          _placeOfOrigin = _countryNames[value];
           });
-          print(_placeOfOrigin);
-        }),
+        }
+      ),
       _ClothingLabelDetail(
           text: _clothingMaterial,
           label: "Material",
@@ -199,30 +198,30 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           }),
       ((_carmaPoints >= 0)
           ? Container(
-              padding: EdgeInsets.only(top: 30),
-              child: Center(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith(
-                          (states) => CustomColours.iconGreen()),
-                      padding: MaterialStateProperty.resolveWith((states) =>
-                          EdgeInsets.only(
-                              top: 15, bottom: 15, left: 20, right: 20))),
-                  child: Text("Add to Closet",
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddToClosetPage(
-                                  placeOfOrigin: _placeOfOrigin,
-                                  clothingMaterial: _clothingMaterial,
-                                  carmaPoints: _carmaPoints,
-                                )));
-                  },
-                ),
-              ),
-            )
+                       padding: EdgeInsets.only(top: 30),
+                       child: Center(
+                       child: ElevatedButton(
+                       style: ButtonStyle(
+                       backgroundColor: MaterialStateColor.resolveWith(
+                       (states) => CustomColours.iconGreen()),
+                       padding: MaterialStateProperty.resolveWith((states) =>
+                       EdgeInsets.only(
+                       top: 15, bottom: 15, left: 20, right: 20))),
+                       child: Text("Add to Closet",
+                       style: TextStyle(color: Colors.white)),
+                       onPressed: () {
+                       Navigator.push(
+                       context,
+                       MaterialPageRoute(
+                       builder: (context) => AddToClosetPage(
+                       placeOfOrigin: _placeOfOrigin.toUpperCase(),
+                       clothingMaterial: _clothingMaterial,
+                       carmaPoints: _carmaPoints,
+                       )));
+                       },
+                       ),
+                       ),
+                       )
           : Container())
     ]);
 
@@ -246,11 +245,14 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       body: Center(
           child: Container(
         padding: EdgeInsets.all(20),
-        child: _buildDetectedText(),
+        child: (_completedLoading)
+            ? _buildDetectedText()
+            : CircularProgressIndicator(),
       )),
     );
   }
 }
+
 
 class _ClothingLabelDropdown extends StatefulWidget {
   final data;
@@ -264,11 +266,13 @@ class _ClothingLabelDropdown extends StatefulWidget {
 }
 
 class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  // int localSelected;
+  //
+  // @override
+  // void initState() {
+  //   localSelected = widget.selected;
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -290,12 +294,16 @@ class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
             value: widget.selected,
             items: dropDownMenuItems,
             onChanged: ((value) {
+              // setState(() {
+              //   localSelected = value;
+              // });
               widget.onChange(value);
             }),
           )),
     );
   }
 }
+
 
 class _ClothingLabelDetail extends StatefulWidget {
   final text;
@@ -353,6 +361,7 @@ class _ClothingLabelDetailState extends State<_ClothingLabelDetail> {
   }
 }
 
+
 class _CarmaPointDetails extends StatefulWidget {
   final points;
   _CarmaPointDetails({this.points});
@@ -364,20 +373,13 @@ class _CarmaPointDetails extends StatefulWidget {
 class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
   Color carmaWidgetColour;
   String carmaText;
-  int localPoints;
-
-  @override
-  void initState() {
-    localPoints = widget.points;
-    super.initState();
-  }
 
   void _getCarmaInfo() {
-    if (localPoints > 0) {
+    if (widget.points > 0) {
       // Have some carma points
       setState(() {
         carmaWidgetColour = CustomColours.iconGreen();
-        carmaText = "$localPoints Carma Points!";
+        carmaText = "${widget.points} Carma Points!";
       });
     } else {
       // Display failed
