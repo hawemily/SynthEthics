@@ -33,7 +33,7 @@ class DonationCard extends StatelessWidget {
                       softWrap: true,
                     ),
                     Text(
-                      address + '\n' + '$distance miles',
+                      address + '\n' + '$distance kilometers',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 14,

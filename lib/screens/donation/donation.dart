@@ -27,8 +27,12 @@ class _DonationPageState extends State<DonationPage> {
   Future getDistance() async {
     Position coords = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+        print("WHYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+        print(coords);
     setState(() {
       this.center = LatLng(coords.latitude, coords.longitude);
+      print("PRINTING CENTER -------------------------------------------------------------------------------------------------");
+      print(this.center);
     });
   }
 
@@ -50,7 +54,7 @@ class _DonationPageState extends State<DonationPage> {
         ),
       ),
       floatingActionButton:
-          Align(child: BottomSheetButton(), alignment: Alignment(1, 0.7)),
+          Align(child: BottomSheetButton(center: center), alignment: Alignment(1, 0.7)),
       bottomNavigationBar: NavBar(),
     );
   }
