@@ -19,7 +19,8 @@ exports.routes = (app, db) => {
         return;
     });
     app.get("/dummy", (req, res) => {
-        res.send("hehe");
+        console.log('called dummy');
+        res.status(200).json({ data: 'dsfdf' });
         return;
     });
 };

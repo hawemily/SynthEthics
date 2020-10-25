@@ -5,8 +5,10 @@ const routes_1 = require("./routes");
 exports.rest = (db) => {
     const express = require('express');
     const bodyParser = require('body-parser');
+    const cors = require('cors');
     const app = express();
     const API_PREFIX = 'api';
+    app.use(cors());
     // Strip /API from the request URI
     app.use((req, res, next) => {
         if (req.url.indexOf(`/${API_PREFIX}/`) === 0) {

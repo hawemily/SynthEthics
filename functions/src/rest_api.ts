@@ -5,8 +5,11 @@ export const rest = (db: FirebaseFirestore.Firestore) : any => {
 
     const express = require('express');
     const bodyParser = require('body-parser');
+    const cors = require('cors');
     const app: any = express();
     const API_PREFIX = 'api';
+
+    app.use(cors());
 
     // Strip /API from the request URI
     app.use((req: Request, res: Response, next: NextFunction) => {
