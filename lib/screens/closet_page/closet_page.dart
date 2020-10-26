@@ -39,7 +39,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     print("trying");
     final deployed_results = await http.get('https://us-central1-cfcalc.cloudfunctions.net/api/dummy');
     print(deployed_results.body);
-    final local_results = await http.get('http://localhost:5001/cfcalc/us-central1/api/dummy');
+    final local_results = await http.get('http://10.0.2.2:5001/cfcalc/us-central1/api/dummy');
     print(local_results.body);
   }
 
