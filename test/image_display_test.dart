@@ -36,7 +36,7 @@ void main() {
   group("VisionText label parser tests", () {
     test("Regex parser tries to look for origin and material", () {
       var source = TestLabelSource(["irrelevant info",
-        "this is made in china",
+        "this is MADE IN china",
         "100% cotton"]);
       var parser = RegexLabelParser(source);
       var labelProperties = parser.parseLabel();
@@ -46,12 +46,12 @@ void main() {
 
     test("Regex parser identifies the first country origin", () {
       var testLabelSource = TestLabelSource(["irrelevant info",
-        "this is made in china",
+        "this is MADE IN china",
         "100% cotton"]);
       var parser = RegexLabelParser(testLabelSource);
       var labelProperties = parser.parseLabel();
       expect(labelProperties.containsKey("origin"), true);
-      expect(labelProperties["origin"].toUpperCase(), "CHINA");
+      expect(labelProperties["origin"].toUpperCase(), "MADE IN CHINA");
     });
 
     test("Regex parser identifies the first material", () {
@@ -61,7 +61,7 @@ void main() {
       var parser = RegexLabelParser(testLabelSource);
       var labelProperties = parser.parseLabel();
       expect(labelProperties.containsKey("material"), true);
-      expect(labelProperties["material"].toUpperCase(), "COTTON");
+      expect(labelProperties["material"].toUpperCase(), "% COTTON");
     });
   });
 }

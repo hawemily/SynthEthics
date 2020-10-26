@@ -34,7 +34,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   List<Map<String, dynamic>> _countryData;
 
   bool _validData = false;
-  bool _completedLoading = false;
+  bool _completedLoadingPage = false;
+  bool _completedLoadingData = false;
   bool _loadingCarma = false;
 
   void initFirebase() async {
@@ -65,7 +66,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
-
       _clothingMaterial = _cleanMaterialText(material);
       _completedLoadingPage = true;
     });
