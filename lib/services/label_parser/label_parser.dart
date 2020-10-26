@@ -1,6 +1,6 @@
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 
-abstract class ILabelParser {
+abstract class LabelParser {
   Map<String, String> parseLabel();
 }
 
@@ -27,7 +27,7 @@ class VisionTextLabelSource implements LabelSource{
   }
 }
 
-class RegexLabelParser implements ILabelParser{
+class RegexLabelParser implements LabelParser{
 
   final Map<String, RegExp> propertyRegExps = {
     "origin" : RegExp(r"MADE IN (\w+)"),
