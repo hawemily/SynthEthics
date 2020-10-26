@@ -71,15 +71,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     });
 
     _countryData = await CountryData.getInstance().countryData;
-    _validateCountryData(origin);
+    _validateCountryData();
   }
 
-  void _validateCountryData(String origin) {
+  void _validateCountryData() {
     List<String> countryNames = _countryData.map((e) {
       return e['country'] as String;
     }).toList();
 
-    int matchIndex = CountryData.containsCountry(countryNames, origin);
+    int matchIndex = CountryData.containsCountry(countryNames, _placeOfOrigin);
     if (matchIndex == -1) {
       countryNames.insert(0, "");
       matchIndex = 0;
