@@ -68,6 +68,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       _placeOfOrigin = _cleanOriginText(origin);
       _clothingMaterial = _cleanMaterialText(material);
       _completedLoadingPage = true;
+      _validData = _placeOfOrigin != "";
     });
 
     _countryData = await CountryData.getInstance().countryData;
