@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/closet_page/closet_container.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
-
-
+import 'package:http/http.dart' as http;
+import 'package:cloud_functions/cloud_functions.dart';
 
 class Closet extends StatefulWidget {
   Closet({Key key, this.categories}) : super(key:key);
-  
+
   final List<String> categories;
 
   @override
@@ -28,15 +28,24 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController = TabController(vsync: this, length:_tabs.length);
   }
-  
+
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
 
+  Future<void> tryCallAPI() async {
+    print("trying");
+    final deployed_results = await http.get('https://us-central1-cfcalc.cloudfunctions.net/api/dummy');
+    print(deployed_results.body);
+    final local_results = await http.get('http://10.0.2.2:5001/cfcalc/us-central1/api/dummy');
+    print(local_results.body);
+  }
+
   @override
   Widget build(BuildContext context) {
+    tryCallAPI();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white70,

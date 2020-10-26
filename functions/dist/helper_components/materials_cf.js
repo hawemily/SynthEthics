@@ -1,29 +1,45 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MaterialCF = void 0;
-exports.MaterialCF = {
-// place all values for materials here in a dictonary
+exports.getMaterialCF = void 0;
+const BaseMaterialCF = 10.0;
+const MaterialCFRatio = {
+    // place all values for materials here in a dictonary
+    // conventional materials
+    lyocell: 0.5,
+    cotton: 1.0,
+    linen: 1.0,
+    bamboo: 1.3,
+    spandex: 1.4,
+    polyester: 1.5,
+    viscose: 1.5,
+    polypropylene: 1.7,
+    silk: 1.9,
+    hemp: 1.9,
+    nylon: 2.2,
+    acrylic: 2.6,
+    wool: 3.0,
+    jute: 5.1,
+    leather: 5.5,
+    // variants
+    polyester_recycled: 1.0,
+    cotton_organic: 1.1,
+    leather_synthetic: 1.6,
 };
-// interface Materials {
-//   Materials: {
-//     [key: string]: number;
-//   };
-//   Manufacturing: {
-//     [key: string]: number;
-//   };
-//   Transport: number;
+// export enum MaterialVariants {
+//   ORGANIC = 'organic',
+//   RECYCLED = 'recycled',
+//   SYNTHETIC = 'synthetic'
 // }
-// const BaseCarma: BaseCarmaIndex = {
-//   Materials: {
-//     cotton: 10,
-//     polyester: 10,
-//   },
-//   Manufacturing: {
-//     cn: 50,
-//     us: 10,
-//     uk: 20,
-//     jp: 15,
-//   },
-//   Transport: 1,
-// };
+exports.getMaterialCF = (material, variant) => {
+    let key = material;
+    if (variant) {
+        key = key + "_" + variant;
+    }
+    if (key in MaterialCFRatio) {
+        return BaseMaterialCF * MaterialCFRatio[key];
+    }
+    else {
+        return BaseMaterialCF;
+    }
+};
 //# sourceMappingURL=materials_cf.js.map

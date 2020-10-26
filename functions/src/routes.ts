@@ -1,29 +1,28 @@
-import { Request, Response, Router } from 'express';
-import {getAllClothes} from './endpoints/get_all_clothes';
-import {postClothingItem} from './endpoints/post_clothing_item';
+import { Request, Response, Router } from "express";
+import { getAllClothes } from "./endpoints/get_all_clothes";
+import { postClothingItem } from "./endpoints/post_clothing_item";
+import { getCarmaValue } from "./endpoints/get_carma_calc";
 
-export const routes = (app:Router, db: FirebaseFirestore.Firestore) => {
+export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
+  // GET /clothes
+  app.get("/closet/allClothes", (req: Request, res: Response) => {
+    getAllClothes(req, res, db);
+    return;
+  });
 
-    // GET /clothes
-    app.get('/closet/allClothes', (req:Request, res:Response) => {
-        getAllClothes(req, res, db);
-        return;
-    });
+  app.post("/carma", (req: Request, res: Response) => {
+    getCarmaValue(req, res);
+    return;
+  });
 
-    app.get('/hello', (req:Request, res:Response) => {
-        res.send(200);
-        return;
-    });
+  app.post("/closet/addItem", (req: Request, res: Response) => {
+    postClothingItem(req, res, db);
+    return;
+  });
 
-    app.post('/posting/double', (req:Request, res:Response) => {
-       res.status(200).send("checking if this works");
-       return;
-    });
-
-
-    app.post('/closet/addItem', (req:Request, res:Response) => {
-        postClothingItem(req, res, db);
-//        res.status(200).send("checking if this api works");
-        return;
-    });
+  app.get("/dummy", (req: Request, res: Response) => {
+    console.log('called dummy');
+    res.status(200).json({data: 'dsfdf'});
+    return;
+  });
 };

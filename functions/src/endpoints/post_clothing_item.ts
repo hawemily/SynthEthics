@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { clothingItem } from "../models/clothing_item_schema";
-import { calculateCarma } from "./calculate_carma";
+import { calculateCarma } from "./get_carma_calc";
 
 const calcTimesToBeWorn = (cf: number) => {
   const c = Math.random() * 20;
@@ -20,6 +20,8 @@ export const postClothingItem = async (
       clothingType,
       currLocation,
       origin,
+      lastWornDate,
+      purchaseDate,
     } = req.body;
 
     const cf = calculateCarma(materials, currLocation, origin);
@@ -35,6 +37,8 @@ export const postClothingItem = async (
       carmaPerWear: cPerWear,
       currentTimesWorn: 0,
       clothingType: clothingType,
+      lastWornDate: lastWornDate,
+      purchaseDate: purchaseDate,
     };
 
     const newClothingItem = await db.collection("closet").add(apparel);

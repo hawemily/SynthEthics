@@ -1,11 +1,21 @@
-export interface AxiosResp {
-  data: JSON;
-  status: Status;
-  statusText: string;
+// interface AxiosResp {
+//   data: JSON;
+//   status: number;
+//   statusText: string;
+//   headers: string;
+// }
+
+export interface AddressComponents {
+  longName?: string;
+  shortName?: string;
 }
 
-enum Status {
+export enum Status {
   Ok = "OK",
-  Invalid_Req = "INVALID_REQUEST",
-  Max_elems_exceeded = "MAX_ELEMENTS_EXCEEDED",
+  ZeroResults = "ZERO_RESULTS",
+  OverDailyLimit = "OVER_DAILY_LIMIT",
+  OverQueryLimit = "OVER_QUERY_LIMIT",
+  InvalidReq = "INVALID_REQUEST",
+  RequestDenied = "REQUEST_DENIED",
+  UnknownError = "UNKNOWN_ERROR",
 }

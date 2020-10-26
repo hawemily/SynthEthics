@@ -1,8 +1,14 @@
-type ClothingType = "top" | "bottom" | "dress" | "hat" | "outer" | "skirt";
+export type ClothingType =
+  | "tops"
+  | "bottoms"
+  | "dresses"
+  | "skirts"
+  | "outerwear"
+  | "headgear";
 
 export interface clothingItem {
   name: string;
-  brand: string;
+  brand?: string;
   placeOfOrigin?: string;
   materials?: string[];
   cF: number;
@@ -10,4 +16,6 @@ export interface clothingItem {
   carmaPerWear: number;
   currentTimesWorn: number;
   clothingType: ClothingType;
+  lastWornDate: string;
+  purchaseDate: string;
 }

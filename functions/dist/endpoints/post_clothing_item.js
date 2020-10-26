@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postClothingItem = void 0;
-const calculate_carma_1 = require("./calculate_carma");
+const get_carma_calc_1 = require("./get_carma_calc");
 const calcTimesToBeWorn = (cf) => {
     const c = Math.random() * 20;
     return cf % c;
 };
 exports.postClothingItem = async (req, res, db) => {
     try {
-        const { name, brand, materials, clothingType, currLocation, origin, } = req.body;
-        const cf = calculate_carma_1.calculateCarma(materials, currLocation, origin);
+        const { name, brand, materials, clothingType, currLocation, origin, lastWornDate, purchaseDate, } = req.body;
+        const cf = get_carma_calc_1.calculateCarma(materials, currLocation, origin);
         const timesToBeWorn = calcTimesToBeWorn(cf);
         const cPerWear = cf / timesToBeWorn;
         const apparel = {
@@ -21,6 +21,8 @@ exports.postClothingItem = async (req, res, db) => {
             carmaPerWear: cPerWear,
             currentTimesWorn: 0,
             clothingType: clothingType,
+            lastWornDate: lastWornDate,
+            purchaseDate: purchaseDate,
         };
         const newClothingItem = await db.collection("closet").add(apparel);
         res.status(201).send(`Created new clothing item: ${newClothingItem.id}`);
