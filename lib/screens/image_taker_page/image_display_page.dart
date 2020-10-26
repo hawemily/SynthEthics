@@ -59,11 +59,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     var origin = labelProperties["origin"];
     var material = labelProperties["material"];
 
+    // TODO: Removed before deployment
+    // String origin = "Made in Myanmar";
+    // String material = "%Polyester";
+
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
 
       _clothingMaterial = _cleanMaterialText(material);
-      _completedLoading = true;
+      _completedLoadingPage = true;
     });
 
     _countryData = await CountryData.getInstance().countryData;
@@ -84,6 +88,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     setState(() {
       _countryIndex = matchIndex;
       _countryNames = countryNames;
+      _completedLoadingData = true;
     });
   }
 
@@ -107,7 +112,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   String _cleanMaterialText(String materialMatch) {
     if (materialMatch == null || materialMatch == "") return materialMatch;
-    return materialMatch.split(' ').last.substring(1);
+
+    return materialMatch.split('%').last.trim();
   }
 
   Widget _buildDetectedText() {
@@ -128,13 +134,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     ];
 
     // Avoid making unnecessary backend calls
-    if (_completedLoading && !_loadingCarma) {
+    if (_completedLoadingData && !_loadingCarma) {
       _getCarmaPoints();
     }
 
     print("Country index " + _countryIndex.toString());
     detectedTextBlocks.addAll([
-      _CarmaPointDetails(points: _carmaPoints, loading: _loadingCarma),
+      _CarmaPointDetails(
+        points: _carmaPoints,
+        loading: (!_completedLoadingData || _loadingCarma)),
       _ClothingLabelDropdown(
           data: _countryNames,
           selected: _countryIndex,
@@ -206,7 +214,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       body: Center(
           child: Container(
         padding: EdgeInsets.only(left :20, right : 20),
-        child: (_completedLoading)
+        child: (_completedLoadingPage)
             ? _buildDetectedText()
             : CircularProgressIndicator(),
       )),

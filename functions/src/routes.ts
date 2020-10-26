@@ -21,7 +21,8 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   });
 
   app.get("/dummy", (req: Request, res: Response) => {
-    res.send("hehe");
+    console.log('called dummy');
+    res.status(200).json({data: 'dsfdf'});
     return;
   });
 };

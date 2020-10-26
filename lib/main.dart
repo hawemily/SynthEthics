@@ -8,7 +8,6 @@ import 'package:synthetics/theme/style.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseFunctions functions = FirebaseFunctions.instance;
   runApp(MyApp());
 }
 
