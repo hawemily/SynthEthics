@@ -138,7 +138,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   String _cleanMaterialText(String materialMatch) {
     if (materialMatch == null) return null;
-    return materialMatch.split(' ').last.substring(1);
+    return materialMatch.split('%').last.trim();
   }
 
   Widget _buildDetectedText() {
