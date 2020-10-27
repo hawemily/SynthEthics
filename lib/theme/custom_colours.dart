@@ -15,4 +15,8 @@ class CustomColours {
   static Color greenNavy() {
     return Color(0xFF22333B);
   }
+
+  static Color negativeRed() {
+    return Color(0xFFE3655B);
+  }
 }

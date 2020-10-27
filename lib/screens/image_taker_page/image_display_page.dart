@@ -33,7 +33,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   List<Map<String, dynamic>> _countryData;
 
   bool _countryLabelMatched = false;
-  bool _completedLoading = false;
+  bool _completedLoadingPage = false;
+  bool _completedLoadingData = false;
   bool _loadingCarma = false;
 
   void initFirebase() async {
@@ -81,11 +82,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       }
     }
 
+    // TODO: Removed before deployment
+    // String origin = "Made in Myanmar";
+    // String material = "%Polyester";
+
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
 
       _clothingMaterial = _cleanMaterialText(material);
-      _completedLoading = true;
+      _completedLoadingPage = true;
     });
 
     _countryData = await CountryData.getInstance().countryData;
@@ -95,6 +100,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     setState(() {
       _countryNames = countryNames;
+      _completedLoadingData = true;
     });
 
     _countryLabelMatched = _match(_placeOfOrigin);
@@ -138,7 +144,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   String _cleanMaterialText(String materialMatch) {
     if (materialMatch == null) return null;
-    return materialMatch.split(' ').last.substring(1);
+    return materialMatch.split('%').last.trim();
   }
 
   Widget _buildDetectedText() {
@@ -159,13 +165,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     ];
 
     // Avoid making unnecessary backend calls
-    if (_completedLoading && !_loadingCarma) {
+    if (_completedLoadingData && !_loadingCarma) {
       _getCarmaPoints();
     }
 
     print("Country index " + _countryIndex.toString());
     detectedTextBlocks.addAll([
-      _CarmaPointDetails(points: _carmaPoints, loading: _loadingCarma),
+      _CarmaPointDetails(
+        points: _carmaPoints,
+        loading: (!_completedLoadingData || _loadingCarma)),
       _ClothingLabelDropdown(
           data: _countryNames,
           selected: _countryIndex,
@@ -231,7 +239,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       body: Center(
           child: Container(
         padding: EdgeInsets.all(20),
-        child: (_completedLoading)
+        child: (_completedLoadingPage)
             ? _buildDetectedText()
             : CircularProgressIndicator(),
       )),
