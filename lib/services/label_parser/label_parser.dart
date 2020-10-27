@@ -11,7 +11,7 @@ abstract class LabelSource {
 
 // VisionText Label Source is adapter for
 // VisionText
-class VisionTextLabelSource implements LabelSource{
+class VisionTextLabelSource implements LabelSource {
   final VisionText _visionText;
   int position = 0;
 
@@ -27,7 +27,7 @@ class VisionTextLabelSource implements LabelSource{
   }
 }
 
-class RegexLabelParser implements LabelParser{
+class RegexLabelParser implements LabelParser {
 
   final Map<String, RegExp> propertyRegExps = {
     "origin" : RegExp(r"MADE IN (\w+)"),
