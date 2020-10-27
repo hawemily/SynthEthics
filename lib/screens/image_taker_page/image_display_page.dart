@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
 import 'package:synthetics/services/country/country_data.dart';
+import 'package:synthetics/services/label_parser/label_parser.dart';
 
 import 'package:synthetics/theme/custom_colours.dart';
 
@@ -29,10 +30,10 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   String _placeOfOrigin = "";
   String _clothingMaterial = "";
 
-  List<dynamic> _countryNames = [];
+  List<String> _countryNames = [];
   List<Map<String, dynamic>> _countryData;
 
-  bool _countryLabelMatched = false;
+  bool _validData = false;
   bool _completedLoadingPage = false;
   bool _completedLoadingData = false;
   bool _loadingCarma = false;
@@ -53,34 +54,11 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     final VisionText visionText = await textRecognizer.processImage(visionImage);
 
-    RegExp expSource = RegExp(r"MADE IN (\w+)");
-    RegExp expMaterial = RegExp(r"%\s?(\w+)");
-
-    String origin;
-    String material;
-
-    for (int i = 0; i < visionText.blocks.length; i++) {
-      String text = visionText.blocks[i].text;
-
-      if (origin == null) {
-        RegExpMatch originMatch = expSource.firstMatch(text.toUpperCase());
-        if (originMatch != null) {
-          origin = originMatch.group(0);
-          print("Source $origin");
-        }
-      }
-      if (material == null) {
-        RegExpMatch materialMatches =
-            expMaterial.firstMatch(text.toUpperCase());
-        if (materialMatches != null) {
-          material = materialMatches.group(0);
-          print("Material $material");
-        }
-      }
-      if (origin != null && material != null) {
-        break;
-      }
-    }
+    // Parse using regex parser with VisionText as label source
+    var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
+    var labelProperties = labelParser.parseLabel();
+    var origin = labelProperties["origin"];
+    var material = labelProperties["material"];
 
     // TODO: Removed before deployment
     // String origin = "Made in Myanmar";
@@ -88,40 +66,31 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
-
       _clothingMaterial = _cleanMaterialText(material);
       _completedLoadingPage = true;
+      _validData = _placeOfOrigin != "";
     });
 
     _countryData = await CountryData.getInstance().countryData;
-    List<dynamic> countryNames = _countryData.map((e) {
-      return e['country'];
+    _validateCountryData();
+  }
+
+  void _validateCountryData() {
+    List<String> countryNames = _countryData.map((e) {
+      return e['country'] as String;
     }).toList();
 
+    int matchIndex = CountryData.containsCountry(countryNames, _placeOfOrigin);
+    if (matchIndex == -1) {
+      countryNames.insert(0, "");
+      matchIndex = 0;
+    }
+
     setState(() {
+      _countryIndex = matchIndex;
       _countryNames = countryNames;
       _completedLoadingData = true;
     });
-
-    _countryLabelMatched = _match(_placeOfOrigin);
-  }
-
-  bool _match(String origin) {
-    bool foundMatch = false;
-    for (int i = 0; i < _countryNames.length; i++) {
-      if (origin.toUpperCase() == _countryNames[i].toUpperCase()) {
-        print("matched");
-        foundMatch = true;
-        setState(() {
-          _countryIndex = i;
-        });
-        break;
-      }
-    }
-
-    if (!foundMatch) _countryNames.insert(0, origin);
-
-    return foundMatch;
   }
 
   void _getCarmaPoints() async {
@@ -138,12 +107,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 
   String _cleanOriginText(String originMatch) {
-    if (originMatch == null) return null;
+    if (originMatch == null || originMatch == "") return originMatch;
     return originMatch.split(' ').last;
   }
 
   String _cleanMaterialText(String materialMatch) {
-    if (materialMatch == null) return null;
+    if (materialMatch == null || materialMatch == "") return materialMatch;
+
     return materialMatch.split('%').last.trim();
   }
 
@@ -179,8 +149,12 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           selected: _countryIndex,
           onChange: (value) {
             setState(() {
-              _countryIndex = value - ((_countryLabelMatched) ? 0 : 1);
+              _countryIndex = value;
               _placeOfOrigin = _countryNames[value];
+
+              setState(() {
+                _validData = _placeOfOrigin != "";
+              });
             });
           }),
       _ClothingLabelDetail(
@@ -206,6 +180,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                   child: Text("Add to Closet",
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
+                    (_validData) ?
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -213,7 +188,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                                   placeOfOrigin: _placeOfOrigin.toUpperCase(),
                                   clothingMaterial: _clothingMaterial,
                                   carmaPoints: _carmaPoints,
-                                )));
+                                )))
+                    : null;
                   },
                 ),
               ),
@@ -238,7 +214,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       ),
       body: Center(
           child: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(left :20, right : 20),
         child: (_completedLoadingPage)
             ? _buildDetectedText()
             : CircularProgressIndicator(),

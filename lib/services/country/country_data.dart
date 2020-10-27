@@ -37,4 +37,14 @@ class CountryData {
     
     return (await openDatabase(databasePath, readOnly: true)).query('country_data');
   }
+
+  // Returns index if found, -1 otherwise
+  static int containsCountry(List<String> countryNames, String country) {
+    for (int i = 0; i < countryNames.length; i++) {
+      if (country.toUpperCase() == countryNames[i].toUpperCase()) {
+        return i;
+      }
+    }
+    return -1;
+  }
 }
