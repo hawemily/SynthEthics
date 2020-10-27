@@ -288,6 +288,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                             builder: (context) => AddToClosetPage(
                                   placeOfOrigin: _placeOfOrigin,
                                   clothingMaterial: _clothingMaterial,
+                                  clothingType: _clothingType,
                                   carmaPoints: _carmaPoints,
                                 )
                         )

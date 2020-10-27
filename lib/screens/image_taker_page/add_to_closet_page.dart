@@ -10,10 +10,12 @@ class AddToClosetPage extends StatefulWidget {
   final placeOfOrigin;
   final clothingMaterial;
   final carmaPoints;
+  final clothingType;
 
   AddToClosetPage({
     this.placeOfOrigin,
     this.clothingMaterial,
+    this.clothingType,
     this.carmaPoints,
   });
 
@@ -126,6 +128,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                     _ReadOnlyCards(
                         text: "Material: ${widget.clothingMaterial}"),
                     _ReadOnlyCards(text: "Origin: ${widget.placeOfOrigin}"),
+                    _ReadOnlyCards(text: "Type: ${widget.clothingType}"),
                   ],
                 )
             )
