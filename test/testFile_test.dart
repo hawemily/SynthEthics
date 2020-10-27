@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-
 import 'screens/closet_page_tests.dart';
 
 void main() {
