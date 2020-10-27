@@ -15,8 +15,8 @@ class _DonationPageState extends State<DonationPage> {
   GoogleMapController mapController;
 
   LatLng center;
-  // List<LatLng> latlngs = new List(2);
-  // List<Marker> markers = new List(3);
+  List<LatLng> latlngs = new List(2);
+  var markers = new List<Marker>();
   /* For testing: changed to 2 from 5*/
   var names = new List(2);
   var addresses = new List(2);
@@ -56,16 +56,19 @@ class _DonationPageState extends State<DonationPage> {
         double d = Geolocator.distanceBetween(
             center.latitude, center.longitude, lat, lng);
         d = d / 1000;
-        // this.latlngs[i] = LatLng(lat, lng);
+        this.latlngs[i] = LatLng(lat, lng);
         this.distances[i] = double.parse(d.toStringAsFixed(2));
       }
-
-      //   for (var i = 0; i < 2; i++) {
-      //     this.markers[i] = Marker(
-      //         draggable: false, position: latlngs[i], markerId: MarkerId('$i'));
-      //   }
-      //   this.markers[2] = Marker(
-      //       markerId: MarkerId('center'), draggable: false, position: center);
+      for (var i = 0; i < 2; i++) {
+        this.markers.add(Marker(
+            draggable: false, position: latlngs[i], markerId: MarkerId('$i')));
+      }
+      this.markers.add(Marker(
+          markerId: MarkerId('center'),
+          draggable: false,
+          position: center,
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueGreen)));
     });
   }
 
@@ -76,15 +79,12 @@ class _DonationPageState extends State<DonationPage> {
         title: Text('Donation centres near you'),
         backgroundColor: Colors.green[700],
       ),
-      body: SizedBox(
-        child: GoogleMap(
-          // markers: Set.from(markers),
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target:
-                center != null ? center : const LatLng(51.497311, -0.179720),
-            zoom: 11.0,
-          ),
+      body: GoogleMap(
+        markers: Set.of(markers),
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: center != null ? center : const LatLng(51.497311, -0.179720),
+          zoom: 14.0,
         ),
       ),
       floatingActionButton: Align(
