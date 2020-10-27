@@ -14,36 +14,14 @@ class ClothingTypes {
   }
 
   static Future<List<String>> _getClothingTypes() async {
-    final materials = [
-      "Recycled Polyester",
-      "Organic Cotton",
-      "Synthetic Leather",
-      "Lyocell",
-      "Cotton",
-      "Linen",
-      "Bamboo",
-      "Spandex",
-      "Polyester",
-      "Viscose",
-      "Polypropylene",
-      "Silk",
-      "Hemp",
-      "Nylon",
-      "Acrylic",
-      "Wool",
-      "Jute",
-      "Leather"
+    final types = [
+      "Tops",
+      "Bottoms",
+      "Skirts",
+      "Dresses",
+      "Outerwear",
+      "Headgear"
     ];
-    return materials;
-  }
-
-  int containsMaterial(List<String> materials, String material) {
-    final upperMaterial = material.toUpperCase();
-    for (int i = 0; i < materials.length; i++) {
-      if (materials[i].toUpperCase() == upperMaterial) {
-        return i;
-      }
-    }
-    return -1;
+    return types;
   }
 }

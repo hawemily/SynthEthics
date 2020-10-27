@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -7,9 +8,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
+import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
 import 'package:synthetics/services/country/country_data.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
+import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
 import 'package:synthetics/theme/custom_colours.dart';
 
@@ -28,18 +32,24 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   int _carmaPoints = -1;
   int _countryIndex = 0;
   int _materialIndex = 0;
+  int _typeIndex = 0;
 
   String _placeOfOrigin = "";
   String _clothingMaterial = "";
+  String _clothingType = "";
 
   List<String> _countryNames = [];
   List<String> _materialTypes = [];
+  List<String> _clothingTypes = [];
   List<Map<String, dynamic>> _countryData;
+
+  Map<String, dynamic> _positionData;
 
   bool _validData = false;
   bool _completedLoadingPage = false;
   bool _completedLoadingData = false;
   bool _loadingCarma = false;
+  bool _validClothingType = false;
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -48,35 +58,70 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   @override
   void initState() {
     initFirebase();
-    ClothingTypes.getInstance().types.then((value) => {
-      setState(() {
-        _materialTypes = List.of(value);
-      })});
+    _getClothingData();
+    _getUserPosition();
     _detectText();
     super.initState();
   }
 
-  void _detectText() async {
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-    final VisionText visionText = await textRecognizer.processImage(visionImage);
+  void _getClothingData() async {
+    ClothingMaterials.getInstance().types.then((value) {
+      setState(() {
+        _materialTypes = List.of(value);
+      });
+    });
+    ClothingTypes.getInstance().types.then((value) {
+      setState(() {
+        _clothingTypes = List.of(value);
+      });
+      _clothingTypes.insert(0, "None");
+    });
+  }
 
-    // Parse using regex parser with VisionText as label source
-    var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
-    var labelProperties = labelParser.parseLabel();
-    var origin = labelProperties["origin"];
-    var material = labelProperties["material"];
+  void _getUserPosition() async {
+    Position position = await Geolocator.getLastKnownPosition();
+    if (position == null) {
+      position = await Geolocator.getCurrentPosition();
+    }
+     setState(() {
+       _positionData = {
+         'latitude': position.latitude,
+         'longitude': position.longitude,
+       };
+    });
+  }
+
+  void _detectText() async {
+    // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
+    // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    // final VisionText visionText = await textRecognizer.processImage(visionImage);
+    //
+    // // Parse using regex parser with VisionText as label source
+    // var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
+    // var labelProperties = labelParser.parseLabel();
+    // var origin = labelProperties["origin"];
+    // var material = labelProperties["material"];
+
+    final origin = "MADE IN MYANMA";
+    final material = "%POLYESTE";
 
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
       _clothingMaterial = _cleanMaterialText(material);
       _completedLoadingPage = true;
-      _validData = _placeOfOrigin != "" && _clothingMaterial != "";
     });
 
     _countryData = await CountryData.getInstance().countryData;
     _validateCountryData();
     _validateMaterialData();
+    _setValidData();
+  }
+
+  void _setValidData() {
+    _validData = (_clothingMaterial != ""
+        && _placeOfOrigin != ""
+        && _validClothingType
+    );
   }
 
   void _validateCountryData() {
@@ -88,6 +133,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (matchIndex == -1) {
       countryNames.insert(0, "");
       matchIndex = 0;
+      _placeOfOrigin = "";
     }
 
     setState(() {
@@ -98,11 +144,12 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   void _validateMaterialData() {
     int materialIndex =
-          ClothingTypes.getInstance().containsMaterial(_materialTypes,
+          ClothingMaterials.getInstance().containsMaterial(_materialTypes,
                                                        _clothingMaterial);
     if (materialIndex == -1) {
       _materialTypes.insert(0, "");
       materialIndex = 0;
+      _clothingMaterial = "";
     }
 
     setState(() {
@@ -113,8 +160,10 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   void _getCarmaPoints() async {
     _loadingCarma = true;
-    // TODO: Replace with calls to calculator once that is complete
-    if (_clothingMaterial != "" && _placeOfOrigin != "") {
+    if (_validData) {
+      print("position $_positionData");
+
+      // TODO: Replace with calls to calculator once that is complete
       final carma = Random().nextInt(200);
       print("gained $carma points");
       print("carma points: ${_carmaPoints + carma}");
@@ -122,6 +171,23 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       setState(() {
         _carmaPoints = _carmaPoints += carma;
       });
+
+
+        // http.post(
+        //   "http://10.0.2.2:5001/cfcalc/us-central1/api/carma",
+        //   //   "https://us-central1-cfcalc.cloudfunctions.net/api/carma",
+        //     headers: <String, String>{
+        //       'Content-Type': 'application/json'
+        //     },
+        //     body: jsonEncode(<String, dynamic>{
+        //       'category': 'tops',
+        //       'materials': [_clothingMaterial],
+        //       'currLocation': position,
+        //       'origin': _placeOfOrigin
+        //     }
+        //     ),
+        // ).then((queryResult) => print(queryResult.body));
+
     }
     _loadingCarma = false;
   }
@@ -163,7 +229,9 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     detectedTextBlocks.addAll([
       _CarmaPointDetails(
         points: _carmaPoints,
-        loading: (!_completedLoadingData || _loadingCarma)),
+        loading: (!_completedLoadingData || _loadingCarma),
+        valid: _validData,
+      ),
       _ClothingLabelDropdown(
           data: _countryNames,
           selected: _countryIndex,
@@ -172,7 +240,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
             setState(() {
               _countryIndex = value;
               _placeOfOrigin = _countryNames[value];
-              _validData = _placeOfOrigin != "" && _clothingMaterial != "";
+              _setValidData();
             });
           }),
       _ClothingLabelDropdown(
@@ -183,9 +251,22 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           setState(() {
             _materialIndex = value;
             _clothingMaterial = _materialTypes[value];
-            _validData = _clothingMaterial != "" && _placeOfOrigin != "" ;
+            _setValidData();
           });
         }
+      ),
+      _ClothingLabelDropdown(
+        data: _clothingTypes,
+        selected: _typeIndex,
+        label: 'Type',
+        onChange: ((value) {
+          setState(() {
+            _typeIndex = value;
+            _clothingType = _clothingTypes[value];
+            _validClothingType = value != 0;
+            _setValidData();
+          });
+        }),
       ),
       ((_carmaPoints >= 0 && _validData)
           ? Container(
@@ -348,10 +429,11 @@ class _ClothingLabelDetailState extends State<_ClothingLabelDetail> {
 }
 
 class _CarmaPointDetails extends StatefulWidget {
-  final points;
-  final loading;
+  final int points;
+  final bool loading;
+  final bool valid;
 
-  _CarmaPointDetails({this.points, this.loading});
+  _CarmaPointDetails({this.points, this.loading, this.valid});
 
   @override
   _CarmaPointDetailsState createState() => _CarmaPointDetailsState();
@@ -362,7 +444,7 @@ class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
   String carmaText;
 
   void _getCarmaInfo() {
-    if (widget.points > 0) {
+    if (widget.valid && widget.points > 0) {
       // Have some carma points
       setState(() {
         carmaWidgetColour = CustomColours.iconGreen();
