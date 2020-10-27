@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
+import 'package:synthetics/services/clothing_types/clothing_types.dart';
 import 'package:synthetics/services/country/country_data.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
 
@@ -26,11 +27,13 @@ class ImageDisplayPage extends StatefulWidget {
 class ImageDisplayPageState extends State<ImageDisplayPage> {
   int _carmaPoints = -1;
   int _countryIndex = 0;
+  int _materialIndex = 0;
 
   String _placeOfOrigin = "";
   String _clothingMaterial = "";
 
   List<String> _countryNames = [];
+  List<String> _materialTypes = [];
   List<Map<String, dynamic>> _countryData;
 
   bool _validData = false;
@@ -45,6 +48,10 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   @override
   void initState() {
     initFirebase();
+    ClothingTypes.getInstance().types.then((value) => {
+      setState(() {
+        _materialTypes = List.of(value);
+      })});
     _detectText();
     super.initState();
   }
@@ -60,19 +67,16 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     var origin = labelProperties["origin"];
     var material = labelProperties["material"];
 
-    // TODO: Removed before deployment
-    // String origin = "Made in Myanmar";
-    // String material = "%Polyester";
-
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
       _clothingMaterial = _cleanMaterialText(material);
       _completedLoadingPage = true;
-      _validData = _placeOfOrigin != "";
+      _validData = _placeOfOrigin != "" && _clothingMaterial != "";
     });
 
     _countryData = await CountryData.getInstance().countryData;
     _validateCountryData();
+    _validateMaterialData();
   }
 
   void _validateCountryData() {
@@ -89,6 +93,20 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     setState(() {
       _countryIndex = matchIndex;
       _countryNames = countryNames;
+    });
+  }
+
+  void _validateMaterialData() {
+    int materialIndex =
+          ClothingTypes.getInstance().containsMaterial(_materialTypes,
+                                                       _clothingMaterial);
+    if (materialIndex == -1) {
+      _materialTypes.insert(0, "");
+      materialIndex = 0;
+    }
+
+    setState(() {
+      _materialIndex = materialIndex;
       _completedLoadingData = true;
     });
   }
@@ -96,13 +114,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   void _getCarmaPoints() async {
     _loadingCarma = true;
     // TODO: Replace with calls to calculator once that is complete
-    final carma = Random().nextInt(200);
-    print("gained $carma points");
-    print("carma points: ${_carmaPoints + carma}");
+    if (_clothingMaterial != "" && _placeOfOrigin != "") {
+      final carma = Random().nextInt(200);
+      print("gained $carma points");
+      print("carma points: ${_carmaPoints + carma}");
 
-    setState(() {
-      _carmaPoints = _carmaPoints += carma;
-    });
+      setState(() {
+        _carmaPoints = _carmaPoints += carma;
+      });
+    }
     _loadingCarma = false;
   }
 
@@ -135,7 +155,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     ];
 
     // Avoid making unnecessary backend calls
-    if (_completedLoadingData && !_loadingCarma) {
+    if (_completedLoadingData && _validData && !_loadingCarma) {
       _getCarmaPoints();
     }
 
@@ -147,26 +167,27 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       _ClothingLabelDropdown(
           data: _countryNames,
           selected: _countryIndex,
+          label: 'Country of Origin',
           onChange: (value) {
             setState(() {
               _countryIndex = value;
               _placeOfOrigin = _countryNames[value];
-
-              setState(() {
-                _validData = _placeOfOrigin != "";
-              });
+              _validData = _placeOfOrigin != "" && _clothingMaterial != "";
             });
           }),
-      _ClothingLabelDetail(
-          text: _clothingMaterial,
-          label: "Material",
-          getPoints: (s) {
-            setState(() {
-              _clothingMaterial = s;
-            });
-            _getCarmaPoints();
-          }),
-      ((_carmaPoints >= 0)
+      _ClothingLabelDropdown(
+        data: _materialTypes,
+        selected: _materialIndex,
+        label: 'Material',
+        onChange: (value) {
+          setState(() {
+            _materialIndex = value;
+            _clothingMaterial = _materialTypes[value];
+            _validData = _clothingMaterial != "" && _placeOfOrigin != "" ;
+          });
+        }
+      ),
+      ((_carmaPoints >= 0 && _validData)
           ? Container(
               padding: EdgeInsets.only(top: 30),
               child: Center(
@@ -180,16 +201,16 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                   child: Text("Add to Closet",
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
-                    (_validData) ?
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => AddToClosetPage(
-                                  placeOfOrigin: _placeOfOrigin.toUpperCase(),
+                                  placeOfOrigin: _placeOfOrigin,
                                   clothingMaterial: _clothingMaterial,
                                   carmaPoints: _carmaPoints,
-                                )))
-                    : null;
+                                )
+                        )
+                    );
                   },
                 ),
               ),
@@ -226,9 +247,10 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 class _ClothingLabelDropdown extends StatefulWidget {
   final data;
   final selected;
+  final label;
   final Function onChange;
 
-  _ClothingLabelDropdown({this.data, this.selected, this.onChange});
+  _ClothingLabelDropdown({this.data, this.selected, this.label, this.onChange});
 
   @override
   _ClothingLabelDropdownState createState() => _ClothingLabelDropdownState();
@@ -251,7 +273,11 @@ class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
             left: 20,
             right: 20,
           ),
-          child: DropdownButton(
+          child: DropdownButtonFormField(
+            decoration: InputDecoration(
+              labelText: widget.label,
+              enabledBorder: InputBorder.none
+            ),
             isExpanded: true,
             value: widget.selected,
             items: dropDownMenuItems,
