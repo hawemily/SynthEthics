@@ -2,10 +2,10 @@ const df = require("dataframe-js").DataFrame;
 import fs = require("fs");
 const csv = require("csv-parser");
 
-var countryCapitalDF: any = null;
-var seaDistanceDF: any = null;
+export var countryCapitalDF: any = null;
+export var seaDistanceDF: any = null;
 
-const mapping: any = {};
+export const mapping: any = {};
 
 const createDF = (filePath: string, string: string) =>
   new Promise((resolve, reject) => {
@@ -36,10 +36,11 @@ const createDF = (filePath: string, string: string) =>
   });
 
 export const initCSVs = async () => {
-  await createDF("data/country_capital_dataset.csv", "countryCapital");
-  countryCapitalDF = mapping["countryCapital"];
   await createDF("data/sea_distance.csv", "seaDistance");
   seaDistanceDF = mapping["seaDistance"];
+
+  await createDF("data/country_capital_dataset.csv", "countryCapital");
+  countryCapitalDF = mapping["countryCapital"];
 
   return "successfully loaded csvs";
 };
@@ -51,6 +52,7 @@ export const findSeaDistance = (currLoc: string, origin: string) => {
     var resDf = seaDistanceDF.filter(
       (row: any) => row.get("iso1") == currLoc && row.get("iso2") === origin
     );
+    console.log(`count: ${resDf.count()}`);
     return resDf.getRow(0).get("seadistance");
   }
   return 0;

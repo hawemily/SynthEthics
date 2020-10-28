@@ -4,4 +4,5 @@ export interface User {
   userId: string;
   closet: { [key in ClothingType]: clothingItem[] };
   carmaPoints: number;
+  carmaAccumulated: number[];
 }

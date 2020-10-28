@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
 import { LatLng } from "../helper_components/coordinates";
 import { getMaterialCF } from "../helper_components/materials_cf";
-import { callMapsApi } from "../helper_components/carma_api";
+import { callMapsApi } from "../helper_components/maps_geolocator_api";
 import {
   findSeaDistance,
   findCountryCode,
-} from "../helper_components/cf_calculations";
+  initCSVs,
+} from "../helper_components/cf_calculations_by_sea";
 
 const DEFAULT_LAT = 51.5074;
 const DEFAULT_LONG = 0.1278;
 const CO2_PER_TONNE_KM_SHIP = 0.012;
+var csvReadIn = false;
 
 const Weights: { [key: string]: number } = {
   tops: 1.0,
@@ -23,15 +25,16 @@ const Weights: { [key: string]: number } = {
 export const getCarmaValue = async (req: Request, res: Response) => {
   const { category, materials, currLocation, origin } = req.body;
 
-  let preWeighted = calculateCarma(materials, currLocation, origin);
-
-  const returnVal = {
-    carma: preWeighted * Weights[category],
+  let preWeighted = await calculateCarma(materials, currLocation, origin);
+  console.log(`carma: ${preWeighted}`);
+  const result = {
+    carma: Math.round(preWeighted * Weights[category]),
   };
-  res.sendStatus(200).json(returnVal);
+  console.log(`result: ${result}`);
+  res.json(result);
 };
 
-export const calculateCarma = (
+export const calculateCarma = async (
   materials: string[],
   currLocation: LatLng,
   org: String
@@ -41,10 +44,19 @@ export const calculateCarma = (
     longitude: currLocation["longitude"] || DEFAULT_LONG,
   };
   const origin = org || "";
+
+  var transportCarma = 0;
+  try {
+    transportCarma = await calculateTransportCarma(cdts, origin);
+  } catch (e) {
+    console.log("transport carma await failing");
+    console.log(e);
+  }
+
   return (
     calculateMaterialsCarma(materials) +
     calculateManufacturingCarma(origin) +
-    calculateTransportCarma(cdts, origin)
+    transportCarma
   );
 };
 
@@ -58,6 +70,8 @@ const calculateMaterialsCarma = (materials: any) => {
       (each.percentage || 100 / materials.length);
   });
 
+  console.log(`total = ${total}`);
+
   return total;
 };
 
@@ -65,19 +79,34 @@ const calculateManufacturingCarma = (origin: any) => {
   return 0;
 };
 
-const calculateTransportCarma = (cdts: LatLng, origin: any): number => {
+const calculateTransportCarma = async (
+  cdts: LatLng,
+  origin: any
+): Promise<number> => {
   let res = 0;
 
-  callMapsApi(cdts)
-    .then((address) => {
-      const currLoc = findCountryCode(address.longName || "");
-      const org = findCountryCode(origin);
-      const dist = findSeaDistance(currLoc, org);
-      res = dist;
-    })
-    .catch((e) => {
+  if (!csvReadIn) {
+    console.log("reading csv in");
+    try {
+      await initCSVs();
+    } catch (e) {
+      console.log("Error occured while reading CSV data files");
       console.log(e);
-    });
+    }
+
+    csvReadIn = !csvReadIn;
+  }
+  try {
+    const address = await callMapsApi(cdts);
+
+    const currLoc = findCountryCode(address.longName || "");
+    const org = findCountryCode(origin);
+    const dist = findSeaDistance(currLoc, org);
+    console.log(`dist: ${dist}`);
+    res = dist;
+  } catch (e) {
+    console.log("Error occured while calling Maps API");
+  }
 
   return calculateCFOfShip(res);
 };

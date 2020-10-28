@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { clothingItem } from "../models/clothing_item_schema";
-import { calculateCarma } from "./get_carma_calc";
+import { calculateCarma } from "./get_carma_value";
 
 const calcTimesToBeWorn = (cf: number) => {
   const c = Math.random() * 20;
@@ -24,7 +24,7 @@ export const postClothingItem = async (
       purchaseDate,
     } = req.body;
 
-    const cf = calculateCarma(materials, currLocation, origin);
+    const cf = await calculateCarma(materials, currLocation, origin);
     const timesToBeWorn = calcTimesToBeWorn(cf);
     const cPerWear = cf / timesToBeWorn;
 
@@ -42,7 +42,8 @@ export const postClothingItem = async (
     };
 
     const newClothingItem = await db.collection("closet").add(apparel);
-    res.status(201).send(`Created new clothing item: ${newClothingItem.id}`);
+    const result = { clothingID: newClothingItem.id };
+    res.sendStatus(201).json(result);
   } catch (error) {
     res.status(400).send(`Apparel should contain name, brand, materials, type`);
   }

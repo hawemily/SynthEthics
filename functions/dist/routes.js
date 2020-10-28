@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.routes = void 0;
 const get_all_clothes_1 = require("./endpoints/get_all_clothes");
 const post_clothing_item_1 = require("./endpoints/post_clothing_item");
-const get_carma_calc_1 = require("./endpoints/get_carma_calc");
+const get_carma_value_1 = require("./endpoints/get_carma_value");
 exports.routes = (app, db) => {
     // GET /clothes
     app.get("/closet/allClothes", (req, res) => {
@@ -11,7 +11,7 @@ exports.routes = (app, db) => {
         return;
     });
     app.post("/carma", (req, res) => {
-        get_carma_calc_1.getCarmaValue(req, res);
+        get_carma_value_1.getCarmaValue(req, res);
         return;
     });
     app.post("/closet/addItem", (req, res) => {
@@ -19,8 +19,8 @@ exports.routes = (app, db) => {
         return;
     });
     app.get("/dummy", (req, res) => {
-        console.log('called dummy');
-        res.status(200).json({ data: 'dsfdf' });
+        console.log("called dummy");
+        res.status(200).json({ data: "dsfdf" });
         return;
     });
 };

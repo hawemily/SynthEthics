@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { getAllClothes } from "./endpoints/get_all_clothes";
 import { postClothingItem } from "./endpoints/post_clothing_item";
-import { getCarmaValue } from "./endpoints/get_carma_calc";
+import { getCarmaValue } from "./endpoints/get_carma_value";
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   // GET /clothes
@@ -21,8 +21,8 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   });
 
   app.get("/dummy", (req: Request, res: Response) => {
-    console.log('called dummy');
-    res.status(200).json({data: 'dsfdf'});
+    console.log("called dummy");
+    res.status(200).json({ data: "dsfdf" });
     return;
   });
 };
