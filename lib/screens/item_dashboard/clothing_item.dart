@@ -3,16 +3,16 @@ import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
 
 class ClothingItem extends StatefulWidget {
-  ClothingItem({Key key, this.clothingId}) : super(key: key);
+  ClothingItem({Key key, this.clothingData}) : super(key: key);
 
-  final clothingId;
+  final clothingData;
 
   @override
   _ClothingItemState createState() => _ClothingItemState();
 }
 
 class _ClothingItemState extends State<ClothingItem> {
-  var totalTimesToWear = 15; //dummy number, to be filled in later
+  var totalTimesToWear = 15;
   var timesWorn = 0;
   var progress = 0.0;
   var material = "Cotton";
@@ -21,6 +21,13 @@ class _ClothingItemState extends State<ClothingItem> {
   var brand = "TOP SHOP";
   var lastWorn = "16 Sep 20";
   var purchaseDate = "24 Aug 20";
+  var clothingID;
+
+  @override
+  void initState() {
+    super.initState();
+    clothingID = widget.clothingData;
+  }
 
   void updateProgress(String action) {
     setState(() {
