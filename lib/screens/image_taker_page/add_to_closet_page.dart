@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:synthetics/routes.dart';
+import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
-import 'image_taker_page.dart';
 
 class AddToClosetPage extends StatefulWidget {
   final placeOfOrigin;

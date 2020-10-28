@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/image_taker_page/image_display_page.dart';
-import 'package:synthetics/screens/image_taker_page/image_taker_page.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
+import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 import '../../routes.dart';

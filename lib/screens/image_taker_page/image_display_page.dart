@@ -17,6 +17,9 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:synthetics/theme/custom_colours.dart';
 
+import 'clothing_label_dropdown.dart';
+import 'label_display_karma_detail.dart';
+
 // Image display page for image taken from the scanner. To be replaced in the
 // future with constructing a item profile to be added to the closet.
 class ImageDisplayPage extends StatefulWidget {
@@ -130,15 +133,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       return e['country'] as String;
     }).toList();
 
-    int matchIndex = CountryData.containsCountry(countryNames, _placeOfOrigin);
-    if (matchIndex == -1) {
+    int countryIndex = CountryData.containsCountry(countryNames, _placeOfOrigin);
+    if (countryIndex == -1) {
       countryNames.insert(0, "");
-      matchIndex = 0;
+      countryIndex = 0;
       _placeOfOrigin = "";
     }
 
     setState(() {
-      _countryIndex = matchIndex;
+      _countryIndex = countryIndex;
       _countryNames = countryNames;
     });
   }
@@ -230,8 +233,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     List<Widget> detectedTextBlocks = [
       Container(
-        height: 250,
-        width: 250,
+        height: 150,
+        width: 150,
         margin: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
         decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -249,12 +252,12 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     print("Country index " + _countryIndex.toString());
     detectedTextBlocks.addAll([
-      _CarmaPointDetails(
+      CarmaPointDetails(
         points: _carmaPoints,
         loading: (!_completedLoadingData || _loadingCarma),
         valid: _validData,
       ),
-      _ClothingLabelDropdown(
+      ClothingLabelDropdown(
           data: _countryNames,
           selected: _countryIndex,
           label: 'Country of Origin',
@@ -266,7 +269,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
               _updatedCarma = true;
             });
           }),
-      _ClothingLabelDropdown(
+      ClothingLabelDropdown(
         data: _materialTypes,
         selected: _materialIndex,
         label: 'Material',
@@ -279,7 +282,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           });
         }
       ),
-      _ClothingLabelDropdown(
+      ClothingLabelDropdown(
         data: _clothingTypes,
         selected: _typeIndex,
         label: 'Type',
@@ -342,7 +345,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       ),
       body: Center(
           child: Container(
-        padding: EdgeInsets.only(left :20, right : 20),
+        padding: EdgeInsets.only(left :20, right : 20, bottom : 20),
         child: (_completedLoadingPage)
             ? _buildDetectedText()
             : CircularProgressIndicator(),
@@ -351,158 +354,3 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 }
 
-class _ClothingLabelDropdown extends StatefulWidget {
-  final data;
-  final selected;
-  final label;
-  final Function onChange;
-
-  _ClothingLabelDropdown({this.data, this.selected, this.label, this.onChange});
-
-  @override
-  _ClothingLabelDropdownState createState() => _ClothingLabelDropdownState();
-}
-
-class _ClothingLabelDropdownState extends State<_ClothingLabelDropdown> {
-
-  @override
-  Widget build(BuildContext context) {
-    List<DropdownMenuItem> dropDownMenuItems = [];
-    for (var entry in widget.data) {
-      dropDownMenuItems.add(DropdownMenuItem(
-        child: Text(entry),
-        value: widget.data.indexOf(entry),
-      ));
-    }
-    return Card(
-      child: Container(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-          ),
-          child: DropdownButtonFormField(
-            decoration: InputDecoration(
-              labelText: widget.label,
-              enabledBorder: InputBorder.none
-            ),
-            isExpanded: true,
-            value: widget.selected,
-            items: dropDownMenuItems,
-            onChanged: ((value) {
-              widget.onChange(value);
-            }),
-          )),
-    );
-  }
-}
-
-class _ClothingLabelDetail extends StatefulWidget {
-  final text;
-  final label;
-  final getPoints;
-
-  _ClothingLabelDetail({this.text, this.label, this.getPoints});
-
-  @override
-  _ClothingLabelDetailState createState() => _ClothingLabelDetailState();
-}
-
-class _ClothingLabelDetailState extends State<_ClothingLabelDetail> {
-  var text;
-  String labelText;
-
-  @override
-  void initState() {
-    this.labelText = "${widget.label}: ${widget.text}";
-    this.text = widget.text;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
-            child: Center(
-              child: TextField(
-                onSubmitted: (text) {
-                  if (text != "") {
-                    setState(() {
-                      this.text = text.toUpperCase();
-                      this.labelText = "${widget.label}";
-                    });
-                    widget.getPoints(this.text);
-                  } else {
-                    setState(() {
-                      this.labelText = "${widget.label}: ${this.text}";
-                    });
-                  }
-                },
-                decoration: InputDecoration(
-                  labelText: labelText,
-                  border: InputBorder.none,
-                  hintText: "$text",
-                  // labelText: "${widget.label}: $text",
-                ),
-              )
-            )
-        )
-    );
-  }
-}
-
-class _CarmaPointDetails extends StatefulWidget {
-  final int points;
-  final bool loading;
-  final bool valid;
-
-  _CarmaPointDetails({this.points, this.loading, this.valid});
-
-  @override
-  _CarmaPointDetailsState createState() => _CarmaPointDetailsState();
-}
-
-class _CarmaPointDetailsState extends State<_CarmaPointDetails> {
-  Color carmaWidgetColour;
-  String carmaText;
-
-  void _getCarmaInfo() {
-    if (widget.valid && widget.points > 0) {
-      // Have some carma points
-      setState(() {
-        carmaWidgetColour = CustomColours.iconGreen();
-        carmaText = "${widget.points} Carma Points!";
-      });
-    } else {
-      // Display failed
-      setState(() {
-        carmaWidgetColour = Colors.red;
-        carmaText =
-            "Oops. We can't seem to get accurate readings, is the information below correct?";
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.loading) {
-      _getCarmaInfo();
-      return Card(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Center(
-              child: Text(carmaText, style: TextStyle(color: Colors.white))),
-        ),
-        color: carmaWidgetColour,
-      );
-    } else {
-      return Card(
-          child: Container(
-              padding: EdgeInsets.all(20),
-              child: Center(child: CircularProgressIndicator())));
-    }
-  }
-}
