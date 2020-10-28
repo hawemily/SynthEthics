@@ -4,14 +4,13 @@ exports.api = void 0;
 const firebase_functions_1 = require("firebase-functions");
 const rest_api_1 = require("./rest_api");
 const firebase_1 = require("./firebase");
-const cf_calculations_1 = require("./helper_components/cf_calculations");
+// import { initCSVs, mapping } from "./helper_components/cf_calculations_by_sea";
 // Initialize Rest API
 const express = rest_api_1.rest(firebase_1.db);
 const settings = {
     timeoutSeconds: 60,
     memory: "512MB",
 };
-cf_calculations_1.initCSVs();
 // add firebase functions here
 exports.api = firebase_functions_1.runWith(settings).https.onRequest(express);
 //// addmessage is a http endpoint

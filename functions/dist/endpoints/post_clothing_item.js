@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postClothingItem = void 0;
-const get_carma_calc_1 = require("./get_carma_calc");
+const get_carma_value_1 = require("./get_carma_value");
 const calcTimesToBeWorn = (cf) => {
     const c = Math.random() * 20;
     return cf % c;
@@ -9,7 +9,7 @@ const calcTimesToBeWorn = (cf) => {
 exports.postClothingItem = async (req, res, db) => {
     try {
         const { name, brand, materials, clothingType, currLocation, origin, lastWornDate, purchaseDate, } = req.body;
-        const cf = get_carma_calc_1.calculateCarma(materials, currLocation, origin);
+        const cf = await get_carma_value_1.calculateCarma(materials, currLocation, origin);
         const timesToBeWorn = calcTimesToBeWorn(cf);
         const cPerWear = cf / timesToBeWorn;
         const apparel = {

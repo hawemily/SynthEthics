@@ -1,10 +1,7 @@
 import axios from "axios";
 import { googleMapsApiKey, googleMapsApiUri } from "../maps_api";
-import {
-  Status,
-  AddressComponents,
-} from "../helper_components/response_object";
-import { LatLng } from "../helper_components/coordinates";
+import { Status, AddressComponents } from "./response_object";
+import { LatLng } from "./coordinates";
 
 const DEFAULT_COUNTRY = "United Kingdom";
 const DEFAULT_COUNTRY_CODE = "UK";
@@ -12,30 +9,28 @@ const DEFAULT_COUNTRY_CODE = "UK";
 export const callMapsApi = async (cdts: LatLng): Promise<AddressComponents> => {
   const reqUri = createReqURI(cdts);
   console.log(`uri: ${reqUri}`);
-  var country: AddressComponents;
-
-  try {
-    const resp = await axios.get(reqUri);
-
-    console.log(`response received with code ${resp.status}`);
-    console.log(resp.data);
-
-    const { results, status } = resp["data"];
-
-    if ((<any>Status)[status] == Status.Ok) {
-      country = parseResults(results);
-      console.log(`longname: ${country.longName}`);
-      return country;
-    }
-  } catch (e) {
-    console.log("Geolocator API error");
-    console.log(e);
-  }
-
-  country = {
+  var country: AddressComponents = {
     longName: DEFAULT_COUNTRY,
     shortName: DEFAULT_COUNTRY_CODE,
   };
+
+  await axios
+    .get(reqUri)
+    .then((resp) => {
+      console.log(`response received with code ${resp.status}`);
+      console.log(resp.data);
+      const { results, status } = resp["data"];
+
+      if (<string>status === Status.Ok) {
+        country = parseResults(results);
+        console.log(`longname: ${country.longName}`);
+      }
+    })
+    .catch((e) => {
+      console.log("Geolocator API error");
+      console.log(e);
+    });
+
   return country;
 };
 
