@@ -15,6 +15,12 @@ class _ClothingItemState extends State<ClothingItem> {
   var totalTimesToWear = 15; //dummy number, to be filled in later
   var timesWorn = 0;
   var progress = 0.0;
+  var material = "Cotton";
+  var itemName = "Black Crop Top";
+  var carma = 50;
+  var brand = "TOP SHOP";
+  var lastWorn = "16 Sep 20";
+  var purchaseDate = "24 Aug 20";
 
   void updateProgress(String action) {
     setState(() {
@@ -43,7 +49,7 @@ class _ClothingItemState extends State<ClothingItem> {
         appBar: AppBar(
           backgroundColor: Colors.white70,
           iconTheme: IconThemeData(color: Colors.black),
-          title: Text('Black Crop Top', style: TextStyle(color: Colors.black)),
+          title: Text(itemName, style: TextStyle(color: Colors.black)),
         ),
         body: ListView(
           children: <Widget>[
@@ -117,18 +123,18 @@ class _ClothingItemState extends State<ClothingItem> {
               children: [
                 InfoBlock(
                   color: Colors.deepOrange[600],
-                  value: 'TOP SHOP',
+                  value: brand,
                   label: 'Shop',
                 ),
                 InfoBlock(
                   color: Colors.blue[600],
-                  value: 'Cotton',
+                  value: material,
                   label: 'Material',
                 ),
                 InfoBlock(
                   color: Colors.green[900],
-                  value: '50 Karma',
-                  label: 'Points',
+                  value: carma.toString(),
+                  label: 'Carma',
                 ),
               ],
             ),
@@ -143,12 +149,12 @@ class _ClothingItemState extends State<ClothingItem> {
                 ),
                 InfoBlock(
                   color: Colors.deepPurple[900],
-                  value: '24 Aug 2020',
+                  value: purchaseDate,
                   label: 'Purchase Date',
                 ),
                 InfoBlock(
                   color: Colors.red[900],
-                  value: '16 Sep 2020',
+                  value: lastWorn,
                   label: 'Last Worn',
                 ),
               ],
