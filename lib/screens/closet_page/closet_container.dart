@@ -5,7 +5,7 @@ import 'package:synthetics/screens/closet_page/clothing_card.dart';
 class ClosetContainer extends StatelessWidget {
   const ClosetContainer({Key key, this.clothingIds}) : super(key: key);
 
-  final clothingIds;
+  final List<int> clothingIds;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,8 @@ class ClosetContainer extends StatelessWidget {
           shrinkWrap: true,
           children: [
             for (var id in this.clothingIds)
-              ClothingCard(clothingId: id, display: ClothingCardDisplay.ClosetSelect)
+              // ClothingCard(clothingId: id, display: ClothingCardDisplay.Closet)
+              ClothingCard(clothingList: clothingIds, display: ClothingCardDisplay.Outfit)
           ],
         ));
   }
