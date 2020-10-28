@@ -50,6 +50,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   bool _completedLoadingData = false;
   bool _loadingCarma = false;
   bool _validClothingType = false;
+  bool _updatedCarma = false;
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -102,8 +103,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     // var origin = labelProperties["origin"];
     // var material = labelProperties["material"];
 
-    final origin = "MADE IN MYANMA";
-    final material = "%POLYESTE";
+    final origin = "MADE IN MYANMAR";
+    final material = "%POLYESTER";
 
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
@@ -163,33 +164,47 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (_validData) {
       print("position $_positionData");
 
-      // TODO: Replace with calls to calculator once that is complete
-      final carma = Random().nextInt(200);
-      print("gained $carma points");
-      print("carma points: ${_carmaPoints + carma}");
 
-      setState(() {
-        _carmaPoints = _carmaPoints += carma;
+
+
+      http.post(
+        // TODO: Replace local with firebase api once available
+        "http://10.0.2.2:5001/cfcalc/us-central1/api/carma",
+        //   "https://us-central1-cfcalc.cloudfunctions.net/api/carma",
+          headers: <String, String>{
+            'Content-Type': 'application/json'
+          },
+          body: jsonEncode(<String, dynamic>{
+            'category': _clothingType,
+            'materials': [_clothingMaterial],
+            'currLocation': _positionData,
+            'origin': _placeOfOrigin
+          }),
+      ).then((queryResult) {
+        print("queryResult ${queryResult}");
+        print("queryResult ${queryResult.body}");
+        print("decoded ${jsonDecode(queryResult.body)}");
+        final response = jsonDecode(queryResult.body);
+
+        // TODO: Replace with calls to calculator once that is complete
+        // final carma = Random().nextInt(200);
+        int carma = 0;
+        if (response['carma'] != null) {
+          carma = response['carma'];
+        }
+
+        print("gained $carma points");
+        print("carma points: ${_carmaPoints + carma}");
+        setState(() {
+          // TODO: Replace with carma point returned from api call
+          _carmaPoints = carma;
+
+          _loadingCarma = false;
+          _updatedCarma = false;
+        });
       });
 
-
-        // http.post(
-        //   "http://10.0.2.2:5001/cfcalc/us-central1/api/carma",
-        //   //   "https://us-central1-cfcalc.cloudfunctions.net/api/carma",
-        //     headers: <String, String>{
-        //       'Content-Type': 'application/json'
-        //     },
-        //     body: jsonEncode(<String, dynamic>{
-        //       'category': 'tops',
-        //       'materials': [_clothingMaterial],
-        //       'currLocation': position,
-        //       'origin': _placeOfOrigin
-        //     }
-        //     ),
-        // ).then((queryResult) => print(queryResult.body));
-
     }
-    _loadingCarma = false;
   }
 
   String _cleanOriginText(String originMatch) {
@@ -201,6 +216,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (materialMatch == null || materialMatch == "") return materialMatch;
 
     return materialMatch.split('%').last.trim();
+  }
+
+  bool _canCalculateCarma() {
+    return _updatedCarma
+        && _completedLoadingData
+        && _validData
+        && !_loadingCarma;
   }
 
   Widget _buildDetectedText() {
@@ -221,7 +243,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     ];
 
     // Avoid making unnecessary backend calls
-    if (_completedLoadingData && _validData && !_loadingCarma) {
+    if (_canCalculateCarma()) {
       _getCarmaPoints();
     }
 
@@ -241,6 +263,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
               _countryIndex = value;
               _placeOfOrigin = _countryNames[value];
               _setValidData();
+              _updatedCarma = true;
             });
           }),
       _ClothingLabelDropdown(
@@ -252,6 +275,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
             _materialIndex = value;
             _clothingMaterial = _materialTypes[value];
             _setValidData();
+            _updatedCarma = true;
           });
         }
       ),
@@ -265,6 +289,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
             _clothingType = _clothingTypes[value];
             _validClothingType = value != 0;
             _setValidData();
+            _updatedCarma = true;
           });
         }),
       ),
