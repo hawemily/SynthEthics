@@ -25,7 +25,8 @@ exports.postClothingItem = async (req, res, db) => {
             purchaseDate: purchaseDate,
         };
         const newClothingItem = await db.collection("closet").add(apparel);
-        res.status(201).send(`Created new clothing item: ${newClothingItem.id}`);
+        const result = { clothingID: newClothingItem.id };
+        res.sendStatus(201).json(result);
     }
     catch (error) {
         res.status(400).send(`Apparel should contain name, brand, materials, type`);
