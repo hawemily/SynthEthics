@@ -8,6 +8,8 @@ class APIClient implements http.Client {
 
   APIClient(this.client);
 
+  final endpoint = 'https://us-central1-cfcalc.cloudfunctions.net/api';
+  // final endpoint = 'http://10.0.2.2:5001/cfcalc/us-central1/api';
   http.Client client;
 
   @override
@@ -17,42 +19,42 @@ class APIClient implements http.Client {
 
   @override
   Future<http.Response> delete(url, {Map<String, String> headers}) {
-    return client.delete(url, headers: headers);
+    return client.delete(endpoint + url, headers: headers);
   }
 
   @override
   Future<http.Response> get(url, {Map<String, String> headers}) {
-    return client.get(url, headers: headers);
+    return client.get(endpoint + url, headers: headers);
   }
 
   @override
   Future<http.Response> head(url, {Map<String, String> headers}) {
-    return client.head(url, headers: headers);
+    return client.head(endpoint + url, headers: headers);
   }
 
   @override
   Future<http.Response> patch(url, {Map<String, String> headers, body, Encoding encoding}) {
-    return client.patch(url, headers: headers, body: body, encoding: encoding);
+    return client.patch(endpoint + url, headers: headers, body: body, encoding: encoding);
   }
 
   @override
   Future<http.Response> post(url, {Map<String, String> headers, body, Encoding encoding}) {
-    return client.post(url, headers: headers, body: body, encoding: encoding);
+    return client.post(endpoint + url, headers: headers, body: body, encoding: encoding);
   }
 
   @override
   Future<http.Response> put(url, {Map<String, String> headers, body, Encoding encoding}) {
-    return client.put(url, headers: headers, body: body, encoding: encoding);
+    return client.put(endpoint + url, headers: headers, body: body, encoding: encoding);
   }
 
   @override
   Future<String> read(url, {Map<String, String> headers}) {
-    return client.read(url, headers: headers);
+    return client.read(endpoint + url, headers: headers);
   }
 
   @override
   Future<Uint8List> readBytes(url, {Map<String, String> headers}) {
-    return client.readBytes(url, headers: headers);
+    return client.readBytes(endpoint + url, headers: headers);
   }
 
   @override
