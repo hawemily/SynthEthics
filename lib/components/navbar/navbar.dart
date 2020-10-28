@@ -67,22 +67,9 @@ class _NavBarState extends State<NavBar> {
                 print('GOTO OUTFITS');
               } else {
                 // Goto closet page
-                // TODO: Remove this variable from the navbar, should be fetched in initState of its target page
-                final categories = [
-                  "tops",
-                  "bottoms",
-                  "skirts",
-                  "dresses",
-                  "outerwear",
-                  "headgear"
-                ];
+               
                 // TODO: Replace this with a _clearStackAndPush, add a corr. route in routes
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Closet(
-                              categories: categories,
-                            )));
+               _clearStackAndPush(Screens.Closet);
               }
               break;
 

@@ -9,21 +9,20 @@ const DEFAULT_LONG = 0.1278;
 const CO2_PER_TONNE_KM_SHIP = 0.012;
 var csvReadIn = false;
 const Weights = {
-    tops: 1.0,
-    bottoms: 1.5,
-    skirts: 1.5,
-    dresses: 2.0,
-    outerwear: 3.0,
-    headgear: 0.8,
+    Tops: 1.0,
+    Bottoms: 1.5,
+    Skirts: 1.5,
+    Dresses: 2.0,
+    Outerwear: 3.0,
+    Headgear: 0.8,
 };
 exports.getCarmaValue = async (req, res) => {
     const { category, materials, currLocation, origin } = req.body;
     let preWeighted = await exports.calculateCarma(materials, currLocation, origin);
-    console.log(`carma: ${preWeighted}`);
     const result = {
         carma: Math.round(preWeighted * Weights[category]),
     };
-    console.log(`result: ${result}`);
+    console.log(result);
     res.json(result);
 };
 exports.calculateCarma = async (materials, currLocation, org) => {
@@ -52,7 +51,7 @@ const calculateMaterialsCarma = (materials) => {
             materials_cf_1.getMaterialCF(each.name, each.variant) *
                 (each.percentage || 100 / materials.length);
     });
-    console.log(`total = ${total}`);
+    console.log(`totalMaterials = ${total}`);
     return total;
 };
 const calculateManufacturingCarma = (origin) => {
@@ -71,17 +70,12 @@ const calculateTransportCarma = async (cdts, origin) => {
         }
         csvReadIn = !csvReadIn;
     }
-    try {
-        const address = await maps_geolocator_api_1.callMapsApi(cdts);
-        const currLoc = cf_calculations_by_sea_1.findCountryCode(address.longName || "");
-        const org = cf_calculations_by_sea_1.findCountryCode(origin);
-        const dist = cf_calculations_by_sea_1.findSeaDistance(currLoc, org);
-        console.log(`dist: ${dist}`);
-        res = dist;
-    }
-    catch (e) {
-        console.log("Error occured while calling Maps API");
-    }
+    const address = await maps_geolocator_api_1.callMapsApi(cdts);
+    const currLoc = cf_calculations_by_sea_1.findCountryCode(address.longName || "");
+    const org = cf_calculations_by_sea_1.findCountryCode(origin);
+    const dist = cf_calculations_by_sea_1.findSeaDistance(currLoc, org);
+    console.log(`dist: ${dist}`);
+    res = dist;
     return calculateCFOfShip(res);
 };
 const calculateCFOfShip = (dist) => {

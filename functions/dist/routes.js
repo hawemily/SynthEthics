@@ -4,6 +4,7 @@ exports.routes = void 0;
 const get_all_clothes_1 = require("./endpoints/get_all_clothes");
 const post_clothing_item_1 = require("./endpoints/post_clothing_item");
 const get_carma_value_1 = require("./endpoints/get_carma_value");
+const init_data_1 = require("./endpoints/init_data");
 exports.routes = (app, db) => {
     // GET /clothes
     app.get("/closet/allClothes", (req, res) => {
@@ -16,6 +17,10 @@ exports.routes = (app, db) => {
     });
     app.post("/closet/addItem", (req, res) => {
         post_clothing_item_1.postClothingItem(req, res, db);
+        return;
+    });
+    app.get("/initData", (req, res) => {
+        init_data_1.initData(res, db);
         return;
     });
     app.get("/dummy", (req, res) => {

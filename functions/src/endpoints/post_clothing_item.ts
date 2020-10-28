@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { clothingItem } from "../models/clothing_item_schema";
+import { clothingItem, ClothingType } from "../models/clothing_item_schema";
 import { calculateCarma } from "./get_carma_value";
 
 const calcTimesToBeWorn = (cf: number) => {
@@ -36,14 +36,14 @@ export const postClothingItem = async (
       maxNoOfTimesToBeWorn: timesToBeWorn,
       carmaPerWear: cPerWear,
       currentTimesWorn: 0,
-      clothingType: clothingType,
+      clothingType: (<any>ClothingType)[clothingType],
       lastWornDate: lastWornDate,
       purchaseDate: purchaseDate,
     };
 
     const newClothingItem = await db.collection("closet").add(apparel);
     const result = { clothingID: newClothingItem.id };
-    res.sendStatus(201).json(result);
+    res.json(result);
   } catch (error) {
     res.status(400).send(`Apparel should contain name, brand, materials, type`);
   }

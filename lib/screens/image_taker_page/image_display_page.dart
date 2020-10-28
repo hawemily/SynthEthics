@@ -11,14 +11,16 @@ import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
 import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
 import 'package:synthetics/services/country/country_data.dart';
+import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:synthetics/services/string_operator/string_operator.dart';
 
 import 'package:synthetics/theme/custom_colours.dart';
 
 import 'clothing_label_dropdown.dart';
-import 'label_display_karma_detail.dart';
+import 'carma_detail_display.dart';
 
 // Image display page for image taken from the scanner. To be replaced in the
 // future with constructing a item profile to be added to the closet.
@@ -54,6 +56,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   bool _loadingCarma = false;
   bool _validClothingType = false;
   bool _updatedCarma = false;
+  bool _hasInitialQuery = false;
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -75,10 +78,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       });
     });
     ClothingTypes.getInstance().types.then((value) {
+      List<String> clothingTypes = ['None'];
+      for (String type in value) {
+        clothingTypes.add(StringOperator.capitalise(type));
+      }
       setState(() {
-        _clothingTypes = List.of(value);
+        _clothingTypes = clothingTypes;
       });
-      _clothingTypes.insert(0, "None");
     });
   }
 
@@ -138,6 +144,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       countryNames.insert(0, "");
       countryIndex = 0;
       _placeOfOrigin = "";
+    } else {
+      _placeOfOrigin = StringOperator.capitaliseClear(_placeOfOrigin);
     }
 
     setState(() {
@@ -154,6 +162,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       _materialTypes.insert(0, "");
       materialIndex = 0;
       _clothingMaterial = "";
+    } else {
+      _clothingMaterial = StringOperator.capitaliseClear(_clothingMaterial);
     }
 
     setState(() {
@@ -167,9 +177,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (_validData) {
       print("position $_positionData");
 
-
-
-
       http.post(
         // TODO: Replace local with firebase api once available
         "http://10.0.2.2:5001/cfcalc/us-central1/api/carma",
@@ -178,19 +185,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
             'Content-Type': 'application/json'
           },
           body: jsonEncode(<String, dynamic>{
-            'category': _clothingType,
+            'category': _clothingType, // Convert to match backend
             'materials': [_clothingMaterial],
             'currLocation': _positionData,
             'origin': _placeOfOrigin
           }),
       ).then((queryResult) {
-        print("queryResult ${queryResult}");
-        print("queryResult ${queryResult.body}");
-        print("decoded ${jsonDecode(queryResult.body)}");
         final response = jsonDecode(queryResult.body);
-
-        // TODO: Replace with calls to calculator once that is complete
-        // final carma = Random().nextInt(200);
         int carma = 0;
         if (response['carma'] != null) {
           carma = response['carma'];
@@ -199,9 +200,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
         print("gained $carma points");
         print("carma points: ${_carmaPoints + carma}");
         setState(() {
-          // TODO: Replace with carma point returned from api call
           _carmaPoints = carma;
-
           _loadingCarma = false;
           _updatedCarma = false;
         });
@@ -309,7 +308,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                               top: 15, bottom: 15, left: 20, right: 20))),
                   child: Text("Add to Closet",
                       style: TextStyle(color: Colors.white)),
-                  onPressed: () {
+                  onPressed: (() {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -317,11 +316,12 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                                   placeOfOrigin: _placeOfOrigin,
                                   clothingMaterial: _clothingMaterial,
                                   clothingType: _clothingType,
+                                  location: _positionData,
                                   carmaPoints: _carmaPoints,
                                 )
                         )
                     );
-                  },
+                  }),
                 ),
               ),
             )
