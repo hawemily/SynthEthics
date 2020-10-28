@@ -45,14 +45,14 @@ class HomePageState extends State<HomePage> {
                                 height: 120.0,
                                 decoration: new BoxDecoration(
                                     shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image : NetworkImage("https://steamcdn"
-                                            "-a.akamaihd.net/steamcommunity/pu"
-                                            "blic/images/avatars/27/271540ebec"
-                                            "73a4380b45350f970f5af5737d7d64_fu"
-                                            "ll.jpg"),
-                                    )
+                                    // image: new DecorationImage(
+                                    //     fit: BoxFit.fill,
+                                    //     image : NetworkImage("https://steamcdn"
+                                    //         "-a.akamaihd.net/steamcommunity/pu"
+                                    //         "blic/images/avatars/27/271540ebec"
+                                    //         "73a4380b45350f970f5af5737d7d64_fu"
+                                    //         "ll.jpg"),
+                                    // )
                                 )),
                             Text(
                               "Mrs Chanandler Bong",

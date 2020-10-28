@@ -11,11 +11,13 @@ void closet_page_tests() {
 
   testWidgets('Closet Test', (WidgetTester tester) async {
     final client = MockClient();
-    when(client.get('https://us-central1-cfcalc.cloudfunctions.net/api/dummy'))
-        .thenAnswer((_) async => http.Response('"hehe"', 200));
 
-    await tester.pumpWidget(MyApp());
-    await tester.tap(find.byIcon(Icons.sensor_window));
+    when(client.get('https://us-central1-cfcalc.cloudfunctions.net/api/dummy'))
+        .thenAnswer((_) async => http.Response('"jaja"', 200));
+
+    await tester.pumpWidget(MyApp(client));
+
+    // await tester.tap(find.byIcon(Icons.sensor_window));
 
 
     //
