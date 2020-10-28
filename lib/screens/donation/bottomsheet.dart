@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'suggestion_list.dart';
 
 class BottomSheetButton extends StatefulWidget {
-  BottomSheetButton({Key key, this.center}) : super(key:key);
+  BottomSheetButton({Key key, this.names, this.addresses, this.distances})
+      : super(key: key);
 
-  final LatLng center;
+  final List names;
+  final List addresses;
+  final List distances;
 
   @override
   _BottomSheetState createState() => _BottomSheetState();
@@ -28,7 +29,12 @@ class _BottomSheetState extends State<BottomSheetButton> {
             child: Icon(Icons.keyboard_arrow_up),
             onPressed: () {
               var sheetController = showBottomSheet(
-                  context: context, builder: (context) => SuggestionsList(center: widget.center));
+                  context: context,
+                  builder: (context) => SuggestionsList(
+                        names: widget.names,
+                        addresses: widget.addresses,
+                        distances: widget.distances,
+                      ));
               _showButton(false);
               sheetController.closed.then((value) => _showButton(true));
             })

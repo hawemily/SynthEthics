@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
+import 'package:synthetics/screens/item_dashboard/stats_model.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
 
 class ClothingItem extends StatefulWidget {
@@ -12,34 +14,32 @@ class ClothingItem extends StatefulWidget {
 }
 
 class _ClothingItemState extends State<ClothingItem> {
-  var totalTimesToWear = 15;
-  var timesWorn = 0;
+  StatsModel clothingID;
   var progress = 0.0;
-  var material = "Cotton";
-  var itemName = "Black Crop Top";
-  var carma = 50;
-  var brand = "TOP SHOP";
-  var lastWorn = "16 Sep 20";
-  var purchaseDate = "24 Aug 20";
-  var clothingID;
 
   @override
   void initState() {
     super.initState();
-    clothingID = widget.clothingData;
+
+    /* replace rawJson with clothing data json object passed */
+    var rawJson =
+        '{"totalTimesToWear" : 15, "timesWorn" : 0, "itemName" : "Black Crop Top", "carma" : 50, "brand" : "Zara", "lastWorn" : "16 Sep 20", "purchaseDate" : "24 Aug 20", "material": "Cotton"}';
+    var parsedjson = json.decode(rawJson);
+    this.clothingID = StatsModel.fromJson(parsedjson);
   }
 
   void updateProgress(String action) {
     setState(() {
       if (action == 'INC') {
-        timesWorn++;
+        this.clothingID.timesWorn++;
       } else {
-        if (timesWorn > 0) timesWorn--;
+        if (this.clothingID.timesWorn > 0) this.clothingID.timesWorn--;
       }
-      this.progress = timesWorn / totalTimesToWear;
+      this.progress =
+          this.clothingID.timesWorn / this.clothingID.totalTimesToWear;
     });
 
-    if (timesWorn == totalTimesToWear) {
+    if (this.clothingID.timesWorn == this.clothingID.totalTimesToWear) {
       showDialog(
           context: context,
           builder: (context) {
@@ -56,7 +56,8 @@ class _ClothingItemState extends State<ClothingItem> {
         appBar: AppBar(
           backgroundColor: Colors.white70,
           iconTheme: IconThemeData(color: Colors.black),
-          title: Text(itemName, style: TextStyle(color: Colors.black)),
+          title:
+              Text(clothingID.itemName, style: TextStyle(color: Colors.black)),
         ),
         body: ListView(
           children: <Widget>[
@@ -78,7 +79,7 @@ class _ClothingItemState extends State<ClothingItem> {
                       height: 180,
                       child: new CircularProgressIndicator(
                         strokeWidth: 30,
-                        value: this.progress,
+                        value: progress,
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                         backgroundColor: Colors.grey,
                       ),
@@ -130,18 +131,18 @@ class _ClothingItemState extends State<ClothingItem> {
               children: [
                 InfoBlock(
                   color: Colors.deepOrange[600],
-                  value: brand,
+                  value: clothingID.brand,
                   label: 'Shop',
                 ),
                 InfoBlock(
                   color: Colors.blue[600],
-                  value: material,
+                  value: clothingID.material,
                   label: 'Material',
                 ),
                 InfoBlock(
                   color: Colors.green[900],
-                  value: carma.toString(),
-                  label: 'Carma',
+                  value: clothingID.carma.toString() + " Carma",
+                  label: 'Points',
                 ),
               ],
             ),
@@ -151,17 +152,19 @@ class _ClothingItemState extends State<ClothingItem> {
               children: [
                 InfoBlock(
                   color: Colors.black,
-                  value: '$timesWorn / $totalTimesToWear',
+                  value: clothingID.timesWorn.toString() +
+                      "/" +
+                      clothingID.totalTimesToWear.toString(),
                   label: 'Times Worn',
                 ),
                 InfoBlock(
                   color: Colors.deepPurple[900],
-                  value: purchaseDate,
+                  value: clothingID.purchaseDate.toString(),
                   label: 'Purchase Date',
                 ),
                 InfoBlock(
                   color: Colors.red[900],
-                  value: lastWorn,
+                  value: clothingID.lastWorn.toString(),
                   label: 'Last Worn',
                 ),
               ],
@@ -169,6 +172,5 @@ class _ClothingItemState extends State<ClothingItem> {
           ],
         ),
         bottomNavigationBar: NavBar());
-//        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }
 }
