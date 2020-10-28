@@ -6,9 +6,14 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:synthetics/services/api_client.dart';
 
 class Closet extends StatefulWidget {
-  Closet({Key key, this.categories}) : super(key:key);
+  Closet({Key key, this.categories, bool isSelect}) : super(key:key) {
+    if (isSelect != null) {
+      this.isSelect = true;
+    }
+  }
 
   final List<String> categories;
+  bool isSelect = false;
 
   @override
   _ClosetState createState() => _ClosetState();
@@ -63,7 +68,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
           children:
             _tabs.map((Tab tab) {
               final String label = tab.text;
-              return ClosetContainer(clothingIds: List.generate(20, (index) => index));
+              return ClosetContainer(clothingIds: List.generate(20, (index) => index), isSelect: widget.isSelect);
             }).toList(),
         ),
         bottomNavigationBar: NavBar(),

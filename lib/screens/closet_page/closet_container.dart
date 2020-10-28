@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 
 class ClosetContainer extends StatelessWidget {
-  const ClosetContainer({Key key, this.clothingIds}) : super(key: key);
+  const ClosetContainer({Key key, this.clothingIds, this.isSelect})
+      : super(key: key);
 
   final List<int> clothingIds;
+  final bool isSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,11 @@ class ClosetContainer extends StatelessWidget {
           children: [
             for (var id in this.clothingIds)
               // ClothingCard(clothingId: id, display: ClothingCardDisplay.Closet)
-              ClothingCard(clothingList: clothingIds, display: ClothingCardDisplay.Outfit)
+              this.isSelect
+                  ? ClothingCard(
+                      clothingId: id, display: ClothingCardDisplay.ClosetSelect)
+                  : ClothingCard(
+                      clothingId: id, display: ClothingCardDisplay.Closet)
           ],
         ));
   }

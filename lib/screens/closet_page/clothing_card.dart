@@ -62,7 +62,7 @@ class _ClothingCardState extends State<ClothingCard> {
             height: 20.0,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
-                color: CustomColours.negativeRed()),
+                color: CustomColours.accentCopper()),
             child: () {
               var icon = null;
               if (display == ClothingCardDisplay.Outfit) {
@@ -88,9 +88,10 @@ class _ClothingCardState extends State<ClothingCard> {
                   });
                 }
               },
-              child: Icon(Icons.arrow_back_ios,
-                  color: this.index == 0 ? Colors.grey : CustomColours.offWhite(),
-                  size: 20.0))),
+              child: this.index == 0
+                  ? Container()
+                  : Icon(Icons.arrow_back_ios,
+                      color: CustomColours.offWhite(), size: 20.0))),
       Positioned(
           top: 75.0,
           right: 10.0,
@@ -103,11 +104,10 @@ class _ClothingCardState extends State<ClothingCard> {
                   });
                 }
               },
-              child: Icon(Icons.arrow_forward_ios,
-                  color: this.index == this.clothingList.length - 1
-                      ? Colors.grey
-                      : CustomColours.offWhite(),
-                  size: 20.0)))
+              child: this.index == this.clothingList.length - 1
+                  ? Container()
+                  : Icon(Icons.arrow_forward_ios,
+                      color: CustomColours.offWhite(), size: 20.0)))
     ];
   }
 
