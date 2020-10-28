@@ -14,6 +14,7 @@ import 'package:synthetics/services/country/country_data.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:synthetics/services/string_operator/string_operator.dart';
 
 import 'package:synthetics/theme/custom_colours.dart';
 
@@ -75,10 +76,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       });
     });
     ClothingTypes.getInstance().types.then((value) {
+      List<String> clothingTypes = ['None'];
+      for (String type in value) {
+        clothingTypes.add(StringOperator.capitalise(type));
+      }
       setState(() {
-        _clothingTypes = List.of(value);
+        _clothingTypes = clothingTypes;
       });
-      _clothingTypes.insert(0, "None");
     });
   }
 
@@ -138,6 +142,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       countryNames.insert(0, "");
       countryIndex = 0;
       _placeOfOrigin = "";
+    } else {
+      _placeOfOrigin = StringOperator.capitaliseClear(_placeOfOrigin);
     }
 
     setState(() {
@@ -167,9 +173,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (_validData) {
       print("position $_positionData");
 
-
-
-
       http.post(
         // TODO: Replace local with firebase api once available
         "http://10.0.2.2:5001/cfcalc/us-central1/api/carma",
@@ -178,19 +181,13 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
             'Content-Type': 'application/json'
           },
           body: jsonEncode(<String, dynamic>{
-            'category': _clothingType,
+            'category': _clothingType, // Convert to match backend
             'materials': [_clothingMaterial],
             'currLocation': _positionData,
             'origin': _placeOfOrigin
           }),
       ).then((queryResult) {
-        print("queryResult ${queryResult}");
-        print("queryResult ${queryResult.body}");
-        print("decoded ${jsonDecode(queryResult.body)}");
         final response = jsonDecode(queryResult.body);
-
-        // TODO: Replace with calls to calculator once that is complete
-        // final carma = Random().nextInt(200);
         int carma = 0;
         if (response['carma'] != null) {
           carma = response['carma'];
@@ -199,9 +196,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
         print("gained $carma points");
         print("carma points: ${_carmaPoints + carma}");
         setState(() {
-          // TODO: Replace with carma point returned from api call
           _carmaPoints = carma;
-
           _loadingCarma = false;
           _updatedCarma = false;
         });
@@ -315,7 +310,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                         MaterialPageRoute(
                             builder: (context) => AddToClosetPage(
                                   placeOfOrigin: _placeOfOrigin,
-                                  clothingMaterial: _clothingMaterial,
+                                  clothingMaterial: _clothingMaterial.toLowerCase(),
                                   clothingType: _clothingType,
                                   carmaPoints: _carmaPoints,
                                 )
