@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postClothingItem = void 0;
+const clothing_item_schema_1 = require("../models/clothing_item_schema");
 const get_carma_value_1 = require("./get_carma_value");
 const calcTimesToBeWorn = (cf) => {
     const c = Math.random() * 20;
@@ -20,13 +21,13 @@ exports.postClothingItem = async (req, res, db) => {
             maxNoOfTimesToBeWorn: timesToBeWorn,
             carmaPerWear: cPerWear,
             currentTimesWorn: 0,
-            clothingType: clothingType,
+            clothingType: clothing_item_schema_1.ClothingType[clothingType],
             lastWornDate: lastWornDate,
             purchaseDate: purchaseDate,
         };
         const newClothingItem = await db.collection("closet").add(apparel);
         const result = { clothingID: newClothingItem.id };
-        res.sendStatus(201).json(result);
+        res.json(result);
     }
     catch (error) {
         res.status(400).send(`Apparel should contain name, brand, materials, type`);

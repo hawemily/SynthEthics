@@ -4,9 +4,9 @@ exports.getAllClothes = void 0;
 exports.getAllClothes = async (req, res, db) => {
     const clothingQuerySnapshot = await db.collection("closet").get();
     const clothingItems = [];
-    clothingQuerySnapshot.forEach(doc => {
+    clothingQuerySnapshot.forEach((doc) => {
         clothingItems.push({ id: doc.id, data: doc.data() });
     });
-    res.status(200).json(clothingItems);
+    res.status(200).json({ clothingItems: clothingItems });
 };
 //# sourceMappingURL=get_all_clothes.js.map
