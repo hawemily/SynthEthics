@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/screens/closet_page/closet_container.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/services/api_client.dart';
-
+import 'package:synthetics/theme/custom_colours.dart';
 
 class Closet extends StatefulWidget {
   Closet({Key key}) : super(key: key);
@@ -23,7 +23,6 @@ class Closet extends StatefulWidget {
 }
 
 class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
-
   List<Tab> _tabs;
   TabController _tabController;
 
@@ -37,9 +36,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     List<String> categories = widget.categories;
 
     print(categories);
-    _tabs = <Tab>[
-      for (String c in categories) Tab(text: c)
-    ];
+    _tabs = <Tab>[for (String c in categories) Tab(text: c)];
     super.initState();
     _tabController = TabController(vsync: this, length: _tabs.length);
   }
@@ -74,25 +71,24 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white70,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text('Closet', style: TextStyle(color: Colors.black)),
+        backgroundColor: CustomColours.greenNavy(),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Closet', style: TextStyle(color: Colors.white)),
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,
           isScrollable: true,
-          unselectedLabelColor: Colors.black.withOpacity(0.4),
-          labelColor: Colors.black,
-          indicatorColor: Colors.black54,),
+          unselectedLabelColor: Colors.white.withOpacity(0.4),
+          labelColor: Colors.white,
+          indicatorColor: Colors.white54,
+        ),
       ),
       // call future builder here
       body: TabBarView(
         controller: _tabController,
-        children:
-        _tabs.map((Tab tab) {
+        children: _tabs.map((Tab tab) {
           final String label = tab.text;
           return ClosetContainer(
               clothingIds: List.generate(20, (index) => index));

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/item_dashboard/stats_model.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 
 class ClothingItem extends StatefulWidget {
   ClothingItem({Key key, this.clothingData}) : super(key: key);
@@ -54,10 +55,10 @@ class _ClothingItemState extends State<ClothingItem> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white70,
-          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: CustomColours.greenNavy(),
+          iconTheme: IconThemeData(color: Colors.white),
           title:
-              Text(clothingID.itemName, style: TextStyle(color: Colors.black)),
+              Text(clothingID.itemName, style: TextStyle(color: Colors.white)),
         ),
         body: ListView(
           children: <Widget>[

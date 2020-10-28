@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 import 'bottomsheet.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -76,8 +77,10 @@ class _DonationPageState extends State<DonationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Donation centres near you'),
-        backgroundColor: Colors.green[700],
+        title: Text('Donation centres near you',
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: CustomColours.greenNavy(),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: GoogleMap(
         markers: Set.of(markers),
