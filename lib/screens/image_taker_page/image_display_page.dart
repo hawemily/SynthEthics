@@ -129,15 +129,15 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       return e['country'] as String;
     }).toList();
 
-    int matchIndex = CountryData.containsCountry(countryNames, _placeOfOrigin);
-    if (matchIndex == -1) {
+    int countryIndex = CountryData.containsCountry(countryNames, _placeOfOrigin);
+    if (countryIndex == -1) {
       countryNames.insert(0, "");
-      matchIndex = 0;
+      countryIndex = 0;
       _placeOfOrigin = "";
     }
 
     setState(() {
-      _countryIndex = matchIndex;
+      _countryIndex = countryIndex;
       _countryNames = countryNames;
     });
   }
@@ -208,8 +208,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     List<Widget> detectedTextBlocks = [
       Container(
-        height: 250,
-        width: 250,
+        height: 150,
+        width: 150,
         margin: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
         decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -317,7 +317,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       ),
       body: Center(
           child: Container(
-        padding: EdgeInsets.only(left :20, right : 20),
+        padding: EdgeInsets.only(left :20, right : 20, bottom : 20),
         child: (_completedLoadingPage)
             ? _buildDetectedText()
             : CircularProgressIndicator(),
