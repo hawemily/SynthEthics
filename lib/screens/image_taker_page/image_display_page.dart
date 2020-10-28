@@ -11,6 +11,7 @@ import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
 import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
 import 'package:synthetics/services/country/country_data.dart';
+import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
@@ -19,7 +20,7 @@ import 'package:synthetics/services/string_operator/string_operator.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 import 'clothing_label_dropdown.dart';
-import 'label_display_karma_detail.dart';
+import 'carma_detail_display.dart';
 
 // Image display page for image taken from the scanner. To be replaced in the
 // future with constructing a item profile to be added to the closet.
@@ -55,6 +56,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   bool _loadingCarma = false;
   bool _validClothingType = false;
   bool _updatedCarma = false;
+  bool _hasInitialQuery = false;
 
   void initFirebase() async {
     await Firebase.initializeApp();
@@ -160,6 +162,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       _materialTypes.insert(0, "");
       materialIndex = 0;
       _clothingMaterial = "";
+    } else {
+      _clothingMaterial = StringOperator.capitaliseClear(_clothingMaterial);
     }
 
     setState(() {
@@ -304,19 +308,20 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                               top: 15, bottom: 15, left: 20, right: 20))),
                   child: Text("Add to Closet",
                       style: TextStyle(color: Colors.white)),
-                  onPressed: () {
+                  onPressed: (() {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => AddToClosetPage(
                                   placeOfOrigin: _placeOfOrigin,
-                                  clothingMaterial: _clothingMaterial.toLowerCase(),
+                                  clothingMaterial: _clothingMaterial,
                                   clothingType: _clothingType,
+                                  location: _positionData,
                                   carmaPoints: _carmaPoints,
                                 )
                         )
                     );
-                  },
+                  }),
                 ),
               ),
             )

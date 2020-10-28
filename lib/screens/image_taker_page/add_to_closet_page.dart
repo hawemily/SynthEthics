@@ -1,22 +1,30 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:synthetics/routes.dart';
+import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/theme/custom_colours.dart';
+import 'package:http/http.dart' as http;
 
 
 class AddToClosetPage extends StatefulWidget {
-  final placeOfOrigin;
-  final clothingMaterial;
-  final carmaPoints;
-  final clothingType;
+  final String placeOfOrigin;
+  final String clothingMaterial;
+  final String clothingType;
+
+  final int carmaPoints;
+
+  final Map<String, dynamic> location;
 
   AddToClosetPage({
     this.placeOfOrigin,
     this.clothingMaterial,
     this.clothingType,
     this.carmaPoints,
+    this.location,
   });
 
   @override
@@ -24,18 +32,62 @@ class AddToClosetPage extends StatefulWidget {
 }
 
 class _AddToClosetPageState extends State<AddToClosetPage> {
-  String clothingName = "";
-  String clothingBrand = "";
-  File clothingImage;
-  
-  void _saveToCloset() {
+  String _clothingName = "";
+  String _clothingBrand = "";
+
+  File _clothingImage;
+
+  void _saveToCloset() async {
     print('Save to closet');
+    print(DateTime.now().toString());
+
+    print({
+          'name': _clothingName,
+          'brand': _clothingBrand,
+          'materials': [widget.clothingMaterial.toLowerCase()],
+          'clothingType': widget.clothingType,
+          'currLocation': widget.location,
+          'origin': widget.placeOfOrigin,
+          'lastWornDate': DateTime.now().toString(),
+          'purchaseDate': DateTime.now().toString(),
+        }.toString());
+
+    final response = await http.post(
+      // TODO: Replace with closet server when finished
+      "http://10.0.2.2:5001/cfcalc/us-central1/api/closet/addItem",
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': _clothingName,
+        'brand': _clothingBrand,
+        'materials': [widget.clothingMaterial.toLowerCase()],
+        'clothingType': widget.clothingType,
+        'currLocation': widget.location,
+        'origin': widget.placeOfOrigin,
+        'lastWornDate': DateTime.now().toString(),
+        'purchaseDate': DateTime.now().toString(),
+      })
+    );
+    print("response $response");
+    if (response != null) {
+      print("response body ${response.body}");
+      print("response Decode ${jsonDecode(response.body)}");
+    }
+    final clothingId = jsonDecode(response.body)['clothingID'];
+    print("clothingID $clothingId");
+    File newImage = await ImageManager.getInstance()
+        .savePictureToDevice(_clothingImage, clothingId);
+    print(newImage == null);
+    if (newImage != null) {
+      print(newImage.path);
+    }
     Navigator.popUntil(
         context,
         ModalRoute.withName(routeMapping[Screens.Home])
     );
     // TODO: Replace with closet page once the constructor is fixed
-    Navigator.pushNamed(context, routeMapping[Screens.Empty]);
+    // Navigator.pushNamed(context, routeMapping[Screens.Empty]);
   }
 
   @override
@@ -57,18 +109,17 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
 
     // Build clothing image view depending on whether an image has been provided
     Widget clothingImageWidget;
-    if (clothingImage == null)
+    if (_clothingImage == null)
       clothingImageWidget = Text("+");
     else {
       clothingImageWidget = Container(
-        height: 250,
-        width: 250,
-        margin: EdgeInsets.all(10),
+        height: 200,
+        width: 200,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: FileImage(clothingImage),
+              image: FileImage(_clothingImage),
             )
         ),
       );
@@ -94,7 +145,6 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                       ],
                     ),
                     Container(
-                      padding: EdgeInsets.only(top: 20),
                       child: OutlinedButton(
                         style: ButtonStyle(
                             shape: MaterialStateProperty.resolveWith((states) =>
@@ -115,15 +165,15 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                     carmaDisplay,
                     _WritableCard(label: "Name", func: (text) {
                       setState(() {
-                        clothingName = text;
+                        _clothingName = text;
                       });
-                      print("clothingName: $clothingName");
+                      print("clothingName: $_clothingName");
                     }),
                     _WritableCard(label: "Brand", func: (text) {
                       setState(() {
-                        clothingBrand = text;
+                        _clothingBrand = text;
                       });
-                      print("clothingBrand: $clothingBrand");
+                      print("clothingBrand: $_clothingBrand");
                     }),
                     _ReadOnlyCards(
                         text: "Material: ${widget.clothingMaterial}"),
@@ -140,7 +190,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
     futureFile.then((value) {
       if (value != null) {
         setState(() {
-          clothingImage = value;
+          _clothingImage = value;
         });
       }
     });
@@ -196,7 +246,6 @@ class _WritableCardState extends State<_WritableCard> {
 }
 
 
-
 class _ReadOnlyCards extends StatelessWidget {
   final text;
   _ReadOnlyCards({this.text});
@@ -224,7 +273,6 @@ class _ReadOnlyCards extends StatelessWidget {
     );
   }
 }
-
 
 class _ATCButtons extends StatelessWidget {
   final func;

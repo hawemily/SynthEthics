@@ -4,10 +4,11 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 class CarmaPointDetails extends StatefulWidget {
   final int points;
+  final bool hasStarted;
   final bool loading;
   final bool valid;
 
-  CarmaPointDetails({this.points, this.loading, this.valid});
+  CarmaPointDetails({this.points, this.hasStarted, this.loading, this.valid});
 
   @override
   CarmaPointDetailsState createState() => CarmaPointDetailsState();
