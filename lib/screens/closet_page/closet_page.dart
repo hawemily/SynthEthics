@@ -7,7 +7,11 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class Closet extends StatefulWidget {
-  Closet({Key key}) : super(key: key);
+  Closet({Key key, bool isSelect}) : super(key: key) {
+    if (isSelect != null) {
+      this.isSelect = true;
+    }
+  }
 
   final List<String> categories = [
     "tops",
@@ -17,6 +21,7 @@ class Closet extends StatefulWidget {
     "outerwear",
     "headgear"
   ];
+  bool isSelect = false;
 
   @override
   _ClosetState createState() => _ClosetState();
@@ -91,7 +96,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         children: _tabs.map((Tab tab) {
           final String label = tab.text;
           return ClosetContainer(
-              clothingIds: List.generate(20, (index) => index));
+              clothingIds: List.generate(20, (index) => index),
+              isSelect: widget.isSelect);
         }).toList(),
       ),
       bottomNavigationBar: NavBar(),

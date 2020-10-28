@@ -19,4 +19,12 @@ class CustomColours {
   static Color negativeRed() {
     return Color(0xFFE3655B);
   }
+
+  static Color accentCopper() {
+    return Color(0xFF986C6A);
+  }
+
+  static Color baseBlack() {
+    return Color(0xFF262626);
+  }
 }
