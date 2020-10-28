@@ -24,7 +24,7 @@ exports.getCarmaValue = async (req, res) => {
         carma: Math.round(preWeighted * Weights[category]),
     };
     console.log(`result: ${result}`);
-    res.send(result);
+    res.json(result);
 };
 exports.calculateCarma = async (materials, currLocation, org) => {
     const cdts = {
@@ -32,7 +32,14 @@ exports.calculateCarma = async (materials, currLocation, org) => {
         longitude: currLocation["longitude"] || DEFAULT_LONG,
     };
     const origin = org || "";
-    const transportCarma = await calculateTransportCarma(cdts, origin);
+    var transportCarma = 0;
+    try {
+        transportCarma = await calculateTransportCarma(cdts, origin);
+    }
+    catch (e) {
+        console.log("transport carma await failing");
+        console.log(e);
+    }
     return (calculateMaterialsCarma(materials) +
         calculateManufacturingCarma(origin) +
         transportCarma);
