@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
+import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/item_dashboard/stats_model.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
+import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class ClothingItem extends StatefulWidget {
@@ -15,32 +19,40 @@ class ClothingItem extends StatefulWidget {
 }
 
 class _ClothingItemState extends State<ClothingItem> {
-  StatsModel clothingID;
+  ClothingItemObject clothingID;
   var progress = 0.0;
+
+  int timesWorn;
+
+  File image;
 
   @override
   void initState() {
     super.initState();
-
-    /* replace rawJson with clothing data json object passed */
-    var rawJson =
-        '{"totalTimesToWear" : 15, "timesWorn" : 0, "itemName" : "Black Crop Top", "carma" : 50, "brand" : "Zara", "lastWorn" : "16 Sep 20", "purchaseDate" : "24 Aug 20", "material": "Cotton"}';
-    var parsedjson = json.decode(rawJson);
-    this.clothingID = StatsModel.fromJson(parsedjson);
+    this.clothingID = widget.clothingItem;
+    ImageManager.getInstance()
+        .loadPictureFromDevice(this.clothingID.id)
+        .then((value) {
+      setState(() {
+        image = value;
+      });
+    });
+    this.timesWorn = clothingID.data.currentTimesWorn.round();
   }
 
   void updateProgress(String action) {
     setState(() {
       if (action == 'INC') {
-        this.clothingID.timesWorn++;
+        this.timesWorn++;
       } else {
-        if (this.clothingID.timesWorn > 0) this.clothingID.timesWorn--;
+        if (this.timesWorn > 0) this.timesWorn--;
       }
       this.progress =
-          this.clothingID.timesWorn / this.clothingID.totalTimesToWear;
+          // this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
+          this.timesWorn / 15;
     });
 
-    if (this.clothingID.timesWorn == this.clothingID.totalTimesToWear) {
+    if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn) {
       showDialog(
           context: context,
           builder: (context) {
@@ -51,6 +63,11 @@ class _ClothingItemState extends State<ClothingItem> {
     }
   }
 
+  String customFormatDateTime(String string) {
+    DateTime datetime = DateTime.parse(string);
+    return DateFormat('dd/MM/yy').format(datetime);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +75,7 @@ class _ClothingItemState extends State<ClothingItem> {
           backgroundColor: CustomColours.greenNavy(),
           iconTheme: IconThemeData(color: Colors.white),
           title:
-              Text(clothingID.itemName, style: TextStyle(color: Colors.white)),
+              Text(clothingID.data.name, style: TextStyle(color: Colors.white)),
         ),
         body: ListView(
           children: <Widget>[
@@ -68,12 +85,11 @@ class _ClothingItemState extends State<ClothingItem> {
               child: Stack(
                 children: <Widget>[
                   Center(
-                    child: Image.asset(
-                      'lib/assets/closet_IT.jpg',
-                      width: double.maxFinite,
-                      height: 160.0,
-                    ),
-                  ),
+                      child: Image.asset(
+                    'lib/assets/closet_IT.jpg',
+                    width: double.maxFinite,
+                    height: 160.0,
+                  )),
                   Center(
                     child: Container(
                       width: 180,
@@ -92,9 +108,15 @@ class _ClothingItemState extends State<ClothingItem> {
                             color: Colors.white,
                             shape: BoxShape.circle,
                             image: new DecorationImage(
-                                // fit: BoxFit.fitHeight,
-                                image: new NetworkImage(
-                                    "https://cdn.endource.com/image/s3-49f2938a8e4d8f6c74bccbd2bf800c06/detail/and-other-stories-ribbed-square-neck-crop-top.jpg")))),
+                                fit: BoxFit.fitHeight,
+                                image: ((this.image == null)
+                                    // TODO: Find a better placeholder image later
+                                    ? new NetworkImage(
+                                        "https://cdn.endource.com/image/s3-49f2938a8e4d8f6c74bccbd2bf800c06/detail/and-other-stories-ribbed-square-neck-crop-top.jpg")
+                                    : FileImage(this.image))
+                            )
+                        )
+                    ),
                   ),
                 ],
               ),
@@ -132,17 +154,18 @@ class _ClothingItemState extends State<ClothingItem> {
               children: [
                 InfoBlock(
                   color: Colors.deepOrange[600],
-                  value: clothingID.brand,
+                  value: clothingID.data.brand,
                   label: 'Shop',
                 ),
                 InfoBlock(
                   color: Colors.blue[600],
-                  value: clothingID.material,
+                  // TODO: Replace once multiple materials is implemented
+                  value: clothingID.data.materials[0],
                   label: 'Material',
                 ),
                 InfoBlock(
                   color: Colors.green[900],
-                  value: clothingID.carma.toString() + " Carma",
+                  value: "${clothingID.data.cF.round()} Carma",
                   label: 'Points',
                 ),
               ],
@@ -153,19 +176,20 @@ class _ClothingItemState extends State<ClothingItem> {
               children: [
                 InfoBlock(
                   color: Colors.black,
-                  value: clothingID.timesWorn.toString() +
-                      "/" +
-                      clothingID.totalTimesToWear.toString(),
+                  value:
+                      // "${this.timesWorn}/${clothingID.data.maxNoOfTimesToBeWorn}",
+                  // TODO Replace with proper value after backend fix
+                  "${this.timesWorn}/15",
                   label: 'Times Worn',
                 ),
                 InfoBlock(
                   color: Colors.deepPurple[900],
-                  value: clothingID.purchaseDate.toString(),
+                  value: customFormatDateTime(clothingID.data.purchaseDate),
                   label: 'Purchase Date',
                 ),
                 InfoBlock(
                   color: Colors.red[900],
-                  value: clothingID.lastWorn.toString(),
+                  value: customFormatDateTime(clothingID.data.lastWornDate),
                   label: 'Last Worn',
                 ),
               ],

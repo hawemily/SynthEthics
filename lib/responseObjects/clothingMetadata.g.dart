@@ -10,12 +10,12 @@ ClothingMetadata _$ClothingMetadataFromJson(Map<String, dynamic> json) {
   return ClothingMetadata(
     json['name'] as String ?? 'Unnamed Item',
     json['brand'] as String ?? 'Unbranded',
-    json['cF'] as int ?? 0,
+    (json['cF'] as num)?.toDouble() ?? 0,
     (json['materials'] as List)?.map((e) => e as String)?.toList(),
     json['lastWornDate'] as String ?? '25/10/2020',
     json['purchaseDate'] as String ?? '25/10/2020',
-    json['currentTimesWorn'] as int ?? 0,
-    json['maxNoOfTimesToBeWorn'] as int ?? 0,
+    (json['currentTimesWorn'] as num)?.toDouble() ?? 0,
+    (json['maxNoOfTimesToBeWorn'] as num)?.toDouble() ?? 0,
   );
 }
 

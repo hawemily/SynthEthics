@@ -13,7 +13,7 @@ class ClothingMetadata {
   final String brand;
 
   @JsonKey(defaultValue: 0)
-  final int cF;
+  final double cF;
 
   final List<String> materials;
 
@@ -25,10 +25,10 @@ class ClothingMetadata {
   final String purchaseDate;
 
   @JsonKey(defaultValue: 0)
-  final int currentTimesWorn;
+  final double currentTimesWorn;
 
   @JsonKey(defaultValue: 0)
-  final int maxNoOfTimesToBeWorn;
+  final double maxNoOfTimesToBeWorn;
 
   ClothingMetadata(this.name,
     this.brand,
