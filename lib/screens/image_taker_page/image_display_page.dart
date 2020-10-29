@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -11,7 +10,6 @@ import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
 import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
 import 'package:synthetics/services/country/country_data.dart';
-import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
@@ -102,18 +100,20 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 
   void _detectText() async {
-    // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-    // final VisionText visionText = await textRecognizer.processImage(visionImage);
-    //
-    // // Parse using regex parser with VisionText as label source
-    // var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
-    // var labelProperties = labelParser.parseLabel();
-    // var origin = labelProperties["origin"];
-    // var material = labelProperties["material"];
+    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
+    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    final VisionText visionText = await textRecognizer.processImage(visionImage);
 
-    final origin = "MADE IN MYANMAR";
-    final material = "%POLYESTER";
+    // Parse using regex parser with VisionText as label source
+    var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
+    var labelProperties = labelParser.parseLabel();
+    var origin = labelProperties["origin"];
+    var material = labelProperties["material"];
+
+    // TODO: Remove testing variables
+    // Testing Variables
+    // final origin = "MADE IN MYANMAR";
+    // final material = "%POLYESTER";
 
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
