@@ -7,11 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
+import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
 import 'package:synthetics/services/country/country_data.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
-import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
 
@@ -177,10 +177,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (_validData) {
       print("position $_positionData");
 
-      http.post(
-        // TODO: Replace local with firebase api once available
-        "http://10.0.2.2:5001/cfcalc/us-central1/api/carma",
-        //   "https://us-central1-cfcalc.cloudfunctions.net/api/carma",
+      api_client.post(
+        "/carma",
           headers: <String, String>{
             'Content-Type': 'application/json'
           },
@@ -197,8 +195,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           carma = response['carma'];
         }
 
-        print("gained $carma points");
-        print("carma points: ${_carmaPoints + carma}");
+        print("carma points: $carma");
         setState(() {
           _carmaPoints = carma;
           _loadingCarma = false;

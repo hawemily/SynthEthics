@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:synthetics/routes.dart';
+import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-import 'package:http/http.dart' as http;
 
 
 class AddToClosetPage extends StatefulWidget {
@@ -37,14 +36,19 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
 
   File _clothingImage;
 
+  bool _savingInProgress = false;
+
   bool _saveActive() {
     return (_clothingImage != null
         && _clothingName != ""
         && _clothingBrand != null);
-
   }
 
   void _saveToCloset() async {
+    setState(() {
+      _savingInProgress = true;
+    });
+
     print('Save to closet');
     print(DateTime.now().toString());
 
@@ -59,9 +63,8 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
           'purchaseDate': DateTime.now().toString(),
         }.toString());
 
-    final response = await http.post(
-      // TODO: Replace with closet server when finished
-      "http://10.0.2.2:5001/cfcalc/us-central1/api/closet/addItem",
+    final response = await api_client.post(
+      "/closet/addItem",
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -148,10 +151,14 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                         _ATCButtons(text: "Back", func: () {
                           Navigator.pop(context);
                         }),
-                        _ATCButtons(
-                          text: "Save",
-                          func: _saveToCloset,
-                          active: _saveActive(),)
+                        ((!_savingInProgress)
+                            ? _ATCButtons(
+                                text: "Save",
+                                func: _saveToCloset,
+                                active: _saveActive(),
+                              )
+                            : CircularProgressIndicator()
+                        )
                       ],
                     ),
                     Container(
