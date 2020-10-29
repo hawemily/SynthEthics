@@ -7,6 +7,7 @@ class ClosetContainer extends StatelessWidget {
 
   final clothingIds;
 
+  // return future builder here
   @override
   Widget build(BuildContext context) {
     return Container(

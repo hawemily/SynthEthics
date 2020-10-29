@@ -5,6 +5,8 @@ import 'package:synthetics/screens/closet_page/closet_container.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
+import 'package:synthetics/responseObjects/clothingItem.dart';
+import 'package:synthetics/responseObjects/clothingItemResponse.dart';
 
 class Closet extends StatefulWidget {
   Closet({Key key}) : super(key: key);
@@ -26,15 +28,15 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   List<Tab> _tabs;
   TabController _tabController;
 
-  //Future<List<String>> categories;
-  // Future<List<Map<String, dynamic>>> clothingItems
+  Future<List<String>> categories;
+  Future<List<ClothingItemResponse>> clothingItems;
 
   @override
   void initState() {
     //TODO: call api to init categories from backend using collecitons
     // categories = getCategories();
     List<String> categories = widget.categories;
-
+    clothingItems = getClothes();
     print(categories);
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
     super.initState();
@@ -47,27 +49,29 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-//  Future<List<String>> getCategories() async {
-//    final resp = await api_client.get("/getAllClothingTypes");
-//
-//    if (resp.statusCode == 200) {
-//      final body = jsonDecode(resp.body);
-//      final clothingTypes = body['clothingTypes'];
-//      return clothingTypes;
-//    }
-//  }
-//
-//  Future<List<Map<String, dynamic>>> getClothes() async {
-//    print("trying get all clothes from backend");
-//    final response = await api_client.get("/closet/allClothes");
-//
-//    if (response.statusCode == 200) {
-//      print(response.body);
-//      final resBody = jsonDecode(response.body);
-//      final closet = resBody['clothingItems'];
-//      return closet;
-//    }
-//  }
+  Future<List<String>> getCategories() async {
+    final resp = await api_client.get("/getAllClothingTypes");
+
+    if (resp.statusCode == 200) {
+      final body = jsonDecode(resp.body);
+      final clothingTypes = body['clothingTypes'];
+      return clothingTypes;
+    }
+  }
+
+  Future<List<ClothingItemResponse>> getClothes() async {
+    print("trying get all clothes from backend");
+    final response = await api_client.get("/closet/allClothes");
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      final resBody = jsonDecode(response.body);
+      final List<ClothingItemResponse> closet= resBody.map((item) =>
+        ClothingItemResponse.fromJson(item)
+      );
+      return closet;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
