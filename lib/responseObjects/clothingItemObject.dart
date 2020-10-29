@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:synthetics/responseObjects/clothingItem.dart';
+import 'package:synthetics/responseObjects/clothingMetadata.dart';
 
 part 'clothingItemResponse.g.dart';
 

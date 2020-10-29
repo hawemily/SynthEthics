@@ -25,8 +25,8 @@ export const postClothingItem = async (
     } = req.body;
 
     const cf = await calculateCarma(materials, currLocation, origin);
-    const timesToBeWorn = calcTimesToBeWorn(cf);
-    const cPerWear = cf / timesToBeWorn;
+    const timesToBeWorn = Math.round(calcTimesToBeWorn(cf));
+    const cPerWear = Math.round(cf / timesToBeWorn);
 
     const apparel: clothingItem = {
       name: name,
