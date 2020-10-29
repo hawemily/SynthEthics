@@ -7,7 +7,7 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class Closet extends StatefulWidget {
-  Closet({Key key, bool isSelect}) : super(key: key) {
+  Closet({Key key, bool isSelect}) : super(key:key) {
     if (isSelect != null) {
       this.isSelect = true;
     }
