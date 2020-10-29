@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 
 class ClosetContainer extends StatelessWidget {
-  const ClosetContainer({Key key, this.clothingIds}) : super(key: key);
+  const ClosetContainer({Key key, this.clothingIds, this.isSelect})
+      : super(key: key);
 
-  final clothingIds;
+  final List<int> clothingIds;
+  final bool isSelect;
 
   // return future builder here
   @override
@@ -13,13 +15,19 @@ class ClosetContainer extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.all(5.0),
         child: new GridView.count(
-            crossAxisCount: 3,
-            childAspectRatio: 0.8,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: [
-          for (var id in this.clothingIds) ClothingCard(clothingId: id)
-        ],
+          crossAxisCount: 3,
+          childAspectRatio: 0.8,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: [
+            for (var id in this.clothingIds)
+              // ClothingCard(clothingId: id, display: ClothingCardDisplay.Closet)
+              this.isSelect
+                  ? ClothingCard(
+                      clothingId: id, display: ClothingCardDisplay.ClosetSelect)
+                  : ClothingCard(
+                      clothingId: id, display: ClothingCardDisplay.Closet)
+          ],
         ));
   }
 }

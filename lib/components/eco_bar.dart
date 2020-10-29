@@ -6,6 +6,7 @@ class EcoBar extends StatelessWidget {
 
   final current;
   final max;
+  final maxWidth = 78.0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +32,31 @@ class EcoBar extends StatelessWidget {
               )
             )
           ),
-          Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                width: 80.0 * current / max,
-                margin: EdgeInsets.fromLTRB(0.5, 2.5, 3.0, 2.5),
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(20)
+          Stack(
+              children: [
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: maxWidth,
+                      margin: EdgeInsets.fromLTRB(0.5, 2.5, 5.0, 2.5),
+                      decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    )
                 ),
-              )
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: maxWidth * current / max,
+                      margin: EdgeInsets.fromLTRB(0.5, 2.5, 3.0, 2.5),
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                    )
+                )
+              ]
           )
         ],
       )
