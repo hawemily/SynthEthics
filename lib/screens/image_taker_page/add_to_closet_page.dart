@@ -37,6 +37,13 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
 
   File _clothingImage;
 
+  bool _saveActive() {
+    return (_clothingImage != null
+        && _clothingName != ""
+        && _clothingBrand != null);
+
+  }
+
   void _saveToCloset() async {
     print('Save to closet');
     print(DateTime.now().toString());
@@ -62,7 +69,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
         'name': _clothingName,
         'brand': _clothingBrand,
         'materials': [widget.clothingMaterial.toLowerCase()],
-        'clothingType': widget.clothingType,
+        'clothingType': widget.clothingType.toLowerCase(),
         'currLocation': widget.location,
         'origin': widget.placeOfOrigin,
         'lastWornDate': DateTime.now().toString(),
@@ -141,7 +148,10 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                         _ATCButtons(text: "Back", func: () {
                           Navigator.pop(context);
                         }),
-                        _ATCButtons(text: "Save", func: _saveToCloset)
+                        _ATCButtons(
+                          text: "Save",
+                          func: _saveToCloset,
+                          active: _saveActive(),)
                       ],
                     ),
                     Container(
@@ -275,18 +285,28 @@ class _ReadOnlyCards extends StatelessWidget {
 }
 
 class _ATCButtons extends StatelessWidget {
-  final func;
-  final text;
-  _ATCButtons({this.text, this.func});
+  final Function func;
+  final String text;
+  final bool active;
+  _ATCButtons({this.text, this.func, this.active: true});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FlatButton(
-          onPressed: this.func,
-          child: Text(this.text)
-      )
-    );
+    if (this.active) {
+      return Container(
+          child: FlatButton(
+            onPressed: this.func,
+            child: Text(this.text),
+          )
+      );
+    } else {
+      return Container(
+          child: FlatButton(
+            child: Text(this.text),
+            disabledTextColor: Colors.grey,
+          )
+      );
+    }
   }
 }
 

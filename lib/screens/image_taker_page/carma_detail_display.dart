@@ -19,19 +19,24 @@ class CarmaPointDetailsState extends State<CarmaPointDetails> {
   String carmaText;
 
   void _getCarmaInfo() {
-    if (widget.valid && widget.points > 0) {
-      // Have some carma points
-      setState(() {
-        carmaWidgetColour = CustomColours.iconGreen();
-        carmaText = "${widget.points} Carma Points!";
-      });
+    if (!widget.hasStarted) {
+      carmaWidgetColour = CustomColours.greenNavy();
+      carmaText = "Select a clothing type below and lets get started!";
     } else {
-      // Display failed
-      setState(() {
-        carmaWidgetColour = Colors.red;
-        carmaText =
-        "Oops. We can't seem to get accurate readings, is the information below correct?";
-      });
+      if (widget.valid && widget.points > 0) {
+        // Have some carma points
+        setState(() {
+          carmaWidgetColour = CustomColours.iconGreen();
+          carmaText = "${widget.points} Carma Points!";
+        });
+      } else {
+        // Display failed
+        setState(() {
+          carmaWidgetColour = Colors.red;
+          carmaText =
+          "Oops. We can't seem to get accurate readings, is the information below correct?";
+        });
+      }
     }
   }
 

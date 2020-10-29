@@ -246,6 +246,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     // Avoid making unnecessary backend calls
     if (_canCalculateCarma()) {
+      if (!_hasInitialQuery) _hasInitialQuery = true;
       _getCarmaPoints();
     }
 
@@ -253,6 +254,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     detectedTextBlocks.addAll([
       CarmaPointDetails(
         points: _carmaPoints,
+        hasStarted: _hasInitialQuery,
         loading: (!_completedLoadingData || _loadingCarma),
         valid: _validData,
       ),
