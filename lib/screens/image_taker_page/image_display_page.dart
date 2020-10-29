@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -8,12 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
+import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
 import 'package:synthetics/services/country/country_data.dart';
-import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/label_parser/label_parser.dart';
-import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
 
@@ -102,18 +100,20 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 
   void _detectText() async {
-    // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-    // final VisionText visionText = await textRecognizer.processImage(visionImage);
-    //
-    // // Parse using regex parser with VisionText as label source
-    // var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
-    // var labelProperties = labelParser.parseLabel();
-    // var origin = labelProperties["origin"];
-    // var material = labelProperties["material"];
+    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
+    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    final VisionText visionText = await textRecognizer.processImage(visionImage);
 
-    final origin = "MADE IN MYANMAR";
-    final material = "%POLYESTER";
+    // Parse using regex parser with VisionText as label source
+    var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
+    var labelProperties = labelParser.parseLabel();
+    var origin = labelProperties["origin"];
+    var material = labelProperties["material"];
+
+    // TODO: Remove testing variables
+    // Testing Variables
+    // final origin = "MADE IN MYANMAR";
+    // final material = "%POLYESTER";
 
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);
@@ -177,10 +177,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (_validData) {
       print("position $_positionData");
 
-      http.post(
-        // TODO: Replace local with firebase api once available
-        "http://10.0.2.2:5001/cfcalc/us-central1/api/carma",
-        //   "https://us-central1-cfcalc.cloudfunctions.net/api/carma",
+      api_client.post(
+        "/carma",
           headers: <String, String>{
             'Content-Type': 'application/json'
           },
@@ -197,8 +195,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           carma = response['carma'];
         }
 
-        print("gained $carma points");
-        print("carma points: ${_carmaPoints + carma}");
+        print("carma points: $carma");
         setState(() {
           _carmaPoints = carma;
           _loadingCarma = false;
@@ -246,6 +243,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     // Avoid making unnecessary backend calls
     if (_canCalculateCarma()) {
+      if (!_hasInitialQuery) _hasInitialQuery = true;
       _getCarmaPoints();
     }
 
@@ -253,6 +251,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     detectedTextBlocks.addAll([
       CarmaPointDetails(
         points: _carmaPoints,
+        hasStarted: _hasInitialQuery,
         loading: (!_completedLoadingData || _loadingCarma),
         valid: _validData,
       ),
