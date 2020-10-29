@@ -6,9 +6,9 @@ import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class ClothingItem extends StatefulWidget {
-  ClothingItem({Key key, this.clothingData}) : super(key: key);
+  ClothingItem({Key key, this.clothingItem}) : super(key: key);
 
-  final clothingData;
+  final clothingItem;
 
   @override
   _ClothingItemState createState() => _ClothingItemState();

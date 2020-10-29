@@ -1,26 +1,29 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/eco_bar.dart';
 import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/theme/custom_colours.dart';
+import 'package:synthetics/responseObjects/clothingItemObject.dart';
+import 'package:synthetics/services/image_taker/image_manager.dart';
 
 enum ClothingCardDisplay { Closet, Outfit, ClosetSelect }
 
 class ClothingCard extends StatefulWidget {
   const ClothingCard(
-      {Key key, this.clothingId, this.clothingList, this.display})
+      {Key key, this.clothingItem, this.display, this.outfitClothingList})
       : super(key: key);
 
-  final int clothingId;
-  final List<int> clothingList;
+  final ClothingItemObject clothingItem;
+  final List<ClothingItemObject> outfitClothingList;
   final ClothingCardDisplay display;
 
   @override
   _ClothingCardState createState() {
-    if (clothingList != null) {
-      return _ClothingCardState(display, clothingList: clothingList);
-    } else if (clothingId != null) {
-      return _ClothingCardState(display, clothingId: clothingId);
+    if (outfitClothingList != null) {
+      return _ClothingCardState(display, outfitClothingList: outfitClothingList);
+    } else if (clothingItem != null) {
+      return _ClothingCardState(display, clothingItem: clothingItem);
     } else {
       return _ClothingCardState(display);
     }
@@ -28,23 +31,35 @@ class ClothingCard extends StatefulWidget {
 }
 
 class _ClothingCardState extends State<ClothingCard> {
-  _ClothingCardState(this.display, {this.clothingId, this.clothingList}) {
-    if (this.clothingList != null) {
+
+  _ClothingCardState(this.display, {this.clothingItem, this.outfitClothingList}) {
+    if (this.outfitClothingList != null) {
       this.index = 0;
-      this.currentClothingId = this.clothingList[this.index];
-    } else if (this.clothingId != null) {
-      this.currentClothingId = this.clothingId;
+      this.currentClothingItem = this.outfitClothingList[this.index];
+    } else if (this.clothingItem != null) {
+      this.currentClothingItem = this.clothingItem;
     } else {
-      this.currentClothingId = -1;
+      this.currentClothingItem = null;
     }
   }
 
   bool clear = false;
   int index = -1;
-  int currentClothingId;
-  final int clothingId;
-  final List<int> clothingList;
-  final ClothingCardDisplay display;
+  ClothingItemObject currentClothingItem;
+  final ClothingItemObject clothingItem;
+  final List<ClothingItemObject> outfitClothingList;
+  ClothingCardDisplay display;
+  Future<File> currClothingItemImage;
+
+  @override
+  void initState() {
+      currClothingItemImage = getImage();
+  }
+
+  Future<File> getImage() {
+    return ImageManager.getInstance().loadPictureFromDevice(this.currentClothingItem.id);
+  }
+
 
   Widget getIcon() {
     return GestureDetector(
@@ -83,7 +98,8 @@ class _ClothingCardState extends State<ClothingCard> {
               onTap: () {
                 if (index > 0) {
                   setState(() {
-                    this.currentClothingId = this.clothingList[this.index - 1];
+                    this.currentClothingItem = this.outfitClothingList[this.index - 1];
+                    this.currClothingItemImage = getImage();
                     this.index = this.index - 1;
                   });
                 }
@@ -97,14 +113,15 @@ class _ClothingCardState extends State<ClothingCard> {
           right: 10.0,
           child: GestureDetector(
               onTap: () {
-                if (index < clothingList.length - 1) {
+                if (index < outfitClothingList.length - 1) {
                   setState(() {
-                    this.currentClothingId = this.clothingList[this.index + 1];
+                    this.currentClothingItem = this.outfitClothingList[this.index + 1];
+                    this.currClothingItemImage = getImage();
                     this.index = this.index + 1;
                   });
                 }
               },
-              child: this.index == this.clothingList.length - 1
+              child: this.index == this.outfitClothingList.length - 1
                   ? Container()
                   : Icon(Icons.arrow_forward_ios,
                       color: CustomColours.offWhite(), size: 20.0)))
@@ -120,22 +137,26 @@ class _ClothingCardState extends State<ClothingCard> {
             color: CustomColours.offWhite(),
             margin: EdgeInsets.all(5.0),
             child: InkWell(
-                onTap: () => {print("object is being tapped")},
+                onTap: () => {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => ClothingItem(clothingItem: this.currentClothingItem)
+                    ))
+                },
                 child: Padding(
                     padding: EdgeInsets.all(5.0),
                     child: Stack(
                         children: (() {
                       var cardChildren = <Widget>[
-                        Ink(
-                          // to be replaced with image
-                          color: Colors.grey,
-                          width: 147,
-                          height: 147,
-                          child: Container(
-                            child: Text("Clothing Image " +
-                                this.currentClothingId.toString()),
-                            alignment: Alignment.center,
-                          ),
+                        FutureBuilder<File>(
+                          future: this.currClothingItemImage,
+                          builder: (context, snapshot) {
+                            if(snapshot.hasData) {
+                              return Image.file(snapshot.data);
+                            } else if (snapshot.data == null) {
+                              return Text("No image from file");
+                            }
+                            return LinearProgressIndicator();
+                          }
                         ),
                         Align(
                             alignment: Alignment.bottomCenter,

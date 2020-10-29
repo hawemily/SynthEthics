@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
+import 'package:synthetics/responseObjects/clothingItemObject.dart';
 
 class ClosetContainer extends StatelessWidget {
-  const ClosetContainer({Key key, this.clothingIds, this.isSelect})
+  const ClosetContainer({Key key, this.clothingItemObjects, this.isCloset})
       : super(key: key);
 
-  final List<int> clothingIds;
-  final bool isSelect;
+  final List<ClothingItemObject> clothingItemObjects;
+  final bool isCloset;
 
-  // return future builder here
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,13 +20,13 @@ class ClosetContainer extends StatelessWidget {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           children: [
-            for (var id in this.clothingIds)
+            for (var item in this.clothingItemObjects)
               // ClothingCard(clothingId: id, display: ClothingCardDisplay.Closet)
-              this.isSelect
+              this.isCloset
                   ? ClothingCard(
-                      clothingId: id, display: ClothingCardDisplay.ClosetSelect)
+                      clothingItem: item, display: ClothingCardDisplay.ClosetSelect)
                   : ClothingCard(
-                      clothingId: id, display: ClothingCardDisplay.Closet)
+                      clothingItem: item, display: ClothingCardDisplay.Closet)
           ],
         ));
   }

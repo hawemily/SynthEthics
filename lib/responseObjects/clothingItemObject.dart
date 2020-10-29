@@ -1,21 +1,21 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:synthetics/responseObjects/clothingMetadata.dart';
 
-part 'clothingItemResponse.g.dart';
+part 'clothingItemObject.g.dart';
 
 @JsonSerializable()
 
-class ClothingItemResponse {
+class ClothingItemObject {
   @JsonKey(required: true)
   final String id;
-  final ClothingItem data;
+  final ClothingMetadata data;
 
-  ClothingItemResponse(
+  ClothingItemObject(
     this.id,
     this.data
   );
 
-  factory ClothingItemResponse.fromJson(Map<String, dynamic> json) => _$ClothingItemResponseFromJson(json);
+  factory ClothingItemObject.fromJson(Map<String, dynamic> json) => _$ClothingItemObjectFromJson(json);
 //  Map<String, dynamic> toJson() => _$ClothingItemResponseToJson(this);
 }
 

@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'clothingItem.g.dart';
+part 'clothingMetadata.g.dart';
 
 @JsonSerializable()
 
-class ClothingItem {
+class ClothingMetadata {
 
   @JsonKey(defaultValue: "Unnamed Item")
   final String name;
@@ -30,7 +30,7 @@ class ClothingItem {
   @JsonKey(defaultValue: 0)
   final int maxNoOfTimesToBeWorn;
 
-  ClothingItem(this.name,
+  ClothingMetadata(this.name,
     this.brand,
     this.cF,
     this.materials,
@@ -39,7 +39,7 @@ class ClothingItem {
     this.currentTimesWorn,
     this.maxNoOfTimesToBeWorn);
 
-  factory ClothingItem.fromJson(Map<String, dynamic> json) => _$ClothingItemFromJson(json);
+  factory ClothingMetadata.fromJson(Map<String, dynamic> json) => _$ClothingMetadataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ClothingItemToJson(this);
+  Map<String, dynamic> toJson() => _$ClothingMetadataToJson(this);
 }

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -6,18 +5,18 @@ import 'package:path_provider/path_provider.dart';
 class ImageManager {
   Future<String> _imageDirPath;
   static ImageManager _instance;
-  
+
   ImageManager._internal();
-  
+
   static ImageManager getInstance() {
     if (_instance == null) {
       _instance = ImageManager._internal();
       _instance._imageDirPath = _getImageDirPath();
     }
-    
+
     return _instance;
   }
-  
+
   static Future<String> _getImageDirPath() async {
     final String path = (await getApplicationDocumentsDirectory()).path;
     return "$path/images";
