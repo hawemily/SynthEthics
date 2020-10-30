@@ -7,7 +7,7 @@ const min = 5;
 const c = Math.random() * (max - min) + min;
 
 const calcTimesToBeWorn = (cf: number) => {
-  return Math.round(cf / c);
+  return Math.ceil(cf / c);
 };
 
 export const postClothingItem = async (
