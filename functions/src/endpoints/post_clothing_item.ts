@@ -2,9 +2,12 @@ import { Request, Response } from "express";
 import { clothingItem, ClothingType } from "../models/clothing_item_schema";
 import { calculateCarma } from "./get_carma_value";
 
+const max = 30;
+const min = 5;
+const c = Math.random() * (max - min) + min;
+
 const calcTimesToBeWorn = (cf: number) => {
-  const c = Math.random() * 20;
-  return cf % c;
+  return MAth.round(cf/c);
 };
 
 export const postClothingItem = async (
@@ -24,7 +27,12 @@ export const postClothingItem = async (
       purchaseDate,
     } = req.body;
 
-    const cf = await calculateCarma(materials, currLocation, origin);
+    const cf = await calculateCarma(
+      materials,
+      currLocation,
+      origin,
+      clothingType
+    );
     const timesToBeWorn = Math.round(calcTimesToBeWorn(cf));
     const cPerWear = Math.round(cf / timesToBeWorn);
 

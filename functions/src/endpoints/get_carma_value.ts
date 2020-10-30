@@ -25,14 +25,15 @@ const Weights: { [key: string]: number } = {
 export const getCarmaValue = async (req: Request, res: Response) => {
   const { category, materials, currLocation, origin } = req.body;
 
-  let preWeighted: number = await calculateCarma(
+  let carma: number = await calculateCarma(
     materials,
     currLocation,
-    origin
+    origin,
+    category
   );
 
   const result: any = {
-    carma: Math.round(preWeighted * Weights[category]),
+    carma: carma,
   };
   console.log(result);
 
@@ -42,7 +43,8 @@ export const getCarmaValue = async (req: Request, res: Response) => {
 export const calculateCarma = async (
   materials: string[],
   currLocation: LatLng,
-  org: String
+  org: String,
+  category: any
 ) => {
   const cdts: LatLng = {
     latitude: currLocation["latitude"] || DEFAULT_LAT,
@@ -58,11 +60,12 @@ export const calculateCarma = async (
     console.log(e);
   }
 
-  return (
+  const preWeighted: number =
     calculateMaterialsCarma(materials) +
     calculateManufacturingCarma(origin) +
-    transportCarma
-  );
+    transportCarma;
+
+  return Math.round(preWeighted * Weights[category]);
 };
 
 const calculateMaterialsCarma = (materials: any) => {
