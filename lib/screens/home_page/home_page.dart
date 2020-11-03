@@ -146,7 +146,7 @@ class HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar(selected: 0),
     );
   }
 }

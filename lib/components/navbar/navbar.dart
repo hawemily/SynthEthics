@@ -10,6 +10,10 @@ import '../../routes.dart';
 
 // NavBar class, to be placed on pages as 'bottomNavigationBar'
 class NavBar extends StatefulWidget {
+  final selected;
+
+  NavBar({this.selected});
+
   @override
   _NavBarState createState() => _NavBarState();
 }
@@ -22,7 +26,9 @@ class _NavBarState extends State<NavBar> {
           context,
           ModalRoute.withName(routeMapping[Screens.Home])
       );
-      Navigator.pushNamed(context, routeMapping[screen]);
+      if (screen != Screens.Home) {
+        Navigator.pushNamed(context, routeMapping[screen]);
+      }
     }
   }
 
@@ -30,28 +36,31 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     final double _iconSize = 30.0;
     final Color _navBarItemColour = CustomColours.iconGreen();
-    final String _currentRoute = ModalRoute.of(context).settings.name;
-
-    IconData _firstButtonIcon = Icons.sensor_window;
-    var isClosetScreen = _currentRoute == routeMapping[Screens.Closet];
-    if (isClosetScreen) {
-      _firstButtonIcon = Icons.details;
-    }
 
     return BottomNavigationBar(
         key: Key('navbar'),
+        type: BottomNavigationBarType.fixed,
+        currentIndex: widget.selected,
         selectedItemColor: _navBarItemColour,
-        unselectedItemColor: _navBarItemColour,
+        unselectedItemColor: CustomColours.greenNavy(),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
+              label: 'home',
+              icon: Icon(Icons.home, size: _iconSize)
+          ),
+          BottomNavigationBarItem(
             label: 'wardrobe',
-            icon: Icon(_firstButtonIcon, size: _iconSize),
+            icon: Icon(Icons.sensor_window, size: _iconSize),
           ),
           BottomNavigationBarItem(
             label: 'add_item',
             icon: Icon(Icons.add_circle_outline, size: _iconSize),
+          ),
+          BottomNavigationBarItem(
+            label: 'outfits',
+            icon: Icon(Icons.details, size: _iconSize)
           ),
           BottomNavigationBarItem(
             label: 'donate_item',
@@ -61,25 +70,25 @@ class _NavBarState extends State<NavBar> {
         onTap: (index) {
           switch (index) {
             case 0:
-              if (isClosetScreen) {
-                // We will go to outfits page
-                // TODO: Implement outfits page
-                print('GOTO OUTFITS');
-              } else {
-                // Goto closet page
-               
-                // TODO: Replace this with a _clearStackAndPush, add a corr. route in routes
-               _clearStackAndPush(Screens.Closet);
-              }
+               _clearStackAndPush(Screens.Home);
               break;
 
             case 1:
+              _clearStackAndPush(Screens.Closet);
+              break;
+
+            case 2:
               // Produces a modal for taking a picture, then goes to image
               // display page via a callback function given to the image taker
               ImageTaker.settingModalBottomSheet(context, imageGetterCallback);
               break;
 
-            case 2:
+            case 3:
+              // TODO: Add outfits page navigation here
+              print("GOTO OUTFITS");
+              break;
+
+            case 4:
               // Go to Donations Page
               _clearStackAndPush(Screens.Donation);
               break;
