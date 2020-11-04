@@ -100,20 +100,20 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 
   void _detectText() async {
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-    final VisionText visionText = await textRecognizer.processImage(visionImage);
+    // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
+    // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    // final VisionText visionText = await textRecognizer.processImage(visionImage);
 
     // Parse using regex parser with VisionText as label source
-    var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
-    var labelProperties = labelParser.parseLabel();
-    var origin = labelProperties["origin"];
-    var material = labelProperties["material"];
+    // var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
+    // var labelProperties = labelParser.parseLabel();
+    // var origin = labelProperties["origin"];
+    // var material = labelProperties["material"];
 
     // TODO: Remove testing variables
     // Testing Variables
-    // final origin = "MADE IN MYANMAR";
-    // final material = "%POLYESTER";
+    final origin = "MADE IN MYANMAR";
+    final material = "%POLYESTER";
 
     setState(() {
       _placeOfOrigin = _cleanOriginText(origin);

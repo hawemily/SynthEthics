@@ -3,16 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postClothingItem = void 0;
 const clothing_item_schema_1 = require("../models/clothing_item_schema");
 const get_carma_value_1 = require("./get_carma_value");
+const max = 30;
+const min = 5;
+const c = Math.random() * (max - min) + min;
 const calcTimesToBeWorn = (cf) => {
-    const c = Math.random() * 20;
-    return cf % c;
+    return Math.ceil(cf / c);
 };
 exports.postClothingItem = async (req, res, db) => {
     try {
         const { name, brand, materials, clothingType, currLocation, origin, lastWornDate, purchaseDate, } = req.body;
-        const cf = await get_carma_value_1.calculateCarma(materials, currLocation, origin);
-        const timesToBeWorn = calcTimesToBeWorn(cf);
-        const cPerWear = cf / timesToBeWorn;
+        const cf = await get_carma_value_1.calculateCarma(materials, currLocation, origin, clothingType);
+        const timesToBeWorn = Math.round(calcTimesToBeWorn(cf));
+        const cPerWear = Math.round(cf / timesToBeWorn);
         const apparel = {
             name: name,
             brand: brand,

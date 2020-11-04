@@ -7,9 +7,14 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/responseObjects/getClosetResponse.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 
-class Closet extends StatefulWidget {
-  Closet({Key key}) : super(key: key);
+enum ClosetMode {
+    Normal, Select, Donate
+}
 
+class Closet extends StatefulWidget {
+  Closet({Key key, this.mode}) : super(key: key);
+
+  ClosetMode mode = ClosetMode.Normal;
   final List<String> categories = [
     "tops",
     "bottoms",
@@ -80,7 +85,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         print(snapshot);
         if (snapshot.hasData) {
           return ClosetContainer(
-            clothingItemObjects: snapshot.data.clothingItems, isCloset: false,
+            ClosetMode.Normal,
+            clothingItemObjects: snapshot.data.clothingItems,
           );
         } else if (snapshot.hasError) {
           print(snapshot.error);

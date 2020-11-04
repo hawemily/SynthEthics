@@ -18,14 +18,14 @@ const Weights = {
 };
 exports.getCarmaValue = async (req, res) => {
     const { category, materials, currLocation, origin } = req.body;
-    let preWeighted = await exports.calculateCarma(materials, currLocation, origin);
+    let carma = await exports.calculateCarma(materials, currLocation, origin, category);
     const result = {
-        carma: Math.round(preWeighted * Weights[category]),
+        carma: carma,
     };
     console.log(result);
     res.json(result);
 };
-exports.calculateCarma = async (materials, currLocation, org) => {
+exports.calculateCarma = async (materials, currLocation, org, category) => {
     const cdts = {
         latitude: currLocation["latitude"] || DEFAULT_LAT,
         longitude: currLocation["longitude"] || DEFAULT_LONG,
@@ -39,9 +39,10 @@ exports.calculateCarma = async (materials, currLocation, org) => {
         console.log("transport carma await failing");
         console.log(e);
     }
-    return (calculateMaterialsCarma(materials) +
+    const preWeighted = calculateMaterialsCarma(materials) +
         calculateManufacturingCarma(origin) +
-        transportCarma);
+        transportCarma;
+    return Math.round(preWeighted * Weights[category]);
 };
 const calculateMaterialsCarma = (materials) => {
     // assume materials is a list of name-variant-percentage, with material to %
