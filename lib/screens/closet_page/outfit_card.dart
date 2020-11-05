@@ -34,7 +34,8 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
     return GestureDetector(
         onTap: () {
           setState(() {
-            this.clear = true;
+            // this.clear = true;
+            this.clear = !this.clear;
           });
         },
         child: Container(
@@ -92,48 +93,23 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
   }
 
   @override
+  Widget buildImage() {
+    return clear
+        ? Align(
+            alignment: Alignment.center,
+            child: Icon(Icons.block, color: CustomColours.accentCopper()))
+        : super.buildImage();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-        children: (() {
-      var base = <Widget>[
-        Card(
-            color: CustomColours.offWhite(),
-            margin: EdgeInsets.all(5.0),
-            child: InkWell(
-                onTap: () => {
-                      print(
-                          'TODO: open up closet and allow users to select from the appropriate category')
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => ClothingItem(
-                      //             clothingItem: this.currentClothingItem)))
-                    },
-                child: Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Stack(
-                        children: (() {
-                      var cardChildren = <Widget>[
-                        FutureBuilder<File>(
-                            future: this.currClothingItemImage,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Image.file(snapshot.data);
-                              } else if (snapshot.data == null) {
-                                return Text("No image from file");
-                              }
-                              return LinearProgressIndicator();
-                            }),
-                        Align(
-                            alignment: Alignment.bottomCenter,
-                            child: EcoBar(current: 20, max: 20)),
-                      ];
-                      return cardChildren;
-                    }())))))
-      ];
-      base.add(Positioned(top: 0.0, right: 0.0, child: getIcon()));
-      base.addAll(getLeftRightControls());
-      return base;
-    }()));
+    Stack stack = this.buildBaseStack(() {
+      print("TODO: navigate to closet in select mode");
+    }, clear: this.clear);
+    stack.children.add(Positioned(top: 0.0, right: 0.0, child: getIcon()));
+    if (!clear) {
+      stack.children.addAll(getLeftRightControls());
+    }
+    return stack;
   }
 }

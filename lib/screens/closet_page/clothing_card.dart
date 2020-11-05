@@ -39,7 +39,20 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                 ClothingItem(clothingItem: this.currentClothingItem)));
   }
 
-  Widget buildBaseStack(on_tap) {
+  Widget buildImage() {
+    return FutureBuilder<File>(
+        future: this.currClothingItemImage,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Image.file(snapshot.data);
+          } else if (snapshot.data == null) {
+            return Text("No image from file");
+          }
+          return LinearProgressIndicator();
+        });
+  }
+
+  Widget buildBaseStack(on_tap, {clear=false}) {
     return Stack(children: [
       Card(
           color: CustomColours.offWhite(),
@@ -48,25 +61,18 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
               onTap: on_tap,
               child: Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: Stack(
-                      children: (() {
-                    var cardChildren = <Widget>[
-                      FutureBuilder<File>(
-                          future: this.currClothingItemImage,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Image.file(snapshot.data);
-                            } else if (snapshot.data == null) {
-                              return Text("No image from file");
-                            }
-                            return LinearProgressIndicator();
-                          }),
-                      Align(
-                          alignment: Alignment.bottomCenter,
-                          child: EcoBar(current: 20, max: 20)),
-                    ];
-                    return cardChildren;
-                  }())))))
+                  child: Stack(children: [
+                    buildImage(),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: clear ? Container() : EcoBar(
+                            current:
+                                this.currentClothingItem.data.currentTimesWorn,
+                            max: this
+                                .currentClothingItem
+                                .data
+                                .maxNoOfTimesToBeWorn)),
+                  ]))))
     ]);
   }
 

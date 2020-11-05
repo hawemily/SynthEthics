@@ -14,7 +14,7 @@ enum ClosetMode {
 class Closet extends StatefulWidget {
   Closet({Key key, this.mode}) : super(key: key);
 
-  ClosetMode mode = ClosetMode.Normal;
+  ClosetMode mode = ClosetMode.Donate;
   final List<String> categories = [
     "tops",
     "bottoms",
@@ -85,7 +85,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         print(snapshot);
         if (snapshot.hasData) {
           return ClosetContainer(
-            ClosetMode.Normal,
+            widget.mode,
             clothingItemObjects: snapshot.data.clothingItems,
           );
         } else if (snapshot.hasError) {
@@ -99,6 +99,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.mode);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
