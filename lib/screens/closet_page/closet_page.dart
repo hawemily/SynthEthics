@@ -116,7 +116,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
           return generateCloset();
         }).toList(),
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar(selected: 1),
     );
 //        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }

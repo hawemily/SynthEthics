@@ -11,7 +11,7 @@ class ExampleEmptyPage extends StatelessWidget {
       body: Center(
         child: Text('This page is literally empty'),
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar(selected: 0),
     );
   }
 }

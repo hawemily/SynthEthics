@@ -196,6 +196,6 @@ class _ClothingItemState extends State<ClothingItem> {
             ),
           ],
         ),
-        bottomNavigationBar: NavBar());
+        bottomNavigationBar: NavBar(selected: 1));
   }
 }
