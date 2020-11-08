@@ -18,7 +18,7 @@ export const callMapsApi = async (cdts: LatLng): Promise<AddressComponents> => {
     .get(reqUri)
     .then((resp) => {
       console.log(`response received with code ${resp.status}`);
-      console.log(resp.data);
+      // console.log(resp.data);
       const { results, status } = resp["data"];
 
       if (<string>status === Status.Ok) {
