@@ -40,6 +40,10 @@ dependencies:
   cloud_functions: ^0.7.0-dev.2
   http: ^0.12.2
 
+  url_launcher: ^5.7.2
+  uni_links: ^0.4.0
+  google_sign_in: ^4.5.4
+
   json_annotation: ^3.0.0
 
   # The following adds the Cupertino Icons font to your application.

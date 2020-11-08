@@ -6,7 +6,9 @@ import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
-import '../../routes.dart';
+//import '../../routes.dart';
+import 'package:synthetics/route_generator.dart';
+
 
 // NavBar class, to be placed on pages as 'bottomNavigationBar'
 class NavBar extends StatefulWidget {
