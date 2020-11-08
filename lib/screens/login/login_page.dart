@@ -12,7 +12,6 @@ class LoginPage extends StatelessWidget {
         automaticallyImplyLeading: false,),
         body: Column(children: <Widget>[
           SignInOrRegisterWithEmailSection(auth:_auth, isSignIn: false,)
-//          Text("teseting")
         ]));
   }
 }

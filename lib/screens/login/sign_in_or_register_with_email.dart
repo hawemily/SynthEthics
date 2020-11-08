@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:synthetics/requestObjects/new_user_request.dart';
+import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/routes.dart';
 
 class SignInOrRegisterWithEmailSection extends StatefulWidget {
@@ -61,10 +64,11 @@ class _SignInOrRegisterWithEmailSectionState
         _email = user.email;
       });
 
-//      NewUserRequest req = new NewUserRequest(user.uid);
-//      api_client.post("/addUser", body:jsonEncode(req));
+      NewUserRequest req = new NewUserRequest(user.uid);
+      api_client.post("/addUser", body: jsonEncode(req));
 
-//      Navigator.pushNamed(context, routeMapping[Screens.Home]);
+      Navigator.pushNamed(context, routeMapping[Screens.Home],
+          arguments: user.uid);
     } else {
       setState(() {
         _registerSuccess = false;
@@ -165,10 +169,14 @@ class _SignInOrRegisterWithEmailSectionState
                   Container(
                       alignment: Alignment.center,
                       child: Text(_registerSuccess == null
-                          ? ''
+                          ? _loginSuccess == null
+                              ? ''
+                              : (_loginSuccess
+                                  ? "User logging in!"
+                                  : "Username does not exist! Please sign up instead.")
                           : (_registerSuccess
                               ? "Successfully registered " + _email
-                              : "Failed to register")))
+                              : "Failedc to register")))
                 ])));
   }
 }
