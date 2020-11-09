@@ -4,6 +4,8 @@ import { postClothingItem } from "./endpoints/post_clothing_item";
 import { getCarmaValue } from "./endpoints/get_carma_value";
 import { initData } from "./endpoints/init_data";
 import { getAllClothingTypes } from "./endpoints/get_all_types";
+import { postOutfit } from "./endpoints/post_outfit";
+import { getAllOutfits } from "./endpoints/get_all_outfits";
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   // GET /clothes
@@ -31,6 +33,16 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     getAllClothingTypes(res);
     return;
   });
+
+  app.get("/outfits", (req: Request, res: Response) => {
+    getAllOutfits(req, res, db);
+    return;
+  })
+
+  app.post("/outfits/add", (req: Request, res: Response) => {
+    postOutfit(req, res, db);
+    return;
+  })
 
   app.get("/dummy", (req: Request, res: Response) => {
     console.log("called dummy");

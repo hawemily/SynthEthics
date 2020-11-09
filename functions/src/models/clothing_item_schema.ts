@@ -5,6 +5,7 @@ export enum ClothingType {
   "skirts",
   "outerwear",
   "headgear",
+  "shoes"
 }
 
 export interface clothingItem {
