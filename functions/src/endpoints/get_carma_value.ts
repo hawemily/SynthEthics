@@ -64,6 +64,9 @@ export const calculateCarma = async (
     calculateMaterialsCarma(materials) +
     calculateManufacturingCarma(origin) +
     transportCarma;
+  
+    console.log(`category: ${category}`);
+  console.log(`preweighted: ${Math.round(preWeighted * Weights[category])}`);
 
   return Math.round(preWeighted * Weights[category]);
 };

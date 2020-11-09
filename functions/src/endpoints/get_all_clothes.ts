@@ -5,7 +5,10 @@ export const getAllClothes = async (
   res: Response,
   db: FirebaseFirestore.Firestore
 ) => {
+  // const {uid} = req;
+  
   const clothingQuerySnapshot = await db.collection("closet").get();
+  // const clothingUserQuerySnapshot = await db.collection(uid).get();
   const clothingItems: any[] = [];
 
   clothingQuerySnapshot.forEach((doc) => {

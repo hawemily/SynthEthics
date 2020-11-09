@@ -16,6 +16,5 @@ class ClothingItemObject {
   );
 
   factory ClothingItemObject.fromJson(Map<String, dynamic> json) => _$ClothingItemObjectFromJson(json);
-//  Map<String, dynamic> toJson() => _$ClothingItemResponseToJson(this);
 }
 

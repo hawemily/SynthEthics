@@ -21,7 +21,8 @@ class ClothingCard extends StatefulWidget {
   @override
   _ClothingCardState createState() {
     if (outfitClothingList != null) {
-      return _ClothingCardState(display, outfitClothingList: outfitClothingList);
+      return _ClothingCardState(display,
+          outfitClothingList: outfitClothingList);
     } else if (clothingItem != null) {
       return _ClothingCardState(display, clothingItem: clothingItem);
     } else {
@@ -31,8 +32,8 @@ class ClothingCard extends StatefulWidget {
 }
 
 class _ClothingCardState extends State<ClothingCard> {
-
-  _ClothingCardState(this.display, {this.clothingItem, this.outfitClothingList}) {
+  _ClothingCardState(this.display,
+      {this.clothingItem, this.outfitClothingList}) {
     if (this.outfitClothingList != null) {
       this.index = 0;
       this.currentClothingItem = this.outfitClothingList[this.index];
@@ -53,13 +54,14 @@ class _ClothingCardState extends State<ClothingCard> {
 
   @override
   void initState() {
-      currClothingItemImage = getImage();
+    super.initState();
+    currClothingItemImage = getImage();
   }
 
   Future<File> getImage() {
-    return ImageManager.getInstance().loadPictureFromDevice(this.currentClothingItem.id);
+    return ImageManager.getInstance()
+        .loadPictureFromDevice(this.currentClothingItem.id);
   }
-
 
   Widget getIcon() {
     return GestureDetector(
@@ -98,7 +100,8 @@ class _ClothingCardState extends State<ClothingCard> {
               onTap: () {
                 if (index > 0) {
                   setState(() {
-                    this.currentClothingItem = this.outfitClothingList[this.index - 1];
+                    this.currentClothingItem =
+                        this.outfitClothingList[this.index - 1];
                     this.currClothingItemImage = getImage();
                     this.index = this.index - 1;
                   });
@@ -115,7 +118,8 @@ class _ClothingCardState extends State<ClothingCard> {
               onTap: () {
                 if (index < outfitClothingList.length - 1) {
                   setState(() {
-                    this.currentClothingItem = this.outfitClothingList[this.index + 1];
+                    this.currentClothingItem =
+                        this.outfitClothingList[this.index + 1];
                     this.currClothingItemImage = getImage();
                     this.index = this.index + 1;
                   });
@@ -138,26 +142,27 @@ class _ClothingCardState extends State<ClothingCard> {
             margin: EdgeInsets.all(5.0),
             child: InkWell(
                 onTap: () => {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => ClothingItem(clothingItem: this.currentClothingItem)
-                    ))
-                },
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ClothingItem(
+                                  clothingItem: this.currentClothingItem)))
+                    },
                 child: Padding(
                     padding: EdgeInsets.all(5.0),
                     child: Stack(
                         children: (() {
                       var cardChildren = <Widget>[
                         FutureBuilder<File>(
-                          future: this.currClothingItemImage,
-                          builder: (context, snapshot) {
-                            if(snapshot.hasData) {
-                              return Image.file(snapshot.data);
-                            } else if (snapshot.data == null) {
-                              return Text("No image from file");
-                            }
-                            return LinearProgressIndicator();
-                          }
-                        ),
+                            future: this.currClothingItemImage,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Image.file(snapshot.data);
+                              } else if (snapshot.data == null) {
+                                return Text("No image from file");
+                              }
+                              return LinearProgressIndicator();
+                            }),
                         Align(
                             alignment: Alignment.bottomCenter,
                             child: EcoBar(current: 20, max: 20)),

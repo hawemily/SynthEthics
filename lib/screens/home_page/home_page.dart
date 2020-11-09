@@ -3,19 +3,50 @@ import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/theme/custom_colours.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/cupertino.dart';
 
 import '../../routes.dart';
 
 // Home page, currently standing in for the user home page
 class HomePage extends StatefulWidget {
+
   @override
   HomePageState createState() => HomePageState();
+
+  final dynamic uid;
+
+  HomePage({this.uid});
 }
 
 class HomePageState extends State<HomePage> {
-
   final double _iconSize = 30.0;
   bool _openAchievements = false;
+  String uid;
+
+  @override
+  void initState() {
+    super.initState();
+//    print("context: ${ModalRoute.of(context).settings.name}");
+    _updateUser(widget.uid);
+//    uid = ModalRoute.of(context).settings.arguments;
+    // post call here to extract user details
+  }
+
+  void _updateUser(dynamic uid) {
+    setState((){
+      if(uid == null) {
+        print("UID SHOULD NOT BE NULL! PLEASE CHECK!");
+        return;
+      }
+//      print("uid to string: ${uid.toString()}");
+      this.uid = uid.toString();
+    });
+  }
+
+  void _gotoEmptyPage() {
+    Navigator.pushNamed(context, routeMapping[Screens.Empty]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,13 +211,8 @@ class _CarmaResolutionTabState extends State<CarmaResolutionTab> {
       child: Text(
         widget.label,
         style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: CustomColours.offWhite()
-        ),
+            fontWeight: FontWeight.bold, color: CustomColours.offWhite()),
       ),
     );
   }
 }
-
-
-
