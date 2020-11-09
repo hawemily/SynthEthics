@@ -23,6 +23,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   @override
   void initState() {
     currentClothingItem = widget.clothingItem;
+    super.initState();
     currClothingItemImage = getImage();
   }
 
@@ -52,7 +53,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
         });
   }
 
-  Widget buildBaseStack(on_tap, {clear=false}) {
+  Widget buildBaseStack(on_tap, {clear = false}) {
     return Stack(children: [
       Card(
           color: CustomColours.offWhite(),
@@ -65,13 +66,17 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                     buildImage(),
                     Align(
                         alignment: Alignment.bottomCenter,
-                        child: clear ? Container() : EcoBar(
-                            current:
-                                this.currentClothingItem.data.currentTimesWorn,
-                            max: this
-                                .currentClothingItem
-                                .data
-                                .maxNoOfTimesToBeWorn)),
+                        child: clear
+                            ? Container()
+                            : EcoBar(
+                                current: this
+                                    .currentClothingItem
+                                    .data
+                                    .currentTimesWorn,
+                                max: this
+                                    .currentClothingItem
+                                    .data
+                                    .maxNoOfTimesToBeWorn)),
                   ]))))
     ]);
   }

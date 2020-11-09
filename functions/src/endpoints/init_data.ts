@@ -11,7 +11,7 @@ export const initData = async (
     materials: ["cotton", "polyester"],
     cF: 1000,
     maxNoOfTimesToBeWorn: 10,
-    clothingType: ClothingType["tops"],
+    clothingType: ClothingType["Tops"],
     lastWornDate: "25/03/2020",
   };
   const ap2: clothingItem = {
@@ -19,7 +19,7 @@ export const initData = async (
     materials: ["cotton", "polyester"],
     cF: 1500,
     maxNoOfTimesToBeWorn: 13,
-    clothingType: ClothingType["bottoms"],
+    clothingType: ClothingType["Bottoms"],
     lastWornDate: "25/06/2020",
   };
 

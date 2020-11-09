@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
+import 'package:synthetics/screens/image_taker_page/textfield/autocomplete_textfield.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
@@ -103,8 +104,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
     // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     // final VisionText visionText = await textRecognizer.processImage(visionImage);
-
-    // Parse using regex parser with VisionText as label source
+    //
+    // // Parse using regex parser with VisionText as label source
     // var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
     // var labelProperties = labelParser.parseLabel();
     // var origin = labelProperties["origin"];
@@ -116,7 +117,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     final material = "%POLYESTER";
 
     setState(() {
-      _placeOfOrigin = _cleanOriginText(origin);
+      _placeOfOrigin = StringOperator.capitaliseClear(_cleanOriginText(origin));
       _clothingMaterial = _cleanMaterialText(material);
       _completedLoadingPage = true;
     });
@@ -255,18 +256,31 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
         loading: (!_completedLoadingData || _loadingCarma),
         valid: _validData,
       ),
-      ClothingLabelDropdown(
-          data: _countryNames,
-          selected: _countryIndex,
-          label: 'Country of Origin',
-          onChange: (value) {
-            setState(() {
-              _countryIndex = value;
-              _placeOfOrigin = _countryNames[value];
-              _setValidData();
-              _updatedCarma = true;
-            });
-          }),
+      // ClothingLabelDropdown(
+      //     data: _countryNames,
+      //     selected: _countryIndex,
+      //     label: 'Country of Origin',
+      //     onChange: (value) {
+      //       setState(() {
+      //         _countryIndex = value;
+      //         _placeOfOrigin = _countryNames[value];
+      //         _setValidData();
+      //         _updatedCarma = true;
+      //       });
+      //     }),
+      AutoTextField(
+        data: _countryNames,
+        defaultText: _placeOfOrigin,
+        label: 'Country of Origin',
+        onSelected: (item) {
+          setState(() {
+            _placeOfOrigin = item;
+            _setValidData();
+            _updatedCarma = true;
+          });
+          print("SELECTED $item");
+        },
+      ),
       ClothingLabelDropdown(
         data: _materialTypes,
         selected: _materialIndex,

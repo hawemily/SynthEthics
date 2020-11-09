@@ -97,7 +97,7 @@ class _DonationPageState extends State<DonationPage> {
             distances: distances,
           ),
           alignment: Alignment(1, 0.7)),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar(selected: 4),
     );
   }
 }

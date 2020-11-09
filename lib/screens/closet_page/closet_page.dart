@@ -37,13 +37,14 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     //TODO: call api to init categories from backend using collecitons
     // categories = getCategories();
     List<String> categories = widget.categories;
     clothingItems = this.getClothes();
     print(categories);
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
-    super.initState();
+
     _tabController = TabController(vsync: this, length: _tabs.length);
   }
 
@@ -122,7 +123,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
           return generateCloset();
         }).toList(),
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar(selected: 1),
     );
 //        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }
