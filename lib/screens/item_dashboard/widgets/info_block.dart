@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'const.dart';
 
 class InfoBlock extends StatelessWidget {
   final Color color;
@@ -35,11 +34,14 @@ class InfoBlock extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontSize: 40,
-            color: color,
-          ),
+              fontSize: 25, color: color, fontWeight: FontWeight.w600),
         ),
-        Text(label, style: kSubTextStyle),
+        Padding(padding: EdgeInsets.only(top: 5.0)),
+        Text(label,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ))
       ],
     );
   }
