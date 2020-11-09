@@ -1,13 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
-import 'package:synthetics/screens/item_dashboard/stats_model.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/theme/custom_colours.dart';
+import 'package:synthetics/services/string_operator/string_operator.dart';
 
 class ClothingItem extends StatefulWidget {
   ClothingItem({Key key, this.clothingItem}) : super(key: key);
@@ -25,6 +24,9 @@ class _ClothingItemState extends State<ClothingItem> {
   int timesWorn;
 
   File image;
+
+  // double _scale;
+  // AnimationController _controller;
 
   @override
   void initState() {
@@ -52,7 +54,8 @@ class _ClothingItemState extends State<ClothingItem> {
           this.timesWorn / 15;
     });
 
-    if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn) {
+    if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
+        this.timesWorn != 0) {
       showDialog(
           context: context,
           builder: (context) {
@@ -65,12 +68,13 @@ class _ClothingItemState extends State<ClothingItem> {
 
   String customFormatDateTime(String string) {
     DateTime datetime = DateTime.parse(string);
-    return DateFormat('dd/MM/yy').format(datetime);
+    return DateFormat('dd MMM yy').format(datetime);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: CustomColours.greenNavy(),
         appBar: AppBar(
           backgroundColor: CustomColours.greenNavy(),
           iconTheme: IconThemeData(color: Colors.white),
@@ -79,120 +83,184 @@ class _ClothingItemState extends State<ClothingItem> {
         ),
         body: ListView(
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 40.0)),
-            SizedBox(
-              height: 180.0,
-              child: Stack(
-                children: <Widget>[
-                  Center(
-                      child: Image.asset(
-                    'lib/assets/closet_IT.jpg',
-                    width: double.maxFinite,
-                    height: 160.0,
-                  )),
-                  Center(
-                    child: Container(
-                      width: 180,
-                      height: 180,
-                      child: new CircularProgressIndicator(
-                        strokeWidth: 30,
-                        value: progress,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                        backgroundColor: Colors.grey,
-                      ),
+            Container(
+                color: CustomColours.offWhite(),
+                child: Column(children: [
+                  Padding(padding: EdgeInsets.only(top: 35)),
+                  SizedBox(
+                    height: 170.0,
+                    child: Stack(
+                      children: <Widget>[
+                        Center(
+                            child: Image.asset(
+                          'lib/assets/closet_IT.jpg',
+                          width: double.maxFinite,
+                          height: 160.0,
+                        )),
+                        Center(
+                          child: Container(
+                            width: 170,
+                            height: 170,
+                            child: new CircularProgressIndicator(
+                              strokeWidth: 30,
+                              value: progress,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  CustomColours.iconGreen()),
+                              backgroundColor: Colors.grey[200],
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                              decoration: new BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.fitHeight,
+                                      image: ((this.image == null)
+                                          // TODO: Find a better placeholder image later
+                                          ? new NetworkImage(
+                                              "https://cdn.endource.com/image/s3-49f2938a8e4d8f6c74bccbd2bf800c06/detail/and-other-stories-ribbed-square-neck-crop-top.jpg")
+                                          : FileImage(this.image))))),
+                        ),
+                      ],
                     ),
                   ),
-                  Center(
-                    child: Container(
-                        decoration: new BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            image: new DecorationImage(
-                                fit: BoxFit.fitHeight,
-                                image: ((this.image == null)
-                                    // TODO: Find a better placeholder image later
-                                    ? new NetworkImage(
-                                        "https://cdn.endource.com/image/s3-49f2938a8e4d8f6c74bccbd2bf800c06/detail/and-other-stories-ribbed-square-neck-crop-top.jpg")
-                                    : FileImage(this.image))
-                            )
-                        )
+                  Padding(padding: EdgeInsets.only(top: 5.0)),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceEvenly,
+                    buttonHeight: 20,
+                    buttonMinWidth: 60,
+                    children: [
+                      FlatButton(
+                        textColor: CustomColours.greenNavy(),
+                        shape: CircleBorder(),
+                        child: Text(
+                          "Wear",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () => updateProgress('INC'),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.undo),
+                        color: CustomColours.greenNavy(),
+                        tooltip: 'Undo',
+                        onPressed: () => updateProgress('DEC'),
+                      ),
+                      FlatButton(
+                        textColor: CustomColours.greenNavy(),
+                        child: Text(
+                          "Donate",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  )
+                ])),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Padding(padding: EdgeInsets.only(top: 10)),
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 30,
+                          color: Color(0xFFB7B7B7).withOpacity(.16),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        InfoBlock(
+                          color: Colors.deepOrange[600],
+                          value:
+                              StringOperator.capitalise(clothingID.data.brand),
+                          label: "Brand",
+                        ),
+                        InfoBlock(
+                          color: CustomColours.iconGreen(),
+                          value: StringOperator.capitalise(
+                              clothingID.data.materials[0]),
+                          label: "Material",
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 30,
+                          color: Color(0xFFB7B7B7).withOpacity(.16),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        InfoBlock(
+                          color: CustomColours.baseBlack(),
+                          value: "${this.timesWorn} / 15",
+                          label: "Times Worn",
+                        ),
+                        InfoBlock(
+                          color: CustomColours.negativeRed(),
+                          value: "${clothingID.data.cF.round()}",
+                          label: "Karma Pts",
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 30,
+                          color: Color(0xFFB7B7B7).withOpacity(.16),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        InfoBlock(
+                          color: Colors.red[900],
+                          value: customFormatDateTime(
+                              clothingID.data.purchaseDate),
+                          label: "Purchased",
+                        ),
+                        InfoBlock(
+                          color: Colors.blue[900],
+                          value: customFormatDateTime(
+                              clothingID.data.lastWornDate),
+                          label: "Last Worn",
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-            Padding(padding: EdgeInsets.only(top: 15.0)),
-            ButtonBar(
-              alignment: MainAxisAlignment.spaceAround,
-              buttonHeight: 60,
-              buttonMinWidth: 60,
-              children: [
-                RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.black,
-                  child: Text("Wear"),
-                  onPressed: () => updateProgress('INC'),
-                  shape: new CircleBorder(),
-                ),
-                IconButton(
-                  icon: Icon(Icons.undo),
-                  tooltip: 'Undo',
-                  onPressed: () => updateProgress('DEC'),
-                ),
-                RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.black,
-                  child: Text("Donate"),
-                  onPressed: () {},
-                  shape: new CircleBorder(),
-                ),
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(top: 20.0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InfoBlock(
-                  color: Colors.deepOrange[600],
-                  value: clothingID.data.brand,
-                  label: 'Shop',
-                ),
-                InfoBlock(
-                  color: Colors.blue[600],
-                  // TODO: Replace once multiple materials is implemented
-                  value: clothingID.data.materials[0],
-                  label: 'Material',
-                ),
-                InfoBlock(
-                  color: Colors.green[900],
-                  value: "${clothingID.data.cF.round()} Carma",
-                  label: 'Points',
-                ),
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(top: 20.0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InfoBlock(
-                  color: Colors.black,
-                  value:
-                      // "${this.timesWorn}/${clothingID.data.maxNoOfTimesToBeWorn}",
-                  // TODO Replace with proper value after backend fix
-                  "${this.timesWorn}/15",
-                  label: 'Times Worn',
-                ),
-                InfoBlock(
-                  color: Colors.deepPurple[900],
-                  value: customFormatDateTime(clothingID.data.purchaseDate),
-                  label: 'Purchase Date',
-                ),
-                InfoBlock(
-                  color: Colors.red[900],
-                  value: customFormatDateTime(clothingID.data.lastWornDate),
-                  label: 'Last Worn',
-                ),
-              ],
             ),
           ],
         ),
