@@ -15,7 +15,6 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   routeMapping[Screens.Empty]: (BuildContext context) => ExampleEmptyPage(),
   routeMapping[Screens.Donation]: (BuildContext context) => DonationPage(),
   routeMapping[Screens.Closet]: (BuildContext context) => Closet(),
-  routeMapping[Screens.Achievements]: (BuildContext context) => AchievementsPage(),
 };
 
 // Enum representation of pages, so that we don't have to keep writing strings
@@ -25,7 +24,6 @@ enum Screens {
   Closet,
   Donation,
   Empty,
-  Achievements,
   Login
 }
 
@@ -36,7 +34,6 @@ Map<Screens, String> routeMapping = {
   Screens.Closet: '/closet',
   Screens.Donation: '/donation',
   Screens.Empty: '/empty',
-  Screens.Achievements: '/achievements'
 };
 
 
