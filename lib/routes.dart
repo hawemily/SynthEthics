@@ -6,6 +6,8 @@ import 'package:synthetics/screens/login/login_page.dart';
 import 'package:synthetics/screens/example_pages/example_empty_page.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
 
+import 'screens/achievements_page/achievements_page.dart';
+
 // Routes for use by the MaterialApp to route between pages
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   routeMapping[Screens.Home]: (BuildContext context) => HomePage(),
