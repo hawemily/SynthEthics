@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/home_page/home_page_button.dart';
+import 'package:synthetics/screens/home_page/info_page.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
@@ -9,7 +10,6 @@ import '../../routes.dart';
 
 // Home page, currently standing in for the user home page
 class HomePage extends StatefulWidget {
-
   @override
   HomePageState createState() => HomePageState();
 
@@ -32,8 +32,8 @@ class HomePageState extends State<HomePage> {
   }
 
   void _updateUser(dynamic uid) {
-    setState((){
-      if(uid == null) {
+    setState(() {
+      if (uid == null) {
         print("UID SHOULD NOT BE NULL! PLEASE CHECK!");
         return;
       }
@@ -48,7 +48,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColours.greenNavy(),
@@ -68,34 +67,12 @@ class HomePageState extends State<HomePage> {
               color: CustomColours.offWhite(),
             ),
             onPressed: () {
-              showDialog(
-                context: context,
-                child: AlertDialog(
-                  elevation: 30,
-                  actions: [
-                    FlatButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text('Close', style: TextStyle(fontSize: 20)))
-                  ],
-                  backgroundColor: Colors.white,
-                  insetPadding: EdgeInsets.all(15),
-                  title: Text("How To Use SynthEthics",
-                      style: TextStyle(fontSize: 22),
-                      textAlign: TextAlign.center),
-                  content: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(25)),
-                    child: Text(
-                        "It covers scanning a clothing label, adding items to the closet. Once in the closet, the user can access the item's dashboard page that has access to various information about the item such as material, Carma points, progress bar, etc. The user can choose to donate clothing items and can view the nearest donation centers near them.",
-                        style: TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center),
-                  ),
-                ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => InformationPage()),
               );
             },
-          )
+          ),
         ],
       ),
       body: Center(
