@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
-import 'package:synthetics/screens/home_page/home_page_button.dart';
+import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 import '../../routes.dart';
 
@@ -16,137 +15,151 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
 
   final double _iconSize = 30.0;
-
-  void _gotoEmptyPage() {
-    Navigator.pushNamed(context, routeMapping[Screens.Empty]);
-  }
+  bool _openAchievements = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: CustomColours.greenNavy(),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-            icon: Icon(
-              Icons.emoji_events,
-              size: _iconSize,
-              color: CustomColours.offWhite(),
-            ),
-            onPressed: () => print("Go to achievements")
-        ),
-        actions: [
-          IconButton(
+    List<Widget> stackWidgets = [
+      Scaffold(
+        appBar: AppBar(
+          backgroundColor: CustomColours.greenNavy(),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
               icon: Icon(
-                Icons.settings,
+                Icons.emoji_events,
                 size: _iconSize,
                 color: CustomColours.offWhite(),
               ),
-              onPressed: () => print("Go to settings")
-          )
-        ],
-      ),
-      body: Center(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        color: CustomColours.offWhite(),
-                        width: 400,
-                        height: 180,
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 20, top: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                            fit: BoxFit.contain,
-                                            image : NetworkImage("https://cdn.icon"
-                                                "scout.com/icon/free/png-512/avata"
-                                                "r-369-456321.png"),
-                                        )
-                                    )),
-                              ),
-                              Text(
-                                "Mrs Chanandler Bong",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: CustomColours.greenNavy()
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]
+              onPressed: () {
+                setState(() {
+                  _openAchievements = true;
+                });
+              }
+          ),
+          actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  size: _iconSize,
+                  color: CustomColours.offWhite(),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: DefaultTabController(
-                  length: 3,
-                  child: SizedBox(
-                    height: 300,
-                    child: Column(
+                onPressed: () => print("Go to settings")
+            )
+          ],
+        ),
+        body: Center(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Stack(
                       children: [
-                        Expanded(
-                          flex: 1,
+                        Center(
                           child: Container(
-                            padding: EdgeInsets.all(5),
-                            color: CustomColours.greenNavy(),
-                            child: TabBar(
-                              labelColor: CustomColours.greenNavy(),
-                              unselectedLabelColor: CustomColours.offWhite(),
-                              indicator: UnderlineTabIndicator(
-                                borderSide: BorderSide(
-                                  color: CustomColours.offWhite()
-                                )
+                            color: CustomColours.offWhite(),
+                            width: 400,
+                            height: 180,
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 20, top: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                        decoration: new BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: new DecorationImage(
+                                              fit: BoxFit.contain,
+                                              image : NetworkImage("https://cdn.icon"
+                                                  "scout.com/icon/free/png-512/avata"
+                                                  "r-369-456321.png"),
+                                            )
+                                        )),
+                                  ),
+                                  Text(
+                                    "Mrs Chanandler Bong",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: CustomColours.greenNavy()
+                                    ),
+                                  )
+                                ],
                               ),
-                              tabs: [
-                                CarmaResolutionTab(label : "WEEK"),
-                                CarmaResolutionTab(label : "MONTH"),
-                                CarmaResolutionTab(label : "YEAR"),
-                              ],
                             ),
                           ),
                         ),
-                        Expanded(
-                          flex: 7,
-                          child: TabBarView(
-                            children: [
-                              CarmaResolutionView(resolution : CarmaViewResolution.WEEK),
-                              CarmaResolutionView(resolution : CarmaViewResolution.MONTH),
-                              CarmaResolutionView(resolution : CarmaViewResolution.YEAR),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )),
-              ),
-              // Column(
-              //                 //
-              //                 // ),
-              //                 // HomePageButton(
-              //                 //   text: 'Go to empty page',
-              //                 //   onPressed: _gotoEmptyPage,
-              //                 // )
-            ],
+                      ]
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: DefaultTabController(
+                      length: 3,
+                      child: SizedBox(
+                        height: 300,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                color: CustomColours.greenNavy(),
+                                child: TabBar(
+                                  labelColor: CustomColours.greenNavy(),
+                                  unselectedLabelColor: CustomColours.offWhite(),
+                                  indicator: UnderlineTabIndicator(
+                                      borderSide: BorderSide(
+                                          color: CustomColours.offWhite()
+                                      )
+                                  ),
+                                  tabs: [
+                                    CarmaResolutionTab(label : "WEEK"),
+                                    CarmaResolutionTab(label : "MONTH"),
+                                    CarmaResolutionTab(label : "YEAR"),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 7,
+                              child: TabBarView(
+                                children: [
+                                  CarmaResolutionView(resolution : CarmaViewResolution.WEEK),
+                                  CarmaResolutionView(resolution : CarmaViewResolution.MONTH),
+                                  CarmaResolutionView(resolution : CarmaViewResolution.YEAR),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: NavBar(selected: 0),
+        bottomNavigationBar: NavBar(selected: 0),
+      )
+    ];
+
+    if (_openAchievements) {
+      stackWidgets.addAll([
+        Container(
+          color: CustomColours.baseBlack().withOpacity(0.9),
+        ),
+        AchievementsPage(onClose: () {
+            setState(() {
+              _openAchievements = false;
+            });
+          },
+        )
+      ]);
+    }
+
+    return Stack(
+      children: stackWidgets
     );
   }
 }
