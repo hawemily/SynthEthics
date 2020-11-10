@@ -4,7 +4,7 @@ import 'package:synthetics/screens/login/sign_in_or_register_with_email.dart';
 import 'package:synthetics/services/auth.dart';
 
 class LoginPage extends StatelessWidget {
-  final FirebaseAuth _auth = Auth.getInstance().auth;
+  final Auth _auth = Auth.getInstance();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

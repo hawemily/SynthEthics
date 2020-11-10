@@ -7,6 +7,8 @@ import 'package:synthetics/requestObjects/new_user_request.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/routes.dart';
+import 'package:synthetics/services/auth.dart';
+import 'package:flutter_session/flutter_session.dart';
 
 class SignInOrRegisterWithEmailSection extends StatefulWidget {
   SignInOrRegisterWithEmailSection({
@@ -15,7 +17,7 @@ class SignInOrRegisterWithEmailSection extends StatefulWidget {
     this.isSignIn,
   });
 
-  fbAuth.FirebaseAuth auth;
+  Auth auth;
   bool isSignIn;
 
   @override
@@ -33,12 +35,14 @@ class _SignInOrRegisterWithEmailSectionState
   bool isSignIn;
   String _email;
   String _errorText;
-  fbAuth.FirebaseAuth _auth;
+  Auth _auth;
+  fbAuth.FirebaseAuth _fbAuth;
 
   @override
   void initState() {
     super.initState();
     this._auth = widget.auth;
+    this._fbAuth = this._auth.auth;
     isSignIn = true;
   }
 
@@ -46,7 +50,7 @@ class _SignInOrRegisterWithEmailSectionState
     fbAuth.User user;
 
     try {
-      user = (await _auth.createUserWithEmailAndPassword(
+      user = (await _fbAuth.createUserWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text))
           .user;
     } on fbAuth.FirebaseException catch (e) {
@@ -67,8 +71,8 @@ class _SignInOrRegisterWithEmailSectionState
       NewUserRequest req = new NewUserRequest(user.uid);
       api_client.post("/addUser", body: jsonEncode(req));
 
-      Navigator.pushNamed(context, routeMapping[Screens.Home],
-          arguments: user.uid);
+//      _auth.setUID(user.uid);
+      Navigator.pushNamed(context, routeMapping[Screens.Home]);
     } else {
       setState(() {
         _registerSuccess = false;
@@ -82,7 +86,7 @@ class _SignInOrRegisterWithEmailSectionState
     fbAuth.User user;
 
     try {
-      user = (await _auth.signInWithEmailAndPassword(
+      user = (await _fbAuth.signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text))
           .user;
     } on fbAuth.FirebaseAuthException catch (e) {
@@ -103,8 +107,8 @@ class _SignInOrRegisterWithEmailSectionState
       print("got user!!");
       print("user.uid, ${user.uid}");
 
-      Navigator.pushNamed(context, routeMapping[Screens.Home],
-          arguments: user.uid);
+//      _auth.setUID(user.uid);
+      Navigator.pushNamed(context, routeMapping[Screens.Home]);
     } else {
       setState(() {
         _loginSuccess = false;

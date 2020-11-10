@@ -6,16 +6,13 @@ import 'package:synthetics/theme/custom_colours.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
 import '../../routes.dart';
+import 'package:synthetics/services/auth.dart';
 
 // Home page, currently standing in for the user home page
 class HomePage extends StatefulWidget {
-
+  Auth auth = Auth.getInstance();
   @override
   HomePageState createState() => HomePageState();
-
-  final dynamic uid;
-
-  HomePage({this.uid});
 }
 
 class HomePageState extends State<HomePage> {
@@ -26,14 +23,14 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 //    print("context: ${ModalRoute.of(context).settings.name}");
-    _updateUser(widget.uid);
+    _updateUser(widget.auth);
 //    uid = ModalRoute.of(context).settings.arguments;
     // post call here to extract user details
   }
 
-  void _updateUser(dynamic uid) {
+  void _updateUser(Auth auth) {
     setState((){
-      if(uid == null) {
+      if(auth.getUID() == null) {
         print("UID SHOULD NOT BE NULL! PLEASE CHECK!");
         return;
       }

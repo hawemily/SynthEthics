@@ -11,7 +11,7 @@ class RouteGenerator {
 
     switch (settings.name) {
       case "/":
-        return MaterialPageRoute(builder: (context) => HomePage(uid: args));
+        return MaterialPageRoute(builder: (context) => HomePage());
       case "/closet":
         return MaterialPageRoute(builder: (context) => Closet());
       case "/donation":

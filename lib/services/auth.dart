@@ -1,13 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 
 class Auth {
-  FirebaseAuth auth;
+  fbAuth.FirebaseAuth auth;
   static Auth _instance;
+  fbAuth.User user;
 
   static Auth getInstance() {
     if(_instance == null) {
       _instance = Auth._internal();
-      _instance.auth = FirebaseAuth.instance;
+      _instance.auth = fbAuth.FirebaseAuth.instance;
     }
     return _instance;
   }
