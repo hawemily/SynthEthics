@@ -32,10 +32,10 @@ class HomePageState extends State<HomePage> {
 
   void _updateUser(Auth auth) {
     setState((){
-      if(auth.getUID() == null) {
-        print("UID SHOULD NOT BE NULL! PLEASE CHECK!");
-        return;
-      }
+//      if(auth.getUID() == null) {
+//        print("UID SHOULD NOT BE NULL! PLEASE CHECK!");
+//        return;
+//      }
 //      print("uid to string: ${uid.toString()}");
       this.uid = uid.toString();
     });
