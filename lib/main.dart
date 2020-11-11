@@ -25,9 +25,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SynthEthic',
       theme: appTheme(),
-      initialRoute: '/start',
-      routes: routes,
+
+      initialRoute: '/login',
+
+//      routes: routes,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
-
