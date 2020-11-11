@@ -1,11 +1,12 @@
 import {Request, Response} from "express";
+import { Collections } from "../helper_components/db_collections";
 import {User} from "../models/users";
 
 
 export const addNewUser = async (req:Request, res:Response, db:FirebaseFirestore.Firestore) => {
    try {
     const {uid} = req.body;
-    const userRef = db.collection("users")
+    const userRef = db.collection(Collections.Users);
 
     const newUser: User = {
         userId: uid,
