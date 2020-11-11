@@ -9,28 +9,34 @@ export const getAllClothes = async (
 ) => {
   // TODO: uncomment the uids when user is implemented
   // const {uid} = req;
+  try {
+    const closetRef = await db.collection(Collections.Closet);
+    // const clothingUserQuerySnapshot = await db.collection(uid).get();
+    const clothingItems: any[] = [];
   
-  const closetRef = await db.collection(Collections.Closet);
-  // const clothingUserQuerySnapshot = await db.collection(uid).get();
-  const clothingItems: any[] = [];
-
-  for (const type in Object.values(ClothingType)) {
-    const typeAsStr = type as keyof typeof ClothingType;
-    const itemsByTypeSnapshot = await closetRef.where('clothingType', '==', ClothingType[typeAsStr]).get();
-    
-    const itemsJson: any[] = [];
-    if (!itemsByTypeSnapshot.empty) {
-      itemsByTypeSnapshot.forEach(doc => {
-        itemsJson.push({id: doc.id, data: doc.data()});
-      }); 
+    for (const type in Object.values(ClothingType)) {
+      console.log(type);
+      const itemsByTypeSnapshot = await closetRef.where('clothingType', '==', type).get();
+      
+      const itemsJson: any[] = [];
+      if (!itemsByTypeSnapshot.empty) {
+        itemsByTypeSnapshot.forEach(doc => {
+          itemsJson.push({id: doc.id, data: doc.data()});
+        }); 
+      }
+  
+      clothingItems.push({typeAsStr : itemsJson});
+      console.log(`clothingItems: ${clothingItems.toString()}`);
     }
-
-    clothingItems.push({typeAsStr : itemsJson});
+  
+    // clothingQuerySnapshot.forEach((doc) => {
+    //   clothingItems.push({ id: doc.id, data: doc.data() });
+    // });
+    const obj = {clothingItems: clothingItems};
+    res.status(200).json(obj);
+  } catch (e) {
+    console.log(e);
+    res.status(400);
   }
-
-  // clothingQuerySnapshot.forEach((doc) => {
-  //   clothingItems.push({ id: doc.id, data: doc.data() });
-  // });
-
-  res.status(200).json({ clothingItems: clothingItems });
+ 
 };
