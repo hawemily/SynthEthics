@@ -6,9 +6,10 @@ part 'items_to_donate_request.g.dart';
 @JsonSerializable()
 
 class ItemsToDonateRequest{
+  String uid;
   List<DonatedItemMetadata> items;
 
-  ItemsToDonateRequest(this.items);
+  ItemsToDonateRequest(this.uid, this.items);
 
   Map<String, dynamic> toJson() => _$ItemsToDonateRequestToJson(this);
 }

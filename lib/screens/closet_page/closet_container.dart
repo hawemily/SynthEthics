@@ -9,6 +9,7 @@ import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/screens/closet_page/flippy_card.dart';
 import 'package:synthetics/screens/closet_page/outfit_card.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/services/api_client.dart';
 
@@ -22,19 +23,19 @@ class ClosetContainer extends StatelessWidget {
   final Function setMode;
   Set<DonatedItemMetadata> clothingToDonate = Set();
 
-  void donateClothingItem(String id, int clothingType, bool toDonate) {
+  void donateClothingItem(String id, bool toDonate) {
     print(id);
     print(toDonate);
     if (toDonate) {
-      clothingToDonate.add(new DonatedItemMetadata(id, clothingType));
+      clothingToDonate.add(new DonatedItemMetadata(id));
     } else {
-      clothingToDonate.remove(new DonatedItemMetadata(id, clothingType));
+      clothingToDonate.remove(new DonatedItemMetadata(id));
     }
   }
 
   void donateSelected() {
     print(clothingToDonate);
-    ItemsToDonateRequest req = new ItemsToDonateRequest(
+    ItemsToDonateRequest req = new ItemsToDonateRequest( CurrentUser.getInstance().getUID(),
         clothingToDonate.length == 0 ? [] : clothingToDonate.toList());
     api_client.post("/markedAsDonate", body: jsonEncode(req));
     print("in closet container");

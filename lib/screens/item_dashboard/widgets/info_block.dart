@@ -9,27 +9,40 @@ class InfoBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 110.0,
-      height: 130,
-      child: Card(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(6),
+          height: 25,
+          width: 25,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color.withOpacity(.26),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+              border: Border.all(
+                color: color,
+                width: 2,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
         Text(
           value,
-          textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.w800, color: color),
+              fontSize: 25, color: color, fontWeight: FontWeight.w600),
         ),
-        Padding(padding: EdgeInsets.only(top: 10.0)),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
+        Padding(padding: EdgeInsets.only(top: 5.0)),
+        Text(label,
+            style: TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: Colors.blueGrey),
-        ),
-      ])),
+              color: Colors.grey,
+            ))
+      ],
     );
   }
 }

@@ -1,14 +1,15 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/requestObjects/new_user_request.dart';
 import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/routes.dart';
-import 'package:synthetics/services/auth.dart';
-//import 'package:flutter_session/flutter_session.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 
 class SignInOrRegisterWithEmailSection extends StatefulWidget {
   SignInOrRegisterWithEmailSection({
@@ -17,7 +18,7 @@ class SignInOrRegisterWithEmailSection extends StatefulWidget {
     this.isSignIn,
   });
 
-  fbAuth.FirebaseAuth auth;
+  FirebaseAuth auth;
   bool isSignIn;
 
   @override
@@ -35,7 +36,7 @@ class _SignInOrRegisterWithEmailSectionState
   bool isSignIn;
   String _email;
   String _errorText;
-  fbAuth.FirebaseAuth _auth;
+  FirebaseAuth _auth;
 
   @override
   void initState() {
@@ -45,13 +46,13 @@ class _SignInOrRegisterWithEmailSectionState
   }
 
   void _register() async {
-    fbAuth.User user;
+    User user;
 
     try {
       user = (await _auth.createUserWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text))
           .user;
-    } on fbAuth.FirebaseException catch (e) {
+    } on FirebaseException catch (e) {
       setState(() {
         _errorText = e.code;
       });
@@ -69,8 +70,10 @@ class _SignInOrRegisterWithEmailSectionState
       NewUserRequest req = new NewUserRequest(user.uid);
       api_client.post("/addUser", body: jsonEncode(req));
 
-      Navigator.pushNamed(context, routeMapping[Screens.Home],
-          arguments: user.uid);
+      CurrentUser currUser = CurrentUser.getInstance();
+      currUser.setUID(user.uid);
+
+      Navigator.pushNamed(context, routeMapping[Screens.Home]);
     } else {
       setState(() {
         _registerSuccess = false;
@@ -81,17 +84,33 @@ class _SignInOrRegisterWithEmailSectionState
   }
 
   void _signIn() async {
-    fbAuth.User user;
+    User user;
 
     try {
       user = (await _auth.signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text))
           .user;
-    } on fbAuth.FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       setState(() {
         _errorText = e.code;
       });
       print(e);
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text(e.message),
+            actions:  [
+              FlatButton(
+                child: Text("Ok"),
+                onPressed: Navigator.of(context).pop,
+              )
+            ]
+          );
+        }
+      );
     } catch (e) {
       print("Non firebase auth error related $e");
     }
@@ -105,8 +124,10 @@ class _SignInOrRegisterWithEmailSectionState
       print("got user!!");
       print("user.uid, ${user.uid}");
 
-      Navigator.pushNamed(context, routeMapping[Screens.Home],
-          arguments: user.uid);
+      CurrentUser currUser = CurrentUser.getInstance();
+      currUser.setUID(user.uid);
+
+      Navigator.pushNamed(context, routeMapping[Screens.Home]);
     } else {
       setState(() {
         _loginSuccess = false;

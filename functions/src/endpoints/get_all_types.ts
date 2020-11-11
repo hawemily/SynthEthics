@@ -7,5 +7,5 @@ export const getAllClothingTypes = (res: Response) => {
     types.push(key);
   });
 
-  res.sendStatus(200).json({ clothingTypes: types });
+  res.send(200).json({ clothingTypes: types });
 };
