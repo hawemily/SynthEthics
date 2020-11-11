@@ -5,15 +5,14 @@ part 'donated_item_metadata.g.dart';
 @JsonSerializable()
 class DonatedItemMetadata {
   String id;
-  int clothingType;
 
-  DonatedItemMetadata(this.id, this.clothingType);
+  DonatedItemMetadata(this.id);
 
 
   @override
   bool operator ==(other) {
     return (other is DonatedItemMetadata) &&
-        other.id == this.id && other.clothingType == this.clothingType;
+        other.id == this.id;
   }
 
   Map<String, dynamic> toJson() => _$DonatedItemMetadataToJson(this);

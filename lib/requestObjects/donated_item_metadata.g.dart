@@ -9,7 +9,6 @@ part of 'donated_item_metadata.dart';
 DonatedItemMetadata _$DonatedItemMetadataFromJson(Map<String, dynamic> json) {
   return DonatedItemMetadata(
     json['id'] as String,
-    json['clothingType'] as int,
   );
 }
 
@@ -17,5 +16,4 @@ Map<String, dynamic> _$DonatedItemMetadataToJson(
         DonatedItemMetadata instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'clothingType': instance.clothingType,
     };

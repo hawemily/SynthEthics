@@ -1,17 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
 
 import '../../routes.dart';
-import 'package:synthetics/services/auth.dart';
 
 // Home page, currently standing in for the user home page
 class HomePage extends StatefulWidget {
-  Auth auth = Auth.getInstance();
   @override
   HomePageState createState() => HomePageState();
 }
@@ -23,22 +23,10 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    // not sure if this widget will be rebuilt if uid changes
+    uid = CurrentUser.getInstance().getUID();
+    print("uid in home page: $uid");
     super.initState();
-//    print("context: ${ModalRoute.of(context).settings.name}");
-    _updateUser(widget.auth);
-//    uid = ModalRoute.of(context).settings.arguments;
-    // post call here to extract user details
-  }
-
-  void _updateUser(Auth auth) {
-    setState((){
-//      if(auth.getUID() == null) {
-//        print("UID SHOULD NOT BE NULL! PLEASE CHECK!");
-//        return;
-//      }
-//      print("uid to string: ${uid.toString()}");
-      this.uid = uid.toString();
-    });
   }
 
   void _gotoEmptyPage() {
@@ -67,11 +55,16 @@ class HomePageState extends State<HomePage> {
           actions: [
             IconButton(
                 icon: Icon(
-                  Icons.settings,
+                  Icons.exit_to_app,
                   size: _iconSize,
                   color: CustomColours.offWhite(),
                 ),
-                onPressed: () => print("Go to settings")
+                onPressed: () {
+                  FirebaseAuth auth = FirebaseAuth.instance;
+                  auth.signOut().then((res) => {
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:routes[routeMapping[Screens.Login]]), (route) => false)
+                  });
+                }
             )
           ],
         ),
