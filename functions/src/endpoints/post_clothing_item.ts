@@ -56,9 +56,11 @@ export const postClothingItem = async (
       purchaseDate: dateOfpurchase,
     };
 
-    // const closetRef = db.collection("closet");
+    // const userRef = db.collection("users").doc('uid');
     console.log(`apparel cf" ${apparel.cF}`)
     console.log(`apparel brand" ${apparel.brand}`)
+    
+    // userRef.collection("closet").add(apparel);
     const newClothingItem = await db.collection("closet").add(apparel);
     // const newClothingItem = await db.collection(uid).add(apparel); 
     console.log(`apparel name" ${apparel.name}`)
