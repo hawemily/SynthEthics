@@ -9,5 +9,6 @@ var ClothingType;
     ClothingType[ClothingType["skirts"] = 3] = "skirts";
     ClothingType[ClothingType["outerwear"] = 4] = "outerwear";
     ClothingType[ClothingType["headgear"] = 5] = "headgear";
+    ClothingType[ClothingType["shoes"] = 6] = "shoes";
 })(ClothingType = exports.ClothingType || (exports.ClothingType = {}));
 //# sourceMappingURL=clothing_item_schema.js.map

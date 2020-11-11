@@ -6,6 +6,8 @@ import { initData } from "./endpoints/init_data";
 import { getAllClothingTypes } from "./endpoints/get_all_types";
 import { addNewUser } from "./endpoints/post_new_user";
 import { getAllDonatedItems } from "./endpoints/get_all_donated_items";
+import { postOutfit } from "./endpoints/post_outfit";
+import { getAllOutfits } from "./endpoints/get_all_outfits";
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   // GET /clothes
@@ -47,6 +49,16 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   
   app.get("/closet/allDonatedItems", (req: Request, res: Response)=> {
     getAllDonatedItems(req, res, db);
+    return;
+  });
+  
+  app.get("/outfits", (req: Request, res: Response) => {
+    getAllOutfits(req, res, db);
+    return;
+  })
+
+  app.post("/outfits/add", (req: Request, res: Response) => {
+    postOutfit(req, res, db);
     return;
   })
 

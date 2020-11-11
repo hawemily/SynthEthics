@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:synthetics/services/clothing_types/clothing_types.dart';
 
 part 'clothingMetadata.g.dart';
 
@@ -30,6 +31,9 @@ class ClothingMetadata {
   @JsonKey(defaultValue: 0)
   final double maxNoOfTimesToBeWorn;
 
+  @JsonKey(defaultValue: "")
+  final int clothingType;
+
   ClothingMetadata(this.name,
     this.brand,
     this.cF,
@@ -37,7 +41,8 @@ class ClothingMetadata {
     this.lastWornDate,
     this.purchaseDate,
     this.currentTimesWorn,
-    this.maxNoOfTimesToBeWorn);
+    this.maxNoOfTimesToBeWorn,
+      this.clothingType);
 
   factory ClothingMetadata.fromJson(Map<String, dynamic> json) => _$ClothingMetadataFromJson(json);
 
