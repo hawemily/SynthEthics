@@ -14,7 +14,7 @@ class FlippyCard extends ClothingCard {
   const FlippyCard(this.flipAction, {Key key, clothingItem})
       : super(key: key, clothingItem: clothingItem);
 
-  final Function(String id, bool donated) flipAction;
+  final Function(String id, int clothingType, bool donated) flipAction;
 
   @override
   _FlippyCardState createState() => _FlippyCardState();
@@ -55,7 +55,7 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
           }
         },
         onFlipDone: (status) {
-          widget.flipAction(this.currentClothingItem.id, !status);
+          widget.flipAction(this.currentClothingItem.id, this.currentClothingItem.data.clothingType, !status);
         },
         front: super.buildBaseStack(null),
         back: Card(

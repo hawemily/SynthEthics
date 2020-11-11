@@ -7,15 +7,18 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/responseObjects/getClosetResponse.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 
+import 'closet_donation_page.dart';
+
 enum ClosetMode {
     Normal, Select, Donate
 }
 
 class Closet extends StatefulWidget {
-  Closet({Key key, this.mode}) : super(key: key);
+  Closet({Key key}) : super(key: key);
 
   ClosetMode mode = ClosetMode.Donate;
   final List<String> categories = [
+    "items to be donated",
     "tops",
     "bottoms",
     "skirts",
@@ -34,6 +37,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   //Future<List<String>> categories;
    Future<GetClosetResponse> clothingItems;
+   Future<GetClosetResponse> _itemsToBeDonated;
+
+   ClosetMode _mode = ClosetMode.Normal;
 
   @override
   void initState() {
@@ -42,6 +48,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     // categories = getCategories();
     List<String> categories = widget.categories;
     clothingItems = this.getClothes();
+//    _itemsToBeDonated = this.getDonatedItems();
+    _itemsToBeDonated = clothingItems;
     print(categories);
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
 
@@ -78,6 +86,19 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     }
   }
 
+  Future<GetClosetResponse> getDonatedItems() async {
+    print("get all items marked as to be donated from backend");
+    final response = await api_client.get("/closet/allDonatedItems");
+    if(response.statusCode == 200) {
+      print(response.body);
+      final resBody = jsonDecode(response.body);
+      final toBeDonated = GetClosetResponse.fromJson(resBody);
+      return toBeDonated;
+    } else {
+      throw Exception("Failed to load donatedItems");
+    }
+  }
+
   Widget generateCloset() {
     print("generatingCloset");
     return FutureBuilder<GetClosetResponse>(
@@ -86,12 +107,40 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         print(snapshot);
         if (snapshot.hasData) {
           return ClosetContainer(
-            widget.mode,
+            _mode,
             clothingItemObjects: snapshot.data.clothingItems,
+            setMode: setMode,
           );
         } else if (snapshot.hasError) {
           print(snapshot.error);
           return Text("Unable to load clothes from closet! Please contact admin for support");
+        }
+        return CircularProgressIndicator();
+      }
+    );
+  }
+
+  setMode(ClosetMode mode) {
+    print("set mode is called $mode");
+    setState(() {
+      _mode = mode;
+    });
+  }
+
+  Widget generateDonationPage() {
+    return FutureBuilder<GetClosetResponse>(
+      future: _itemsToBeDonated,
+      builder: (context, snapshot) {
+        print("generating donated items in generate donation page");
+        if (snapshot.hasData) {
+          return ClosetDonationPage(
+            setMode: setMode,
+            mode: _mode,
+            donatedItems: snapshot.data.clothingItems
+          );
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+          return Text("Unable to load donated items");
         }
         return CircularProgressIndicator();
       }
@@ -120,10 +169,15 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         controller: _tabController,
         children: _tabs.map((Tab tab) {
           final String label = tab.text;
-          return generateCloset();
+          if (label == "items to be donated") {
+            return generateDonationPage();
+          } else {
+            return generateCloset();
+          }
         }).toList(),
       ),
       bottomNavigationBar: NavBar(selected: 1),
+
     );
 //        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }
