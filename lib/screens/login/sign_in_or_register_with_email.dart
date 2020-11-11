@@ -7,6 +7,8 @@ import 'package:synthetics/requestObjects/new_user_request.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/routes.dart';
+import 'package:synthetics/services/auth.dart';
+//import 'package:flutter_session/flutter_session.dart';
 
 class SignInOrRegisterWithEmailSection extends StatefulWidget {
   SignInOrRegisterWithEmailSection({
