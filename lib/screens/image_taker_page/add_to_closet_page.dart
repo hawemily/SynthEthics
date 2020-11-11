@@ -63,6 +63,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
           'purchaseDate': DateTime.now().toString(),
         }.toString());
 
+//    print('clothingType: ${widget.clothingType}');
     final response = await api_client.post(
       "/closet/addItem",
       headers: <String, String>{
@@ -70,13 +71,13 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
       },
       body: jsonEncode(<String, dynamic>{
         'name': _clothingName,
-        'brand': _clothingBrand,
-        'materials': [widget.clothingMaterial.toLowerCase()],
-        'clothingType': widget.clothingType.toLowerCase(),
+        'Brand': _clothingBrand,
+        'Materials': [widget.clothingMaterial.toLowerCase()],
+        'clothingType': widget.clothingType,
         'currLocation': widget.location,
         'origin': widget.placeOfOrigin,
-        'lastWornDate': DateTime.now().toString(),
-        'purchaseDate': DateTime.now().toString(),
+        'lastWorn': DateTime.now().toString(),
+        'dateOfpurchase': DateTime.now().toString(),
       })
     );
     print("response $response");

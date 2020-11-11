@@ -6,7 +6,6 @@ import 'package:http/http.dart';
 import 'package:synthetics/routes.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/style.dart';
-import 'package:synthetics/route_generator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +25,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SynthEthic',
       theme: appTheme(),
-      // initialRoute: '/login',
-      initialRoute: '/',
+
+      initialRoute: '/login',
 
 //      routes: routes,
       onGenerateRoute: RouteGenerator.generateRoute,

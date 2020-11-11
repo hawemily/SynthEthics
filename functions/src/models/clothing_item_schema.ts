@@ -1,10 +1,10 @@
 export enum ClothingType {
-  "tops",
-  "bottoms",
-  "dresses",
-  "skirts",
-  "outerwear",
-  "headgear",
+  Tops = "Tops",
+  Bottoms = "Bottoms",
+  Dresses = "Dresses",
+  Skirts = "Skirts",
+  Outerwear = "Outerwear",
+  Headgear = "Headgear",
 }
 
 export interface clothingItem {
