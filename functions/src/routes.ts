@@ -9,6 +9,7 @@ import { getAllDonatedItems } from "./endpoints/get_all_donated_items";
 import { postOutfit } from "./endpoints/post_outfit";
 import { getAllOutfits } from "./endpoints/get_all_outfits";
 import { markItemsAsDonate } from "./endpoints/post_items_to_donate";
+import { initOutfits } from "./endpoints/init_outfits";
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   // GET /clothes
@@ -29,6 +30,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.get("/initData", (req: Request, res: Response) => {
     initData(res, db);
+    return;
+  });
+
+  app.get("/initOutfits", (req: Request, res: Response) => {
+    initOutfits(res, db);
     return;
   });
 

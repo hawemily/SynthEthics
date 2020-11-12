@@ -8,7 +8,6 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 import '../../routes.dart';
 
-
 // NavBar class, to be placed on pages as 'bottomNavigationBar'
 class NavBar extends StatefulWidget {
   final selected;
@@ -20,13 +19,10 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-
   void _clearStackAndPush(Screens screen) {
     if (ModalRoute.of(context).settings.name != routeMapping[screen]) {
       Navigator.popUntil(
-          context,
-          ModalRoute.withName(routeMapping[Screens.Home])
-      );
+          context, ModalRoute.withName(routeMapping[Screens.Home]));
       if (screen != Screens.Home) {
         Navigator.pushNamed(context, routeMapping[screen]);
       }
@@ -48,9 +44,7 @@ class _NavBarState extends State<NavBar> {
         showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
-              label: 'home',
-              icon: Icon(Icons.home, size: _iconSize)
-          ),
+              label: 'home', icon: Icon(Icons.home, size: _iconSize)),
           BottomNavigationBarItem(
             label: 'wardrobe',
             icon: Icon(Icons.sensor_window, size: _iconSize),
@@ -60,9 +54,7 @@ class _NavBarState extends State<NavBar> {
             icon: Icon(Icons.add_circle_outline, size: _iconSize),
           ),
           BottomNavigationBarItem(
-            label: 'outfits',
-            icon: Icon(Icons.details, size: _iconSize)
-          ),
+              label: 'outfits', icon: Icon(Icons.details, size: _iconSize)),
           BottomNavigationBarItem(
             label: 'donate_item',
             icon: Icon(Icons.place, size: _iconSize),
@@ -71,7 +63,7 @@ class _NavBarState extends State<NavBar> {
         onTap: (index) {
           switch (index) {
             case 0:
-               _clearStackAndPush(Screens.Home);
+              _clearStackAndPush(Screens.Home);
               break;
 
             case 1:
@@ -86,7 +78,7 @@ class _NavBarState extends State<NavBar> {
 
             case 3:
               // TODO: Add outfits page navigation here
-              print("GOTO OUTFITS");
+              _clearStackAndPush(Screens.DressingRoom);
               break;
 
             case 4:
