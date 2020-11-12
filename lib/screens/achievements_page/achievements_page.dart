@@ -15,6 +15,14 @@ class AchievementsPage extends StatefulWidget {
 
 class _AchievementsPageState extends State<AchievementsPage> {
   Widget _expandedAchievement;
+  List<Achievement> achievements = [
+    Achievement(type: AchievementType.Unlock),
+    Achievement(type: AchievementType.Tiered),
+    Achievement(type: AchievementType.Unlock),
+    Achievement(type: AchievementType.Tiered),
+    Achievement(type: AchievementType.Unlock),
+    Achievement(type: AchievementType.Tiered)
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
               bottomRight: Radius.circular(5))),
       margin: EdgeInsets.all(30),
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 350),
         child: (_expandedAchievement == null)
             ? Column(children: [
                 Expanded(
@@ -69,24 +77,16 @@ class _AchievementsPageState extends State<AchievementsPage> {
                     padding: EdgeInsets.only(bottom: 15),
                     child: GridView.count(
                       primary: false,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: [
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                      ],
+                      padding: const EdgeInsets.all(5),
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 1,
+                      crossAxisCount: 3,
+                      children: achievements
+                          .map((achievement) => PreviewAchievementCard(
+                                achievement: achievement,
+                                onClick: _expandAchievement,
+                              ))
+                          .toList(),
                     ),
                   ),
                 ),
@@ -104,10 +104,6 @@ class _AchievementsPageState extends State<AchievementsPage> {
 
   void _expandAchievement(Achievement achievementData) {
     setState(() {
-      print(achievementData);
-      // _expandedAchievement = Container(
-      //   child : Text("Achievement Expanded")
-      // );
       _expandedAchievement = new ExpandedAchievementCard(
           achievement: achievementData, onClose: _collapseAchievement);
     });
