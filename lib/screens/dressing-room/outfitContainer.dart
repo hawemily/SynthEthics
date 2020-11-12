@@ -12,9 +12,9 @@ class OutfitContainer extends StatelessWidget {
     print("Outfit: ${this.outfits}");
     return Stack(children: [
       Container(
-          margin: const EdgeInsets.all(5.0),
+          margin: const EdgeInsets.all(15.0),
           child: new GridView.count(
-            crossAxisCount: 3,
+            crossAxisCount: 2,
             childAspectRatio: 0.8,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,

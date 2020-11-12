@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/getOutfitResponse.dart';
+import 'package:synthetics/responseObjects/outfitListItem.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
+import '../closet_page/outfit_card.dart';
 import 'outfitContainer.dart';
 
 class DressingRoom extends StatefulWidget {
@@ -61,13 +63,13 @@ class _DressingRoomState extends State<DressingRoom> {
         title: Text('Dressing Room'),
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: generateOutfits(),
-        ),
-      ),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            // child: generateOutfits(),
+            child: generateOutfits(),
+          )),
       bottomNavigationBar: NavBar(selected: 3),
     );
   }

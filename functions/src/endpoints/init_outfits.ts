@@ -31,10 +31,21 @@ export const initOutfits = async (
   const jsonObject2 = {id: "6", data: ap2};
 
   const o1: Outfit = {name: "Outfit 1", clothing: [jsonObject1, jsonObject2]};
+  const o2: Outfit = {name: "Outfit 2", clothing: [jsonObject1, jsonObject2]};
+  const o3: Outfit = {name: "Outfit 3", clothing: [jsonObject1, jsonObject2]};
+
 
   const awaitap1 = await outfitRef.add(o1);
+  const awaitap2 = await outfitRef.add(o2);
+  const awaitap3 = await outfitRef.add(o3);
+
   console.log(`id: ${awaitap1.id}`);
+  console.log(`id: ${awaitap2.id}`);
+  console.log(`id: ${awaitap3.id}`);
+
   res.json({
     o1: awaitap1.id,
+    o2: awaitap2.id,
+    o3: awaitap3.id,
   });
 };

@@ -27,7 +27,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
   void initState() {
     this.index = 0;
     this.currentClothingItem = widget.outfitClothingList[this.index];
-    currClothingItemImage = this.getImage();
+    currClothingItemImage = getImage();
   }
 
   Widget getIcon() {
@@ -70,7 +70,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
               child: this.index == 0
                   ? Container()
                   : Icon(Icons.arrow_back_ios,
-                      color: CustomColours.offWhite(), size: 20.0))),
+                      color: CustomColours.greenNavy(), size: 20.0))),
       Positioned(
           top: 75.0,
           right: 10.0,
@@ -88,28 +88,36 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
               child: this.index == widget.outfitClothingList.length - 1
                   ? Container()
                   : Icon(Icons.arrow_forward_ios,
-                      color: CustomColours.offWhite(), size: 20.0)))
+                      color: CustomColours.greenNavy(), size: 20.0)))
     ];
   }
 
   @override
   Widget buildImage() {
-    return clear
-        ? Align(
-            alignment: Alignment.center,
-            child: Icon(Icons.block, color: CustomColours.accentCopper()))
-        : super.buildImage();
+    // return clear ?
+    return Align(
+        alignment: Alignment.center,
+        child: Icon(Icons.block, color: CustomColours.accentCopper()));
+    // : super.buildImage();
   }
+
+  // void tapAction() {
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) =>
+  //               ClothingItem(clothingItem: this.currentClothingItem)));
+  // }
 
   @override
   Widget build(BuildContext context) {
-    Stack stack = this.buildBaseStack(() {
-      print("TODO: navigate to closet in select mode");
-    }, clear: this.clear);
+    // Stack stack = this.buildBaseStack(this.tapAction, clear: this.clear);
+    Stack stack = this.buildBaseStack(() => print("Get item dashboard page"),
+        clear: this.clear);
     stack.children.add(Positioned(top: 0.0, right: 0.0, child: getIcon()));
-    if (!clear) {
-      stack.children.addAll(getLeftRightControls());
-    }
+    // if (!clear) {
+    stack.children.addAll(getLeftRightControls());
+    // }
     return stack;
   }
 }
