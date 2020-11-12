@@ -222,7 +222,7 @@ class _ClothingItemState extends State<ClothingItem> {
                         InfoBlock(
                           color: CustomColours.negativeRed(),
                           value: "${clothingID.data.cF.round()}",
-                          label: "Karma Pts",
+                          label: "Carma Pts",
                         ),
                       ],
                     ),

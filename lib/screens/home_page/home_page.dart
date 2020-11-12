@@ -9,6 +9,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
 
 import '../../routes.dart';
+import 'info_page.dart';
 
 // Home page, currently standing in for the user home page
 class HomePage extends StatefulWidget {
@@ -52,6 +53,18 @@ class HomePageState extends State<HomePage> {
                 });
               }),
           actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.info,
+                  size: _iconSize,
+                  color: CustomColours.offWhite(),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InformationPage()),
+                  );
+                }),
             IconButton(
                 icon: Icon(
                   Icons.exit_to_app,
