@@ -16,7 +16,7 @@ ClothingMetadata _$ClothingMetadataFromJson(Map<String, dynamic> json) {
     json['purchaseDate'] as String ?? '25/10/2020',
     (json['currentTimesWorn'] as num)?.toDouble() ?? 0,
     (json['maxNoOfTimesToBeWorn'] as num)?.toDouble() ?? 0,
-    json['clothingType'] as int ?? '',
+    json['clothingType'] as String ?? '',
   );
 }
 

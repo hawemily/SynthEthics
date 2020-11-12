@@ -25,7 +25,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     // not sure if this widget will be rebuilt if uid changes
     uid = CurrentUser.getInstance().getUID();
-    // print("uid in home page: $uid");
+     print("uid in home page: $uid");
     super.initState();
   }
 

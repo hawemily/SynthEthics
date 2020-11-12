@@ -1,20 +1,17 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-import 'package:synthetics/responseObjects/clothingItemObject.dart';
-import 'package:synthetics/services/image_taker/image_manager.dart';
 
 class FlippyCard extends ClothingCard {
-  const FlippyCard(this.flipAction, {Key key, clothingItem})
+  FlippyCard(this.flipAction, this.initFlip, {Key key, clothingItem})
       : super(key: key, clothingItem: clothingItem);
 
   final Function(String id, bool donated) flipAction;
+  bool initFlip;
 
   @override
   _FlippyCardState createState() => _FlippyCardState();
@@ -28,7 +25,13 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
   void initState() {
     this.currentClothingItem = widget.clothingItem;
     currClothingItemImage = super.getImage();
-    _confettiControl = ConfettiController(duration: const Duration(milliseconds: 300));
+    _confettiControl =
+        ConfettiController(duration: const Duration(milliseconds: 300));
+    if (widget.initFlip) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        cardKey.currentState.toggleCard();
+      });
+    }
   }
 
   @override
@@ -99,7 +102,8 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
                           alignment: Alignment.center,
                           child: ConfettiWidget(
                               confettiController: _confettiControl,
-                              blastDirectionality: BlastDirectionality.explosive,
+                              blastDirectionality:
+                              BlastDirectionality.explosive,
                               // blastDirection: -pi / 2,
                               shouldLoop: false,
                               minBlastForce: 20,

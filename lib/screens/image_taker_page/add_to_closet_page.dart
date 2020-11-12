@@ -59,44 +59,51 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
           'clothingType': widget.clothingType,
           'currLocation': widget.location,
           'origin': widget.placeOfOrigin,
-          'lastWornDate': DateTime.now().toString(),
-          'purchaseDate': DateTime.now().toString(),
+          'lastWorn': DateTime.now().toString(),
+          'dateOfPurchase': DateTime.now().toString(),
         }.toString());
 
 //    print('clothingType: ${widget.clothingType}');
-    final response = await api_client.post(
-      "/closet/addItem",
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'name': _clothingName,
-        'Brand': _clothingBrand,
-        'Materials': [widget.clothingMaterial.toLowerCase()],
-        'clothingType': widget.clothingType,
-        'currLocation': widget.location,
-        'origin': widget.placeOfOrigin,
-        'lastWorn': DateTime.now().toString(),
-        'dateOfpurchase': DateTime.now().toString(),
-      })
-    );
-    print("response $response");
-    if (response != null) {
-      print("response body ${response.body}");
-      print("response Decode ${jsonDecode(response.body)}");
+    try {
+      final response = await api_client.post(
+          "/closet/addItem",
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'name': _clothingName,
+            'brand': _clothingBrand,
+            'materials': [widget.clothingMaterial.toLowerCase()],
+            'clothingType': widget.clothingType,
+            'currLocation': widget.location,
+            'origin': widget.placeOfOrigin,
+            'lastWorn': DateTime.now().toString(),
+            'dateOfpurchase': DateTime.now().toString(),
+          })
+      );
+
+      print("response $response");
+      if (response.statusCode == 200) {
+        print("response body ${response.body}");
+        print("response Decode ${jsonDecode(response.body)}");
+        final clothingId = jsonDecode(response.body)['clothingID'];
+        print("clothingID $clothingId");
+        File newImage = await ImageManager.getInstance()
+            .savePictureToDevice(_clothingImage, clothingId);
+        print(newImage == null);
+        if (newImage != null) {
+          print(newImage.path);
+        }
+        Navigator.popUntil(
+            context,
+            ModalRoute.withName(routeMapping[Screens.Home])
+        );
+      }
+
+    } catch (e) {
+      print("in add to closet page: $e");
     }
-    final clothingId = jsonDecode(response.body)['clothingID'];
-    print("clothingID $clothingId");
-    File newImage = await ImageManager.getInstance()
-        .savePictureToDevice(_clothingImage, clothingId);
-    print(newImage == null);
-    if (newImage != null) {
-      print(newImage.path);
-    }
-    Navigator.popUntil(
-        context,
-        ModalRoute.withName(routeMapping[Screens.Home])
-    );
+
     // TODO: Replace with closet page once the constructor is fixed
     // Navigator.pushNamed(context, routeMapping[Screens.Empty]);
   }

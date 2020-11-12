@@ -32,7 +32,7 @@ class ClothingMetadata {
   final double maxNoOfTimesToBeWorn;
 
   @JsonKey(defaultValue: "")
-  final int clothingType;
+  final String clothingType;
 
   ClothingMetadata(this.name,
     this.brand,

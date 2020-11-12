@@ -58,6 +58,8 @@ class _DonationActionButtonState extends State<DonationActionButton>
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
+      marginRight: 30.0,
+      marginBottom: 30.0,
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 20.0),
       onOpen: () => print("OPENING DIAL"),
