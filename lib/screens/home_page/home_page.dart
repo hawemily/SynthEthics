@@ -25,7 +25,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     // not sure if this widget will be rebuilt if uid changes
     uid = CurrentUser.getInstance().getUID();
-     print("uid in home page: $uid");
+    print("uid in home page: $uid");
     super.initState();
   }
 
@@ -50,8 +50,7 @@ class HomePageState extends State<HomePage> {
                 setState(() {
                   _openAchievements = true;
                 });
-              }
-          ),
+              }),
           actions: [
             IconButton(
                 icon: Icon(
@@ -62,10 +61,13 @@ class HomePageState extends State<HomePage> {
                 onPressed: () {
                   FirebaseAuth auth = FirebaseAuth.instance;
                   auth.signOut().then((res) => {
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:routes[routeMapping[Screens.Login]]), (route) => false)
-                  });
-                }
-            )
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: routes[routeMapping[Screens.Login]]),
+                            (route) => false)
+                      });
+                })
           ],
         ),
         body: Center(
@@ -75,44 +77,40 @@ class HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Stack(
-                      children: [
-                        Center(
-                          child: Container(
-                            color: CustomColours.offWhite(),
-                            width: 400,
-                            height: 180,
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 20, top: 20),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                        decoration: new BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: new DecorationImage(
-                                              fit: BoxFit.contain,
-                                              image : NetworkImage("https://cdn.icon"
-                                                  "scout.com/icon/free/png-512/avata"
-                                                  "r-369-456321.png"),
-                                            )
-                                        )),
-                                  ),
-                                  Text(
-                                    "Mrs Chanandler Bong",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: CustomColours.greenNavy()
-                                    ),
-                                  )
-                                ],
+                  child: Stack(children: [
+                    Center(
+                      child: Container(
+                        color: CustomColours.offWhite(),
+                        width: 400,
+                        height: 180,
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 20, top: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.contain,
+                                          image: NetworkImage("https://cdn.icon"
+                                              "scout.com/icon/free/png-512/avata"
+                                              "r-369-456321.png"),
+                                        ))),
                               ),
-                            ),
+                              Text(
+                                "Mrs Chanandler Bong",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: CustomColours.greenNavy()),
+                              )
+                            ],
                           ),
                         ),
-                      ]
-                  ),
+                      ),
+                    ),
+                  ]),
                 ),
                 Expanded(
                   flex: 3,
@@ -129,16 +127,15 @@ class HomePageState extends State<HomePage> {
                                 color: CustomColours.greenNavy(),
                                 child: TabBar(
                                   labelColor: CustomColours.greenNavy(),
-                                  unselectedLabelColor: CustomColours.offWhite(),
+                                  unselectedLabelColor:
+                                      CustomColours.offWhite(),
                                   indicator: UnderlineTabIndicator(
                                       borderSide: BorderSide(
-                                          color: CustomColours.offWhite()
-                                      )
-                                  ),
+                                          color: CustomColours.offWhite())),
                                   tabs: [
-                                    CarmaResolutionTab(label : "WEEK"),
-                                    CarmaResolutionTab(label : "MONTH"),
-                                    CarmaResolutionTab(label : "YEAR"),
+                                    CarmaResolutionTab(label: "WEEK"),
+                                    CarmaResolutionTab(label: "MONTH"),
+                                    CarmaResolutionTab(label: "YEAR"),
                                   ],
                                 ),
                               ),
@@ -147,9 +144,12 @@ class HomePageState extends State<HomePage> {
                               flex: 7,
                               child: TabBarView(
                                 children: [
-                                  CarmaResolutionView(resolution : CarmaViewResolution.WEEK),
-                                  CarmaResolutionView(resolution : CarmaViewResolution.MONTH),
-                                  CarmaResolutionView(resolution : CarmaViewResolution.YEAR),
+                                  CarmaResolutionView(
+                                      resolution: CarmaViewResolution.WEEK),
+                                  CarmaResolutionView(
+                                      resolution: CarmaViewResolution.MONTH),
+                                  CarmaResolutionView(
+                                      resolution: CarmaViewResolution.YEAR),
                                 ],
                               ),
                             )
@@ -170,7 +170,8 @@ class HomePageState extends State<HomePage> {
         Container(
           color: CustomColours.baseBlack().withOpacity(0.9),
         ),
-        AchievementsPage(onClose: () {
+        AchievementsPage(
+          onClose: () {
             setState(() {
               _openAchievements = false;
             });
@@ -179,9 +180,7 @@ class HomePageState extends State<HomePage> {
       ]);
     }
 
-    return Stack(
-      children: stackWidgets
-    );
+    return Stack(children: stackWidgets);
   }
 }
 

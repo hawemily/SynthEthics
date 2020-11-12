@@ -200,18 +200,23 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   Widget generateSuggestionPage() {
+    print("generating suggestion page");
     return FutureBuilder<GetClosetResponse>(
         future: clothingItems,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var allSuggestions = [];
+            List<ClothingItemObject> allSuggestions = [];
+
             snapshot.data.clothingTypes.forEach((i) {
-              var listClothingItems = i.clothingItems;
-              var suggestions = listClothingItems.where((element) {
+
+              List<ClothingItemObject> listClothingItems = i.clothingItems;
+              listClothingItems.forEach((element) {
                 DateTime lastWorn = DateTime.parse(element.data.lastWornDate);
-                return lastWorn.difference(DateTime.now()).inDays < 30;
+                if (lastWorn.difference(DateTime.now()).inDays < 30) {
+                  allSuggestions.add(element);
+                }
               });
-              allSuggestions.addAll(suggestions);
+
             });
 
             return ClosetSuggestionPage(

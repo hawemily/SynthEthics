@@ -25,7 +25,7 @@ class ClosetDonationPage extends StatelessWidget {
             setMode(ClosetMode.Donate);
           }),
       ActionIconsAndText(
-          icon: Icon(Icons.check),
+          icon: Icon(Icons.add_to_photos_rounded),
           text: Text("Mark Donated"),
           onClick: () {
             setMode(ClosetMode.Select);
