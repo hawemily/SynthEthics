@@ -178,20 +178,29 @@ class HomePageState extends State<HomePage> {
       )
     ];
 
-    if (_openAchievements) {
-      stackWidgets.addAll([
-        Container(
+    stackWidgets.addAll([
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: (_openAchievements) ? Container(
           color: CustomColours.baseBlack().withOpacity(0.9),
-        ),
-        AchievementsPage(
-          onClose: () {
+        ) : Container(),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return ScaleTransition(child: child, scale: animation);
+        },
+      ),
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 150),
+        child: (_openAchievements) ? AchievementsPage(onClose: () {
             setState(() {
               _openAchievements = false;
             });
           },
-        )
-      ]);
-    }
+        ) : Container(),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return ScaleTransition(child: child, scale: animation);
+        },
+      )
+    ]);
 
     return Stack(children: stackWidgets);
   }
