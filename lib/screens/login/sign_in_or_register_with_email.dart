@@ -160,6 +160,7 @@ class _SignInOrRegisterWithEmailSectionState
                         return null;
                       }),
                   TextFormField(
+                      obscureText: true,
                       controller: _passwordController,
                       decoration: const InputDecoration(labelText: "Password"),
                       validator: (String value) {
