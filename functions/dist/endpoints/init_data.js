@@ -9,7 +9,7 @@ exports.initData = async (res, db) => {
         materials: ["cotton", "polyester"],
         cF: 1000,
         maxNoOfTimesToBeWorn: 10,
-        clothingType: clothing_item_schema_1.ClothingType["tops"],
+        clothingType: clothing_item_schema_1.ClothingType["Tops"],
         lastWornDate: "25/03/2020",
     };
     const ap2 = {
@@ -17,7 +17,7 @@ exports.initData = async (res, db) => {
         materials: ["cotton", "polyester"],
         cF: 1500,
         maxNoOfTimesToBeWorn: 13,
-        clothingType: clothing_item_schema_1.ClothingType["bottoms"],
+        clothingType: clothing_item_schema_1.ClothingType["Bottoms"],
         lastWornDate: "25/06/2020",
     };
     const awaitap1 = await closetRef.add(ap1);

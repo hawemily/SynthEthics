@@ -7,14 +7,19 @@ const max = 30;
 const min = 5;
 const c = Math.random() * (max - min) + min;
 const calcTimesToBeWorn = (cf) => {
+    console.log(`Calc Times To Be Worn: ${cf / c}`);
     return Math.ceil(cf / c);
 };
 exports.postClothingItem = async (req, res, db) => {
     try {
-        const { name, brand, materials, clothingType, currLocation, origin, lastWornDate, purchaseDate, } = req.body;
+        const { 
+        // userId,
+        name, brand, materials, clothingType, currLocation, origin, lastWorn, dateOfpurchase, } = req.body;
         const cf = await get_carma_value_1.calculateCarma(materials, currLocation, origin, clothingType);
+        console.log(`cf: ${cf}`);
         const timesToBeWorn = Math.round(calcTimesToBeWorn(cf));
         const cPerWear = Math.round(cf / timesToBeWorn);
+        console.log(`cperewear: ${cPerWear}`);
         const apparel = {
             name: name,
             brand: brand,
@@ -24,10 +29,16 @@ exports.postClothingItem = async (req, res, db) => {
             carmaPerWear: cPerWear,
             currentTimesWorn: 0,
             clothingType: clothing_item_schema_1.ClothingType[clothingType],
-            lastWornDate: lastWornDate,
-            purchaseDate: purchaseDate,
+            lastWornDate: lastWorn,
+            purchaseDate: dateOfpurchase,
         };
+        // const userRef = db.collection("users").doc('uid');
+        console.log(`apparel cf" ${apparel.cF}`);
+        console.log(`apparel brand" ${apparel.brand}`);
+        // userRef.collection("closet").add(apparel);
         const newClothingItem = await db.collection("closet").add(apparel);
+        // const newClothingItem = await db.collection(uid).add(apparel); 
+        console.log(`apparel name" ${apparel.name}`);
         const result = { clothingID: newClothingItem.id };
         res.json(result);
     }

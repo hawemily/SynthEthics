@@ -6,8 +6,11 @@ const post_clothing_item_1 = require("./endpoints/post_clothing_item");
 const get_carma_value_1 = require("./endpoints/get_carma_value");
 const init_data_1 = require("./endpoints/init_data");
 const get_all_types_1 = require("./endpoints/get_all_types");
+const post_new_user_1 = require("./endpoints/post_new_user");
+const get_all_donated_items_1 = require("./endpoints/get_all_donated_items");
 const post_outfit_1 = require("./endpoints/post_outfit");
 const get_all_outfits_1 = require("./endpoints/get_all_outfits");
+const post_items_to_donate_1 = require("./endpoints/post_items_to_donate");
 exports.routes = (app, db) => {
     // GET /clothes
     app.get("/closet/allClothes", (req, res) => {
@@ -26,8 +29,20 @@ exports.routes = (app, db) => {
         init_data_1.initData(res, db);
         return;
     });
+    app.post("/addUser", (req, res) => {
+        post_new_user_1.addNewUser(req, res, db);
+        return;
+    });
     app.get("/getAllClothingTypes", (req, res) => {
         get_all_types_1.getAllClothingTypes(res);
+        return;
+    });
+    app.post("/markForDonation", (req, res) => {
+        post_items_to_donate_1.markItemsAsDonate(req, res, db);
+        return;
+    });
+    app.get("/closet/allDonatedItems", (req, res) => {
+        get_all_donated_items_1.getAllDonatedItems(req, res, db);
         return;
     });
     app.get("/outfits", (req, res) => {

@@ -17,7 +17,7 @@ exports.callMapsApi = async (cdts) => {
         .get(reqUri)
         .then((resp) => {
         console.log(`response received with code ${resp.status}`);
-        console.log(resp.data);
+        // console.log(resp.data);
         const { results, status } = resp["data"];
         if (status === response_object_1.Status.Ok) {
             country = parseResults(results);

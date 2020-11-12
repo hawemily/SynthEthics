@@ -8,6 +8,7 @@ import { addNewUser } from "./endpoints/post_new_user";
 import { getAllDonatedItems } from "./endpoints/get_all_donated_items";
 import { postOutfit } from "./endpoints/post_outfit";
 import { getAllOutfits } from "./endpoints/get_all_outfits";
+import { markItemsAsDonate } from "./endpoints/post_items_to_donate";
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   // GET /clothes
@@ -41,8 +42,8 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
-  app.post("/markedAsDonate", (req: Request, res:Response) => {
-    postClothingItem(req, res, db);
+  app.post("/markForDonation", (req: Request, res:Response) => {
+    markItemsAsDonate(req, res, db);
     return;
   });
 

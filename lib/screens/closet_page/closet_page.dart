@@ -11,6 +11,7 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/responseObjects/getClosetResponse.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/services/current_user.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 
 import 'closet_donation_page.dart';
 
@@ -73,10 +74,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     setState(() {
       _mode = mode;
     });
-    if (mode == ClosetMode.Normal) {
-      // TODO: CALL API AND SEND SET OF CLOTHES TO BE DONATED TO BACKEND yipee and UPDATE clothing lists
-      donateSelected();
-    }
   }
 
   Future<List<String>> getCategories() async {
@@ -98,7 +95,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       final resBody = jsonDecode(response.body);
       final toBeDonated = ClothingTypeObject.fromJson(resBody);
       print("final to be donated list: ");
-      toBeDonated.clothingItems.forEach((element) {print(element);});
+      toBeDonated.clothingItems.forEach((element) {
+        print(element);
+      });
       return toBeDonated;
     } else {
       throw Exception("Failed to load donatedItems");
@@ -121,51 +120,52 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     }
   }
 
-
-
   bool isSelectedForDonation(String id) {
     return unconfirmedDonations.firstWhere((el) => el.id == id,
-        orElse: () => null) !=
+            orElse: () => null) !=
         null;
   }
 
   void donateClothingItem(String id, bool toDonate) {
-    print(id);
-    print(toDonate);
     if (toDonate) {
       unconfirmedDonations.add(new DonatedItemMetadata(id));
     } else {
       unconfirmedDonations.remove(new DonatedItemMetadata(id));
     }
-    print(unconfirmedDonations.length);
   }
 
   void donateSelected() {
+    print("DONATE SELECTED");
+    if (unconfirmedDonations.isEmpty) return;
     print(unconfirmedDonations);
-    ItemsToDonateRequest req = new ItemsToDonateRequest(uid,
-        unconfirmedDonations.length == 0 ? [] : unconfirmedDonations.toList());
-    api_client.post("/markedAsDonate", body: jsonEncode(req));
-    print("in closet container");
-    // setMode(ClosetMode.Normal);
-    unconfirmedDonations.clear();
-    // TODO: navigate back to donations and passing back the set of clothes to donate
+    // ItemsToDonateRequest req = new ItemsToDonateRequest(uid,
+    //     unconfirmedDonations.length == 0 ? [] : unconfirmedDonations.toList());
+    var ls = unconfirmedDonations.map((each) => each.id).toList();
+
+    api_client.post("/markForDonation", body: jsonEncode(<String, dynamic>{'ids': ls})).then((e) {
+      print("in closet container");
+      print(e.statusCode);
+      print(e.body);
+      setState(() {
+        unconfirmedDonations.clear();
+        _mode = ClosetMode.Normal;
+        confirmedDonations = this.getDonatedItems();
+        clothingItems = this.getClothes();
+      });
+    });
   }
 
   Widget generateCloset(String type) {
-//    print("generatingCloset");
     return FutureBuilder<GetClosetResponse>(
         future: clothingItems,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-//            print("String type: $type");
-
-            List<ClothingTypeObject> clothingTypes = snapshot.data.clothingTypes.where((e) {
+            List<ClothingTypeObject> clothingTypes =
+                snapshot.data.clothingTypes.where((e) {
               return e.clothingType == type;
-            }
-            ).toList();
-//            print("clothingTypes list: ${clothingTypes}");
+            }).toList();
             List<ClothingItemObject> ls = clothingTypes.first.clothingItems;
-            
+
             return ClosetContainer(_mode,
                 clothingItemObjects: ls,
                 setMode: setMode,
@@ -176,17 +176,17 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             return Text(
                 "Unable to load clothes from closet! Please contact admin for support");
           }
-          return Center(child:CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
         });
   }
 
   Widget generateDonationPage() {
-    print("genreating Donation page! on line 186");
     return FutureBuilder<ClothingTypeObject>(
         future: confirmedDonations,
         builder: (context, snapshot) {
           print("generating donated items in generate donation page");
           if (snapshot.hasData) {
+            print(snapshot.data.clothingItems);
             return ClosetDonationPage(
                 setMode: setMode,
                 mode: _mode,
@@ -195,12 +195,11 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             print(snapshot.error);
             return Text("Unable to load donated items");
           }
-          return Center(child:CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
         });
   }
 
   Widget generateSuggestionPage() {
-    print("generating suggestion page");
     return FutureBuilder<GetClosetResponse>(
         future: clothingItems,
         builder: (context, snapshot) {
@@ -208,7 +207,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             List<ClothingItemObject> allSuggestions = [];
 
             snapshot.data.clothingTypes.forEach((i) {
-
               List<ClothingItemObject> listClothingItems = i.clothingItems;
               listClothingItems.forEach((element) {
                 DateTime lastWorn = DateTime.parse(element.data.lastWornDate);
@@ -216,7 +214,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                   allSuggestions.add(element);
                 }
               });
-
             });
 
             return ClosetSuggestionPage(
@@ -229,19 +226,28 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             print(snapshot.error);
             return Text("Unable to load suggested items");
           }
-          return Center(child:CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_mode);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(_mode == ClosetMode.Donate ? 'Select Donations' : 'Closet',
             style: TextStyle(color: Colors.black)),
+        actions: _mode == ClosetMode.Donate ? [
+          Padding(
+              padding: EdgeInsets.all(10.0),
+              child: RaisedButton(
+                  color: CustomColours.greenNavy(),
+                  child: Text('Done',
+                      style: TextStyle(
+                          fontSize: 16, color: CustomColours.offWhite())),
+                  onPressed: donateSelected))
+        ] : [],
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,

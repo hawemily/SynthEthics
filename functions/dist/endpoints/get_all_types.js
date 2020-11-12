@@ -7,6 +7,6 @@ exports.getAllClothingTypes = (res) => {
     Object.keys(clothing_item_schema_1.ClothingType).forEach((key) => {
         types.push(key);
     });
-    res.sendStatus(200).json({ clothingTypes: types });
+    res.send(200).json({ clothingTypes: types });
 };
 //# sourceMappingURL=get_all_types.js.map

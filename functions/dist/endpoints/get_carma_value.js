@@ -39,9 +39,12 @@ exports.calculateCarma = async (materials, currLocation, org, category) => {
         console.log("transport carma await failing");
         console.log(e);
     }
+    console.log(`transport carma value: ${transportCarma}`);
     const preWeighted = calculateMaterialsCarma(materials) +
         calculateManufacturingCarma(origin) +
         transportCarma;
+    console.log(`category: ${category}`);
+    console.log(`preweighted: ${Math.round(preWeighted * Weights[category])}`);
     return Math.round(preWeighted * Weights[category]);
 };
 const calculateMaterialsCarma = (materials) => {

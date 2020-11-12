@@ -33,15 +33,14 @@ class ClosetContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("mode in closet container: $mode");
-    List<ActionIconsAndText> actionButtons = [
-      ActionIconsAndText(
-          icon: Icon(Icons.check),
-          text: Text("Done"),
-          onClick: () {
-            setMode(ClosetMode.Normal);
-          })
-    ];
+    // List<ActionIconsAndText> actionButtons = [
+    //   ActionIconsAndText(
+    //       icon: Icon(Icons.check),
+    //       text: Text("Done"),
+    //       onClick: () {
+    //         setMode(ClosetMode.Normal);
+    //       })
+    // ];
 
     return Stack(children: [
       Container(
@@ -70,9 +69,9 @@ class ClosetContainer extends StatelessWidget {
                 }()
             ],
           )),
-      mode == ClosetMode.Donate
-          ? DonationActionButton(floatingActionButtons: actionButtons)
-          : Container()
+      // mode == ClosetMode.Donate
+      //     ? DonationActionButton(floatingActionButtons: actionButtons)
+      //     : Container()
     ]);
   }
 }

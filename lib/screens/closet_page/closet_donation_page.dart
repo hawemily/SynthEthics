@@ -32,20 +32,11 @@ class ClosetDonationPage extends StatelessWidget {
           })
     ];
 
-    List<ActionIconsAndText> donateActionButtons = [
-      ActionIconsAndText(
-          icon: Icon(Icons.check),
-          text: Text("Done"),
-          onClick: () {
-            setMode(ClosetMode.Normal);
-          })
-    ];
-
     switch (mode) {
       case ClosetMode.Normal:
         return DonationActionButton(floatingActionButtons: normalActionButtons);
-      case ClosetMode.Donate:
-        return DonationActionButton(floatingActionButtons: donateActionButtons);
+      // case ClosetMode.Donate:
+      //   return DonationActionButton(floatingActionButtons: donateActionButtons);
       default:
         return Container();
     }
