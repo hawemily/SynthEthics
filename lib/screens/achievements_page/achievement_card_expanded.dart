@@ -57,10 +57,18 @@ class _ExpandedAchievementCardState extends State<ExpandedAchievementCard> {
               Expanded(
                 flex: 7,
                 child: Container(
-                  padding: EdgeInsets.only(bottom: 15),
+                  padding: EdgeInsets.all(15),
                   child: Column(
                     children: [
-                      Image.asset("lib/assets/temp_medal.png"),
+                      (widget.achievement.type == AchievementType.Unlock) ?
+                        Image.asset("lib/assets/medal.png") :
+                        Image.asset("lib/assets/medal2.png"),
+                      Text("Lvl : " + widget.achievement.level.toString(),
+                        style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
                       Container(
                         padding: EdgeInsets.all(10),
                         child: ClipRRect(
@@ -76,6 +84,7 @@ class _ExpandedAchievementCardState extends State<ExpandedAchievementCard> {
                         ),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(widget.achievement.previousTarget.toString()),
                           Text((widget.achievement.progressToTarget +
@@ -83,7 +92,8 @@ class _ExpandedAchievementCardState extends State<ExpandedAchievementCard> {
                               "/" + widget.achievement.nextTarget.toString()),
                           Text(widget.achievement.nextTarget.toString())
                         ],
-                      )
+                      ),
+                      Text(widget.achievement.description)
                     ],
                   ),
                 ),

@@ -12,9 +12,9 @@ class Achievement {
   final int nextTarget;
   final int progressToTarget;
 
-  Achievement({this.id = 0, this.name = "f", this.description = "f",
-      this.type, this.achieved, this.level,
-      this.previousTarget, this.nextTarget, this.progressToTarget});
+  Achievement({this.id = 0, this.name = "Items Donated", this.description = "How many of your clothes have you donated?",
+      this.type = AchievementType.Unlock, this.achieved = true, this.level = 14,
+      this.previousTarget = 50, this.nextTarget = 300, this.progressToTarget = 200});
 }
 
 enum AchievementType {
