@@ -14,8 +14,8 @@ export const getAllClothes = async (
     // const clothingUserQuerySnapshot = await db.collection(uid).get();
     const clothingItems: any[] = [];
   
-    for (const type in Object.values(ClothingType)) {
-      console.log(type);
+    for (const type of Object.values(ClothingType)) {
+      
       const itemsByTypeSnapshot = await closetRef.where('clothingType', '==', type).get();
       
       const itemsJson: any[] = [];
@@ -25,14 +25,16 @@ export const getAllClothes = async (
         }); 
       }
   
-      clothingItems.push({typeAsStr : itemsJson});
-      console.log(`clothingItems: ${clothingItems.toString()}`);
+      clothingItems.push({clothingType : type, clothingItems: itemsJson});
+      clothingItems.forEach((e) => {
+        console.log(e);
+      });
     }
   
     // clothingQuerySnapshot.forEach((doc) => {
     //   clothingItems.push({ id: doc.id, data: doc.data() });
     // });
-    const obj = {clothingItems: clothingItems};
+    const obj = {clothingTypes: clothingItems};
     res.status(200).json(obj);
   } catch (e) {
     console.log(e);

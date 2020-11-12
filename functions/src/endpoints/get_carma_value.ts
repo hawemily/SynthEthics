@@ -59,7 +59,7 @@ export const calculateCarma = async (
     console.log("transport carma await failing");
     console.log(e);
   }
-
+  console.log(`transport carma value: ${transportCarma}`);
   const preWeighted: number =
     calculateMaterialsCarma(materials) +
     calculateManufacturingCarma(origin) +

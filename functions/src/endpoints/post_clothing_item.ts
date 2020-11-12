@@ -20,8 +20,8 @@ export const postClothingItem = async (
     const {
       // userId,
       name,
-      Brand,
-      Materials,
+      brand,
+      materials,
       clothingType,
       currLocation,
       origin,
@@ -29,9 +29,8 @@ export const postClothingItem = async (
       dateOfpurchase,
     } = req.body;
     
-    console.log(" in add item!")
     const cf = await calculateCarma(
-      Materials,
+      materials,
       currLocation,
       origin,
       clothingType
@@ -45,8 +44,8 @@ export const postClothingItem = async (
 
     const apparel: clothingItem = {
       name: name,
-      brand: Brand,
-      materials: Materials,
+      brand: brand,
+      materials: materials,
       cF: cf,
       maxNoOfTimesToBeWorn: timesToBeWorn,
       carmaPerWear: cPerWear,
