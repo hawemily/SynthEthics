@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/screens/achievements_page/achievement.dart';
 import 'package:synthetics/screens/achievements_page/achievement_card_expanded.dart';
 import 'package:synthetics/screens/achievements_page/achievement_card_preview.dart';
+import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
+import 'package:synthetics/services/initialiser/initialiser.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class AchievementsPage extends StatefulWidget {
@@ -23,6 +26,24 @@ class _AchievementsPageState extends State<AchievementsPage> {
     Achievement(type: AchievementType.Unlock),
     Achievement(type: AchievementType.Tiered)
   ];
+
+  void getAchievements() {
+    String uid = CurrentUser.getInstance().getUID();
+    print("uid: $uid");
+    api_client.get("/getAchievements", headers: {"uid" : uid})
+        .then((result) {
+      print("getAchievements: ${result.body}");
+    });
+  }
+
+  @override
+  void initState() {
+    LocalDatabaseInitialiser.initAchievements().then((res) {
+      print("Init Achievements: $res");
+      getAchievements();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
