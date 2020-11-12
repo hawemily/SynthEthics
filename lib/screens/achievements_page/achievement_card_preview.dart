@@ -18,7 +18,13 @@ class PreviewAchievementCard extends StatefulWidget {
 class _PreviewAchievementCardState extends State<PreviewAchievementCard> {
   @override
   Widget build(BuildContext context) {
+    bool toGreyOut = !widget.achievement.achieved &&
+      widget.achievement.type == AchievementType.Unlock;
     return Container(
+      foregroundDecoration: toGreyOut ? BoxDecoration(
+        color: Colors.grey,
+        backgroundBlendMode: BlendMode.saturation,
+      ) : null,
       child: Card(
       elevation: 5,
       color: CustomColours.greenNavy(),

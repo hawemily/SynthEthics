@@ -15,9 +15,9 @@ export const getAchievements = async (
       const currentUserSnapshot = await userRef.where("userId", "==", req.headers["uid"]).get();
       const result: any[] = [];
       if (!currentUserSnapshot.empty) {
-        var achieved: any[] = [];
+        var userData: FirebaseFirestore.DocumentData;
         currentUserSnapshot.forEach((user) => {
-          achieved = user.data()['achieved'];
+          userData = user.data();
         });
 
         const achievementsSnapshot = await achievementsRef.get();
@@ -25,9 +25,9 @@ export const getAchievements = async (
         if (!achievementsSnapshot.empty) {
           achievementsSnapshot.forEach((achievement) => {
             result.push({
-              id: achievement.id,
               data: achievement.data(),
-              status: achieved.includes(achievement.data()['achievementId'])
+              user: userData,
+              achievedStatus: userData['achieved'].includes(achievement.data()['achievementId'])
             });
           });
         }

@@ -15,15 +15,15 @@ export const initAchievementTypes = async (
         achievementId: 0,
         achievementName: "Zen Master",
         achievementDescription: "Collect Carma by making sustainable fashion choices",
-        AchievementType: AchievementType.Tiered,
+        achievementType: AchievementType.Tiered,
         achievementTiers: [100, 500, 1000, 1750, 2500],
         achievementAttribute: "carmaPoints"
       },
       {
         achievementId: 1,
         achievementName: "Charitable",
-        achievementDescription: "Collect Carma by making sustainable fashion choices",
-        AchievementType: AchievementType.Tiered,
+        achievementDescription: "Donate items of clothing to help reduce waste",
+        achievementType: AchievementType.Tiered,
         achievementTiers: [2, 5, 10, 20, 50],
         achievementAttribute: "itemsDonated"
       },
@@ -31,7 +31,7 @@ export const initAchievementTypes = async (
         achievementId: 2,
         achievementName: "A Good Start",
         achievementDescription: "Donate your first item of clothing",
-        AchievementType: AchievementType.Binary,
+        achievementType: AchievementType.Binary,
       },
       // {
       //   achievementId: 3,

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/achievements_page/achievement.dart';
 import 'package:synthetics/screens/achievements_page/achievement_card_expanded.dart';
 import 'package:synthetics/screens/achievements_page/achievement_card_preview.dart';
+import 'package:synthetics/services/achievements/achievement_calculator.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/initialiser/initialiser.dart';
@@ -18,28 +21,60 @@ class AchievementsPage extends StatefulWidget {
 
 class _AchievementsPageState extends State<AchievementsPage> {
   Widget _expandedAchievement;
-  List<Achievement> achievements = [
-    Achievement(type: AchievementType.Unlock),
-    Achievement(type: AchievementType.Tiered),
-    Achievement(type: AchievementType.Unlock),
-    Achievement(type: AchievementType.Tiered),
-    Achievement(type: AchievementType.Unlock),
-    Achievement(type: AchievementType.Tiered)
-  ];
+  List<Achievement> achievements = [];
 
-  void getAchievements() {
+  void getAchievements() async {
     String uid = CurrentUser.getInstance().getUID();
     print("uid: $uid");
-    api_client.get("/getAchievements", headers: {"uid" : uid})
+    await api_client.get("/getAchievements", headers: {"uid" : uid})
         .then((result) {
-      print("getAchievements: ${result.body}");
+      List<dynamic> jsonAchievements = json.decode(result.body);
+
+      // First sort by ID
+      jsonAchievements.sort((a, b) =>
+          a["data"]["achievementId"] < (b["data"]["achievementId"]) ? - 1 : 1);
+
+      // Then for each achievement we parse data and calculate the levelling
+      // data if the achievement is tiered
+      setState(() {
+        achievements = jsonAchievements.map((achievementJson) {
+          dynamic achievementData = achievementJson["data"];
+          dynamic userData = achievementJson["user"];
+
+          AchievementType type = AchievementType
+              .values[achievementData["achievementType"]];
+
+          if (type == AchievementType.Tiered) {
+            dynamic levelData = AchievementLevelCalculator.calculate(
+              achievementData["achievementTiers"],
+              userData[achievementData["achievementAttribute"]]);
+            return Achievement(
+              id: achievementData["achievementId"],
+              name: achievementData["achievementName"],
+              description: achievementData["achievementDescription"],
+              type: type,
+              achieved: achievementJson["achievedStatus"],
+              level: levelData["level"],
+              previousTarget: levelData["previousAmount"],
+              nextTarget: levelData["targetAmount"],
+              progressToTarget: levelData["progress"]
+            );
+          }
+          return Achievement(
+            id: achievementData["achievementId"],
+            name: achievementData["achievementName"],
+            description: achievementData["achievementDescription"],
+            type: type,
+            achieved: achievementJson["achievedStatus"],
+          );
+        }).toList();
+      });
     });
   }
 
   @override
   void initState() {
     LocalDatabaseInitialiser.initAchievements().then((res) {
-      print("Init Achievements: $res");
       getAchievements();
     });
     super.initState();
@@ -54,7 +89,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
               topRight: Radius.circular(28),
               bottomLeft: Radius.circular(5),
               bottomRight: Radius.circular(5))),
-      margin: EdgeInsets.all(30),
+      margin: EdgeInsets.fromLTRB(30, 100, 30, 100),
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 350),
         child: (_expandedAchievement == null)
