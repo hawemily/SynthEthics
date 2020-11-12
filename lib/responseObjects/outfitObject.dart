@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
-import 'package:synthetics/responseObjects/clothingMetadata.dart';
-import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
+import 'clothingItemObject.dart';
 
 part 'outfitObject.g.dart';
 
@@ -9,9 +8,9 @@ part 'outfitObject.g.dart';
 class OutfitObject {
   @JsonKey(required: true)
   final String name;
-  final List<ClothingItemObject> clothingitems;
+  final List<ClothingItemObject> clothing;
 
-  OutfitObject(this.name, this.clothingitems);
+  OutfitObject(this.name, this.clothing);
 
   factory OutfitObject.fromJson(Map<String, dynamic> json) =>
       _$OutfitObjectFromJson(json);

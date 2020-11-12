@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:synthetics/responseObjects/outfitObject.dart';
+import 'package:synthetics/responseObjects/outfitListItem.dart';
 import 'package:synthetics/screens/closet_page/outfit_card.dart';
 
 class OutfitContainer extends StatelessWidget {
   OutfitContainer({Key key, this.outfits}) : super(key: key);
 
-  final List<OutfitObject> outfits;
+  final List<OutfitListItem> outfits;
 
   @override
   Widget build(BuildContext context) {
+    print("Outfit: ${this.outfits}");
     return Stack(children: [
       Container(
           margin: const EdgeInsets.all(5.0),
@@ -19,7 +20,7 @@ class OutfitContainer extends StatelessWidget {
             shrinkWrap: true,
             children: [
               for (var item in this.outfits)
-                OutfitCard(outfitClothingList: item.clothingitems)
+                OutfitCard(outfitClothingList: item.data.clothing)
             ],
           )),
     ]);

@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:synthetics/responseObjects/outfitObject.dart';
+import 'package:synthetics/responseObjects/outfitListItem.dart';
 
 part 'getOutfitResponse.g.dart';
 
 @JsonSerializable()
 class GetOutfitResponse {
-  final List<OutfitObject> outfits;
+  final List<OutfitListItem> outfits;
 
   GetOutfitResponse(this.outfits);
 
