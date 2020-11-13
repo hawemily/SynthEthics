@@ -8,9 +8,11 @@ import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 
 class ClothingCard extends StatefulWidget {
-  const ClothingCard({Key key, this.clothingItem}) : super(key: key);
+  const ClothingCard({Key key, this.clothingItem, this.isOutfit = false})
+      : super(key: key);
 
   final ClothingItemObject clothingItem;
+  final bool isOutfit;
 
   @override
   ClothingCardState createState() => ClothingCardState();
@@ -19,12 +21,13 @@ class ClothingCard extends StatefulWidget {
 class ClothingCardState<T extends ClothingCard> extends State<T> {
   ClothingItemObject currentClothingItem;
   Future<File> currClothingItemImage;
-
+  bool isSelectedOutfit;
   @override
   void initState() {
     currentClothingItem = widget.clothingItem;
     super.initState();
     currClothingItemImage = getImage();
+    isSelectedOutfit = false;
   }
 
   Future<File> getImage() {
@@ -40,17 +43,48 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                 ClothingItem(clothingItem: this.currentClothingItem)));
   }
 
+  // Widget buildImage() {
+  //   return isSelectedOutfit
+  //       ? Align(
+  //           alignment: Alignment.center,
+  //           child: Icon(Icons.check, color: CustomColours.accentCopper()))
+  //       : buildImage2();
+  // }
+
   Widget buildImage() {
-    return FutureBuilder<File>(
-        future: this.currClothingItemImage,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Image.file(snapshot.data);
-          } else if (snapshot.data == null) {
-            return Text("No image from file");
-          }
-          return LinearProgressIndicator();
-        });
+    return (isSelectedOutfit)
+        ? Align(
+            alignment: Alignment.center,
+            child: Icon(Icons.check, color: CustomColours.accentCopper()))
+        : FutureBuilder<File>(
+            future: this.currClothingItemImage,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Image.file(snapshot.data);
+              } else if (snapshot.data == null) {
+                return Text("No image from file");
+              }
+              return LinearProgressIndicator();
+            });
+  }
+
+  Widget getIcon() {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            this.isSelectedOutfit = !this.isSelectedOutfit;
+          });
+        },
+        child: Container(
+            width: 20.0,
+            height: 20.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: CustomColours.accentCopper()),
+            child: () {
+              var icon = Icons.add;
+              return Icon(icon, color: CustomColours.offWhite(), size: 10.0);
+            }()));
   }
 
   Widget buildBaseStack(on_tap, {clear = false}) {
@@ -83,6 +117,10 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    return this.buildBaseStack(this.tapAction);
+    Stack stack = this.buildBaseStack(this.tapAction);
+    if (widget.isOutfit) {
+      stack.children.add(Positioned(top: 0.0, right: 0.0, child: getIcon()));
+    }
+    return stack;
   }
 }

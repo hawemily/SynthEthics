@@ -98,7 +98,16 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
         ? Align(
             alignment: Alignment.center,
             child: Icon(Icons.block, color: CustomColours.accentCopper()))
-        : super.buildImage();
+        : FutureBuilder<File>(
+            future: this.currClothingItemImage,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Image.file(snapshot.data);
+              } else if (snapshot.data == null) {
+                return Text("No image from file");
+              }
+              return LinearProgressIndicator();
+            });
   }
 
   // void tapAction() {

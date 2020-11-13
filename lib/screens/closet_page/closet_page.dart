@@ -49,7 +49,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   Set<DonatedItemMetadata> unconfirmedDonations = Set();
 
   //Outfit selection
-  Set<ClothingItemObject> outfitItems = Set(); 
+  Set<ClothingItemObject> outfitItems = Set();
 
   ClosetMode _mode = ClosetMode.Normal;
   String uid = CurrentUser.getInstance().getUID();
@@ -136,9 +136,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         null;
   }
 
-    bool isSelectedForOutfit(String id) {
-    return outfitItems.firstWhere((el) => el.id == id,
-            orElse: () => null) !=
+  bool isSelectedForOutfit(String id) {
+    return outfitItems.firstWhere((el) => el.id == id, orElse: () => null) !=
         null;
   }
 
@@ -193,10 +192,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     api_client
         .post("/postOutfit",
-            body: jsonEncode(<String, dynamic>{
-            'name': "outfitName",
-            'clothing': items 
-            }))
+            body: jsonEncode(
+                <String, dynamic>{'name': "outfitName", 'clothing': items}))
         .then((e) {
       print("in closet container");
       print(e.statusCode);
@@ -220,12 +217,13 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             }).toList();
             List<ClothingItemObject> ls = clothingTypes.first.clothingItems;
 
-            return ClosetContainer(_mode,
-                clothingItemObjects: ls,
-                setMode: setMode,
-                donate: widget.selectingOutfit ? addToOutfit : donateClothingItem,
-                isUnconfirmedDonation: isSelectedForDonation,
-                );
+            return ClosetContainer(
+              _mode,
+              clothingItemObjects: ls,
+              setMode: setMode,
+              donate: widget.selectingOutfit ? addToOutfit : donateClothingItem,
+              isUnconfirmedDonation: isSelectedForDonation,
+            );
           } else if (snapshot.hasError) {
             print(snapshot.error);
             return Text(
@@ -304,9 +302,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                                 fontSize: 16, color: CustomColours.offWhite())),
                         onPressed: donateSelected))
               ]
-            : 
-                widget.selectingOutfit
-                    ? [Padding(
+            : widget.selectingOutfit
+                ? [
+                    Padding(
                         padding: EdgeInsets.all(10.0),
                         child: RaisedButton(
                             color: CustomColours.greenNavy(),
@@ -314,9 +312,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: CustomColours.offWhite())),
-                            onPressed: outfitSelected))]
-                    : []
-              ,
+                            onPressed: outfitSelected))
+                  ]
+                : [],
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,
