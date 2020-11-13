@@ -94,11 +94,11 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
 
   @override
   Widget buildImage() {
-    // return clear ?
-    return Align(
-        alignment: Alignment.center,
-        child: Icon(Icons.block, color: CustomColours.accentCopper()));
-    // : super.buildImage();
+    return clear
+        ? Align(
+            alignment: Alignment.center,
+            child: Icon(Icons.block, color: CustomColours.accentCopper()))
+        : super.buildImage();
   }
 
   // void tapAction() {
