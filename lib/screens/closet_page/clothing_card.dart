@@ -52,7 +52,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   // }
 
   Widget buildImage() {
-    return (isSelectedOutfit)
+    return (isSelectedOutfit == true && isSelectedOutfit != null)
         ? Align(
             alignment: Alignment.center,
             child: Icon(Icons.check, color: CustomColours.accentCopper()))
