@@ -17,11 +17,11 @@ import 'action_icons_and_text.dart';
 class ClosetContainer extends StatelessWidget {
   ClosetContainer(this.mode,
       {Key key,
-        this.clothingItemObjects,
-        this.setMode,
-        this.donate,
-        this.isUnconfirmedDonation,
-        this.stagnant = false})
+      this.clothingItemObjects,
+      this.setMode,
+      this.donate,
+      this.isUnconfirmedDonation,
+      this.stagnant = false})
       : super(key: key);
 
   final List<ClothingItemObject> clothingItemObjects;
@@ -52,16 +52,15 @@ class ClosetContainer extends StatelessWidget {
             shrinkWrap: true,
             children: [
               for (var item in this.clothingItemObjects)
-                    () {
+                () {
                   switch (this.mode) {
                     case (ClosetMode.Select):
-                      return OutfitCard(
-                          outfitClothingList: this.clothingItemObjects);
+                      return ClothingCard(clothingItem: item);
                     case (ClosetMode.Donate):
                       return stagnant
                           ? ClothingCard(clothingItem: item)
                           : FlippyCard(donate, isUnconfirmedDonation(item.id),
-                          clothingItem: item);
+                              clothingItem: item);
                     case (ClosetMode.Normal):
                     default:
                       return ClothingCard(clothingItem: item);
