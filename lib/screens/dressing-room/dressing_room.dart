@@ -3,10 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/getOutfitResponse.dart';
-import 'package:synthetics/responseObjects/outfitListItem.dart';
+import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-
 import '../closet_page/outfit_card.dart';
 import 'outfitContainer.dart';
 
@@ -63,13 +62,26 @@ class _DressingRoomState extends State<DressingRoom> {
         title: Text('Dressing Room'),
       ),
       body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            // child: generateOutfits(),
-            child: generateOutfits(),
-          )),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: generateOutfits(),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          setState(() {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Closet(selectingOutfit: true)));
+            outfits = this.getOutfits();
+          });
+        },
+        label: Text('Add Outfit'),
+        icon: Icon(Icons.add),
+      ),
       bottomNavigationBar: NavBar(selected: 3),
     );
   }
