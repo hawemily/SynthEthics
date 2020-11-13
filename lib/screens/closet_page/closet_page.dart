@@ -7,6 +7,8 @@ import 'package:synthetics/responseObjects/clothingTypeObject.dart';
 import 'package:synthetics/screens/closet_page/closet_container.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/closet_page/closet_suggestion_page.dart';
+import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
+import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/responseObjects/getClosetResponse.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
@@ -18,7 +20,9 @@ import 'closet_donation_page.dart';
 enum ClosetMode { Normal, Select, Donate }
 
 class Closet extends StatefulWidget {
-  Closet({Key key}) : super(key: key);
+  Closet({Key key, this.selectingOutfit = false}) : super(key: key);
+
+  final bool selectingOutfit;
 
   final List<String> categories = [
     "Tops",
@@ -44,12 +48,18 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   Future<ClothingTypeObject> confirmedDonations;
   Set<DonatedItemMetadata> unconfirmedDonations = Set();
 
+  //Outfit selection
+  Set<ClothingItemObject> outfitItems = Set(); 
+
   ClosetMode _mode = ClosetMode.Normal;
   String uid = CurrentUser.getInstance().getUID();
 
   @override
   void initState() {
     super.initState();
+    if (widget.selectingOutfit) {
+      _mode = ClosetMode.Select;
+    }
     //TODO: call api to init categories from backend using collecitons
     // categories = getCategories();
     List<String> categories = widget.categories;
@@ -126,6 +136,21 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         null;
   }
 
+    bool isSelectedForOutfit(String id) {
+    return outfitItems.firstWhere((el) => el.id == id,
+            orElse: () => null) !=
+        null;
+  }
+
+  void addToOutfit(String id, bool toAddToOutfit) {
+    //TODO: add ClothingItemObject from string id
+    // if (toAddToOutfit) {
+    //   outfitItems.add(new ClothingItemObject(id, ));
+    // } else {
+    //   outfitItems.remove(new ClothingItemObject(id));
+    // }
+  }
+
   void donateClothingItem(String id, bool toDonate) {
     if (toDonate) {
       unconfirmedDonations.add(new DonatedItemMetadata(id));
@@ -142,7 +167,10 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     //     unconfirmedDonations.length == 0 ? [] : unconfirmedDonations.toList());
     var ls = unconfirmedDonations.map((each) => each.id).toList();
 
-    api_client.post("/markForDonation", body: jsonEncode(<String, dynamic>{'ids': ls})).then((e) {
+    api_client
+        .post("/markForDonation",
+            body: jsonEncode(<String, dynamic>{'ids': ls}))
+        .then((e) {
       print("in closet container");
       print(e.statusCode);
       print(e.body);
@@ -153,6 +181,32 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         clothingItems = this.getClothes();
       });
     });
+  }
+
+  void outfitSelected() {
+    print("OUTFIT SELECTED");
+    if (outfitItems.isEmpty) {
+      Navigator.pop(context);
+      return;
+    }
+    var items = outfitItems.map((each) => each.id).toList();
+
+    api_client
+        .post("/postOutfit",
+            body: jsonEncode(<String, dynamic>{
+            'name': "outfitName",
+            'clothing': items 
+            }))
+        .then((e) {
+      print("in closet container");
+      print(e.statusCode);
+      print(e.body);
+      setState(() {
+        outfitItems.clear();
+        _mode = ClosetMode.Normal;
+      });
+    });
+    Navigator.pop(context);
   }
 
   Widget generateCloset(String type) {
@@ -169,8 +223,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             return ClosetContainer(_mode,
                 clothingItemObjects: ls,
                 setMode: setMode,
-                donate: donateClothingItem,
-                isUnconfirmedDonation: isSelectedForDonation);
+                donate: widget.selectingOutfit ? addToOutfit : donateClothingItem,
+                isUnconfirmedDonation: isSelectedForDonation,
+                );
           } else if (snapshot.hasError) {
             print(snapshot.error);
             return Text(
@@ -238,16 +293,30 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(_mode == ClosetMode.Donate ? 'Select Donations' : 'Closet',
             style: TextStyle(color: Colors.black)),
-        actions: _mode == ClosetMode.Donate ? [
-          Padding(
-              padding: EdgeInsets.all(10.0),
-              child: RaisedButton(
-                  color: CustomColours.greenNavy(),
-                  child: Text('Done',
-                      style: TextStyle(
-                          fontSize: 16, color: CustomColours.offWhite())),
-                  onPressed: donateSelected))
-        ] : [],
+        actions: _mode == ClosetMode.Donate
+            ? [
+                Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: RaisedButton(
+                        color: CustomColours.greenNavy(),
+                        child: Text('Done',
+                            style: TextStyle(
+                                fontSize: 16, color: CustomColours.offWhite())),
+                        onPressed: donateSelected))
+              ]
+            : 
+                widget.selectingOutfit
+                    ? [Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: RaisedButton(
+                            color: CustomColours.greenNavy(),
+                            child: Text('Finish Outfit',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: CustomColours.offWhite())),
+                            onPressed: outfitSelected))]
+                    : []
+              ,
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,

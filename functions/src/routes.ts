@@ -53,6 +53,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
+  app.post("/postOutfit", (req: Request, res:Response) => {
+    postOutfit(req, res, db);
+    return;
+  });
+
   
   app.get("/closet/allDonatedItems", (req: Request, res: Response)=> {
     getAllDonatedItems(req, res, db);

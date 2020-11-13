@@ -14,7 +14,7 @@ export const postOutfit = async (
 ) => {
     try {
         const {
-            id,
+            // id,
             name,
             clothing
         } = req.body;
@@ -24,19 +24,23 @@ export const postOutfit = async (
             clothing: clothing
         }
 
-        const outfitRef = db.collection('outfits').doc(id);
+        // const outfitRef = await db.collection('outfits').get(id);
+        const outfitRef = await db.collection('outfits').add(outfit);
 
-        outfitRef.get()
-            .then(async (docSnapshot) => {
-                if (docSnapshot.exists) {
-                    outfitRef.update(outfit);
-                } else {
-                    const newOutfit = await db.collection('outfits').add(outfit);
-                    res.json({
-                        outfitID: newOutfit.id
-                    });
-                }
-            });
+        // outfitRef.get()
+        //     .then(async (docSnapshot) => {
+        //         if (docSnapshot.exists) {
+        //             outfitRef.update(outfit);
+        //         } else {
+        //             const newOutfit = await db.collection('outfits').add(outfit);
+        //             res.json({
+        //                 outfitID: newOutfit.id
+        //             });
+        //         }
+        //     });
+
+    const result = { clothingID: outfitRef.id};
+    res.json(result);
     } catch (error) {
         res.status(400).send('Failed to post outfit');
     }

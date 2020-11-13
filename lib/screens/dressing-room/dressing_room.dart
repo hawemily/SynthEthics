@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/getOutfitResponse.dart';
+import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
@@ -68,6 +69,16 @@ class _DressingRoomState extends State<DressingRoom> {
           child: generateOutfits(),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+      onPressed: () {
+        setState(() {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Closet(selectingOutfit: true)));
+          outfits = this.getOutfits();
+        });
+      },
+      label: Text('Add Outfit'),
+      icon: Icon(Icons.add),
+    ),
       bottomNavigationBar: NavBar(selected: 3),
     );
   }
