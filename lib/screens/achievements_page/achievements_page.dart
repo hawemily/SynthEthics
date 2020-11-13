@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/achievements_page/achievement.dart';
 import 'package:synthetics/screens/achievements_page/achievement_card_expanded.dart';
 import 'package:synthetics/screens/achievements_page/achievement_card_preview.dart';
+import 'package:synthetics/services/achievements/achievement_calculator.dart';
+import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
+import 'package:synthetics/services/initialiser/initialiser.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class AchievementsPage extends StatefulWidget {
@@ -15,6 +21,64 @@ class AchievementsPage extends StatefulWidget {
 
 class _AchievementsPageState extends State<AchievementsPage> {
   Widget _expandedAchievement;
+  List<Achievement> achievements = [];
+
+  void getAchievements() async {
+    String uid = CurrentUser.getInstance().getUID();
+    print("uid: $uid");
+    await api_client.get("/getAchievements", headers: {"uid" : uid})
+        .then((result) {
+      List<dynamic> jsonAchievements = json.decode(result.body);
+
+      // First sort by ID
+      jsonAchievements.sort((a, b) =>
+          a["data"]["achievementId"] < (b["data"]["achievementId"]) ? - 1 : 1);
+
+      // Then for each achievement we parse data and calculate the levelling
+      // data if the achievement is tiered
+      setState(() {
+        achievements = jsonAchievements.map((achievementJson) {
+          dynamic achievementData = achievementJson["data"];
+          dynamic userData = achievementJson["user"];
+
+          AchievementType type = AchievementType
+              .values[achievementData["achievementType"]];
+
+          if (type == AchievementType.Tiered) {
+            dynamic levelData = AchievementLevelCalculator.calculate(
+              achievementData["achievementTiers"],
+              userData[achievementData["achievementAttribute"]]);
+            return Achievement(
+              id: achievementData["achievementId"],
+              name: achievementData["achievementName"],
+              description: achievementData["achievementDescription"],
+              type: type,
+              achieved: achievementJson["achievedStatus"],
+              level: levelData["level"],
+              previousTarget: levelData["previousAmount"],
+              nextTarget: levelData["targetAmount"],
+              progressToTarget: levelData["progress"]
+            );
+          }
+          return Achievement(
+            id: achievementData["achievementId"],
+            name: achievementData["achievementName"],
+            description: achievementData["achievementDescription"],
+            type: type,
+            achieved: achievementJson["achievedStatus"],
+          );
+        }).toList();
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    LocalDatabaseInitialiser.initAchievements().then((res) {
+      getAchievements();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +89,9 @@ class _AchievementsPageState extends State<AchievementsPage> {
               topRight: Radius.circular(28),
               bottomLeft: Radius.circular(5),
               bottomRight: Radius.circular(5))),
-      margin: EdgeInsets.all(30),
+      margin: EdgeInsets.fromLTRB(30, 100, 30, 100),
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 350),
         child: (_expandedAchievement == null)
             ? Column(children: [
                 Expanded(
@@ -69,24 +133,16 @@ class _AchievementsPageState extends State<AchievementsPage> {
                     padding: EdgeInsets.only(bottom: 15),
                     child: GridView.count(
                       primary: false,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: [
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.4, onClick: _expandAchievement, oneTime: true),
-                        PreviewAchievementCard(progress: 0.9, onClick: _expandAchievement, oneTime: false),
-                        PreviewAchievementCard(progress: 0.1, onClick: _expandAchievement, oneTime: true),
-                      ],
+                      padding: const EdgeInsets.all(5),
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 1,
+                      crossAxisCount: 3,
+                      children: achievements
+                          .map((achievement) => PreviewAchievementCard(
+                                achievement: achievement,
+                                onClick: _expandAchievement,
+                              ))
+                          .toList(),
                     ),
                   ),
                 ),
@@ -104,10 +160,6 @@ class _AchievementsPageState extends State<AchievementsPage> {
 
   void _expandAchievement(Achievement achievementData) {
     setState(() {
-      print(achievementData);
-      // _expandedAchievement = Container(
-      //   child : Text("Achievement Expanded")
-      // );
       _expandedAchievement = new ExpandedAchievementCard(
           achievement: achievementData, onClose: _collapseAchievement);
     });

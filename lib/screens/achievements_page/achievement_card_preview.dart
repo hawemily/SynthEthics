@@ -5,11 +5,10 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 class PreviewAchievementCard extends StatefulWidget {
 
-  final double progress;
+  final Achievement achievement;
   final Function onClick;
-  final bool oneTime;
 
-  const PreviewAchievementCard({Key key, this.progress, this.onClick, this.oneTime})
+  const PreviewAchievementCard({Key key, this.achievement, this.onClick})
       : super(key: key);
 
   @override
@@ -19,8 +18,13 @@ class PreviewAchievementCard extends StatefulWidget {
 class _PreviewAchievementCardState extends State<PreviewAchievementCard> {
   @override
   Widget build(BuildContext context) {
+    bool toGreyOut = !widget.achievement.achieved &&
+      widget.achievement.type == AchievementType.Unlock;
     return Container(
-      margin: EdgeInsets.only(bottom: 5),
+      foregroundDecoration: toGreyOut ? BoxDecoration(
+        color: Colors.grey,
+        backgroundBlendMode: BlendMode.saturation,
+      ) : null,
       child: Card(
       elevation: 5,
       color: CustomColours.greenNavy(),
@@ -28,7 +32,7 @@ class _PreviewAchievementCardState extends State<PreviewAchievementCard> {
           borderRadius: BorderRadius.circular(5)
       ),
       child: Container(
-        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+        padding: EdgeInsets.all(1),
         child: Row(
           children: [
             Expanded(
@@ -38,9 +42,11 @@ class _PreviewAchievementCardState extends State<PreviewAchievementCard> {
                   color: CustomColours.negativeRed(),
                   child: Container(
                       padding: EdgeInsets.all(10),
-                      child: (widget.oneTime) ? Image.asset("lib/assets/medal.png") : Image.asset("lib/assets/medal2.png")),
+                      child: (widget.achievement.type == AchievementType.Unlock)
+                          ? Image.asset("lib/assets/medal.png") :
+                            Image.asset("lib/assets/medal2.png")),
                 ),
-                onTap: () => widget.onClick(new Achievement(type: (widget.oneTime) ? AchievementType.Unlock : AchievementType.Tiered)),
+                onTap: () => widget.onClick(widget.achievement),
               ),
             ),
           ],

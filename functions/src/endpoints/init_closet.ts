@@ -1,7 +1,7 @@
 import { clothingItem, ClothingType } from "../models/clothing_item_schema";
 import { Response } from "express";
 
-export const initData = async (
+export const initCloset = async (
   res: Response,
   db: FirebaseFirestore.Firestore
 ) => {

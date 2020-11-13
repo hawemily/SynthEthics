@@ -4,6 +4,7 @@ import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/services/current_user.dart';
+import 'package:synthetics/services/initialiser/initialiser.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,10 @@ class HomePageState extends State<HomePage> {
   void initState() {
     // not sure if this widget will be rebuilt if uid changes
     uid = CurrentUser.getInstance().getUID();
-    print("uid in home page: $uid");
+
+    // TODO: REMOVE TESTING DATA INITIALISER
+    LocalDatabaseInitialiser.initUsers(uid);
+
     super.initState();
   }
 
