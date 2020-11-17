@@ -9,34 +9,31 @@ import 'closet_page.dart';
 class ClosetDonationPage extends StatelessWidget {
   List<ClothingItemObject> donatedItems;
   final Function setMode;
+  final Function action;
   final ClosetMode mode;
 
-  ClosetDonationPage(
-      {this.donatedItems,
-        this.setMode,
-        this.mode});
+  ClosetDonationPage({this.donatedItems, this.setMode, this.mode, this.action});
 
   Widget getActionButtons() {
     List<ActionIconsAndText> normalActionButtons = [
       ActionIconsAndText(
-          icon: Icon(Icons.attach_money),
-          text: Text("Donate Items"),
+          icon: Icon(Icons.store_mall_directory),
+          text: Text("Confirm Donated"),
           onClick: () {
-            setMode(ClosetMode.Donate);
+            // TODO: move to a new mode where users can only select clothing in the 'to be donated' tab to indicate that they have already donated the clothing.
+            // setMode(ClosetMode.Select);
           }),
       ActionIconsAndText(
-          icon: Icon(Icons.add_to_photos_rounded),
-          text: Text("Mark Donated"),
+          icon: Icon(Icons.restore),
+          text: Text("Unmark Donated"),
           onClick: () {
-            setMode(ClosetMode.Select);
+            setMode(ClosetMode.UnDonate);
           })
     ];
 
     switch (mode) {
       case ClosetMode.Normal:
         return DonationActionButton(floatingActionButtons: normalActionButtons);
-      // case ClosetMode.Donate:
-      //   return DonationActionButton(floatingActionButtons: donateActionButtons);
       default:
         return Container();
     }
@@ -46,9 +43,8 @@ class ClosetDonationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: [
       ClosetContainer(mode,
-          clothingItemObjects: donatedItems,
-          setMode: setMode,
-          stagnant: true),
+          action: action,
+          clothingItemObjects: donatedItems, setMode: setMode, stagnant: mode == ClosetMode.Donate),
       getActionButtons()
     ]);
   }

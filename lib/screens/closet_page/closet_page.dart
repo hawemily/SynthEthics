@@ -17,7 +17,7 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 import 'closet_donation_page.dart';
 
-enum ClosetMode { Normal, Select, Donate }
+enum ClosetMode { Normal, Select, Donate, UnDonate }
 
 class Closet extends StatefulWidget {
   Closet({Key key, this.selectingOutfit = false}) : super(key: key);
@@ -25,6 +25,7 @@ class Closet extends StatefulWidget {
   final bool selectingOutfit;
 
   final List<String> categories = [
+    "All",
     "Tops",
     "Bottoms",
     "Skirts",
@@ -46,7 +47,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   //Future<List<String>> categories;
   Future<GetClosetResponse> clothingItems;
   Future<ClothingTypeObject> confirmedDonations;
-  Set<DonatedItemMetadata> unconfirmedDonations = Set();
+
+  // can use to hold unconfirmed 'to be donated' clothes, 'undonate' clothes etc
+  Set<DonatedItemMetadata> tempClothingBin = Set();
 
   //Outfit selection
   Set<String> outfitItems = Set();
@@ -70,7 +73,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     print(categories);
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
 
-    _tabController = TabController(vsync: this, length: _tabs.length);
+    _tabController =
+        TabController(vsync: this, initialIndex: 1, length: _tabs.length);
   }
 
   @override
@@ -131,7 +135,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   bool isSelectedForDonation(String id) {
-    return unconfirmedDonations.firstWhere((el) => el.id == id,
+    return tempClothingBin.firstWhere((el) => el.id == id,
             orElse: () => null) !=
         null;
   }
@@ -153,19 +157,28 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   void donateClothingItem(String id, bool toDonate) {
     if (toDonate) {
-      unconfirmedDonations.add(new DonatedItemMetadata(id));
+      tempClothingBin.add(new DonatedItemMetadata(id));
     } else {
-      unconfirmedDonations.remove(new DonatedItemMetadata(id));
+      tempClothingBin.remove(new DonatedItemMetadata(id));
     }
+  }
+
+  void undonateClothingItem(String id, bool isSelected) {
+    donateClothingItem(id, isSelected);
   }
 
   void donateSelected() {
     print("DONATE SELECTED");
-    if (unconfirmedDonations.isEmpty) return;
-    print(unconfirmedDonations);
+    if (tempClothingBin.isEmpty) {
+      setState(() {
+        _mode = ClosetMode.Normal;
+      });
+      return;
+    }
+    print(tempClothingBin);
     // ItemsToDonateRequest req = new ItemsToDonateRequest(uid,
     //     unconfirmedDonations.length == 0 ? [] : unconfirmedDonations.toList());
-    var ls = unconfirmedDonations.map((each) => each.id).toList();
+    var ls = tempClothingBin.map((each) => each.id).toList();
 
     api_client
         .post("/markForDonation",
@@ -175,7 +188,31 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       print(e.statusCode);
       print(e.body);
       setState(() {
-        unconfirmedDonations.clear();
+        tempClothingBin.clear();
+        _mode = ClosetMode.Normal;
+        confirmedDonations = this.getDonatedItems();
+        clothingItems = this.getClothes();
+      });
+    });
+  }
+
+  void undonateSelected() {
+    if (tempClothingBin.isEmpty) {
+      setState(() {
+        _mode = ClosetMode.Normal;
+      });
+      return;
+    }
+    print(tempClothingBin);
+
+    var ls = tempClothingBin.map((each) => each.id).toList();
+
+    api_client
+        .post("/unmarkForDonation",
+            body: jsonEncode(<String, dynamic>{'ids': ls}))
+        .then((e) {
+      setState(() {
+        tempClothingBin.clear();
         _mode = ClosetMode.Normal;
         confirmedDonations = this.getDonatedItems();
         clothingItems = this.getClothes();
@@ -221,13 +258,18 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                 snapshot.data.clothingTypes.where((e) {
               return e.clothingType == type;
             }).toList();
-            List<ClothingItemObject> ls = clothingTypes.first.clothingItems;
+            List<ClothingItemObject> ls = type == "All"
+                ? snapshot.data.clothingTypes
+                    .map((t) => t.clothingItems)
+                    .expand((x) => x)
+                    .toList()
+                : clothingTypes.first.clothingItems;
 
             return ClosetContainer(
               _mode,
               clothingItemObjects: ls,
               setMode: setMode,
-              donate: widget.selectingOutfit ? addToOutfit : donateClothingItem,
+              action: widget.selectingOutfit ? addToOutfit : donateClothingItem,
               isUnconfirmedDonation: isSelectedForDonation,
             );
           } else if (snapshot.hasError) {
@@ -249,6 +291,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             return ClosetDonationPage(
                 setMode: setMode,
                 mode: _mode,
+                action: undonateClothingItem,
                 donatedItems: snapshot.data.clothingItems);
           } else if (snapshot.hasError) {
             print(snapshot.error);
@@ -291,44 +334,56 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var actions = <Widget>[];
+    if (_mode == ClosetMode.Donate) {
+      actions.add(Padding(
+          padding: EdgeInsets.all(10.0),
+          child: RaisedButton(
+              color: CustomColours.greenNavy(),
+              child: Text('Done',
+                  style:
+                      TextStyle(fontSize: 16, color: CustomColours.offWhite())),
+              onPressed: donateSelected)));
+    } else if (_mode == ClosetMode.UnDonate) {
+      actions.add(Padding(
+          padding: EdgeInsets.all(10.0),
+          child: RaisedButton(
+              color: CustomColours.greenNavy(),
+              child: Text('Done',
+                  style:
+                      TextStyle(fontSize: 16, color: CustomColours.offWhite())),
+              onPressed: undonateSelected)));
+    } else if (widget.selectingOutfit) {
+      actions.add(Padding(
+          padding: EdgeInsets.all(10.0),
+          child: RaisedButton(
+              color: CustomColours.greenNavy(),
+              child: Text('Finish Outfit',
+                  style:
+                      TextStyle(fontSize: 16, color: CustomColours.offWhite())),
+              onPressed: outfitSelected)));
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text(_mode == ClosetMode.Donate ? 'Select Donations' : 'Closet',
+        title: Text(_mode == ClosetMode.Donate ? 'Select Donations' : _mode == ClosetMode.UnDonate ? 'Undo Donations' : 'Closet',
             style: TextStyle(color: Colors.black)),
-        actions: _mode == ClosetMode.Donate
-            ? [
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: RaisedButton(
-                        color: CustomColours.greenNavy(),
-                        child: Text('Done',
-                            style: TextStyle(
-                                fontSize: 16, color: CustomColours.offWhite())),
-                        onPressed: donateSelected))
-              ]
-            : widget.selectingOutfit
-                ? [
-                    Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: RaisedButton(
-                            color: CustomColours.greenNavy(),
-                            child: Text('Finish Outfit',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: CustomColours.offWhite())),
-                            onPressed: outfitSelected))
-                  ]
-                : [],
+        actions: actions,
         bottom: TabBar(
-          tabs: _tabs,
-          controller: _tabController,
-          isScrollable: true,
-          unselectedLabelColor: Colors.black.withOpacity(0.4),
-          labelColor: Colors.black,
-          indicatorColor: Colors.black54,
-        ),
+            tabs: _tabs,
+            controller: _tabController,
+            isScrollable: true,
+            unselectedLabelColor: Colors.black.withOpacity(0.4),
+            labelColor: Colors.black,
+            indicatorColor: Colors.black54,
+            onTap: (index) {
+              setState(() {
+                _tabController.index = _mode == ClosetMode.UnDonate
+                    ? widget.categories.indexOf("to be donated")
+                    : index;
+              });
+            }),
       ),
       // call future builder here
       body: TabBarView(

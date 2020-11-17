@@ -56,7 +56,7 @@ class ClosetSuggestionPage extends StatelessWidget {
         mode,
         clothingItemObjects: suggestedItems,
         setMode: setMode,
-        donate: donate,
+        action: donate,
         isUnconfirmedDonation: isUnconfirmedDonation,
       ),
       getActionButtons()

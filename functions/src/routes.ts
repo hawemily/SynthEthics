@@ -18,6 +18,7 @@ import { initCloset } from "./endpoints/init_closet";
 import { initUsers } from "./endpoints/init_users";
 import { initOutfits } from "./endpoints/init_outfits";
 import { initAchievementTypes } from "./endpoints/init_achievement_types";
+import { unmarkItemsAsDonate } from "./endpoints/post_items_not_to_donate";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -98,6 +99,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   });
   app.post("/markForDonation", (req: Request, res:Response) => {
     markItemsAsDonate(req, res, db);
+    return;
+  });
+
+  app.post("/unmarkForDonation", (req: Request, res:Response) => {
+    unmarkItemsAsDonate(req, res, db);
     return;
   });
 
