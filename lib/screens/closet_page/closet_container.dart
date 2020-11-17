@@ -58,6 +58,7 @@ class ClosetContainer extends StatelessWidget {
                       return ClothingCard(
                         clothingItem: item,
                         isOutfit: true,
+                        selectItemForOutfit: donate,
                       );
                     case (ClosetMode.Donate):
                       return stagnant

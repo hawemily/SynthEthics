@@ -49,7 +49,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   Set<DonatedItemMetadata> unconfirmedDonations = Set();
 
   //Outfit selection
-  Set<ClothingItemObject> outfitItems = Set();
+  Set<String> outfitItems = Set();
 
   ClosetMode _mode = ClosetMode.Normal;
   String uid = CurrentUser.getInstance().getUID();
@@ -137,17 +137,18 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   bool isSelectedForOutfit(String id) {
-    return outfitItems.firstWhere((el) => el.id == id, orElse: () => null) !=
+    return outfitItems.firstWhere((el) => el == id, orElse: () => null) !=
         null;
   }
 
   void addToOutfit(String id, bool toAddToOutfit) {
-    //TODO: add ClothingItemObject from string id
-    // if (toAddToOutfit) {
-    //   outfitItems.add(new ClothingItemObject(id, ));
-    // } else {
-    //   outfitItems.remove(new ClothingItemObject(id));
-    // }
+    if (toAddToOutfit) {
+      print("Adding item to outfit, the id is ");
+      print(id);
+      outfitItems.add(id);
+    } else {
+      outfitItems.remove(id);
+    }
   }
 
   void donateClothingItem(String id, bool toDonate) {
@@ -182,18 +183,23 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     });
   }
 
-  void outfitSelected() {
+  void outfitSelected() async {
     print("OUTFIT SELECTED");
     if (outfitItems.isEmpty) {
-      Navigator.pop(context);
+      Navigator.pop(context, "none");
       return;
     }
-    var items = outfitItems.map((each) => each.id).toList();
+    var items = outfitItems.toList();
+    print("printing list of items for outfit before pushing");
+    print(items);
 
-    api_client
+    print(jsonEncode(
+                <String, dynamic>{'name': "outfitName", 'ids': items}));
+  // put in try, loading icon
+    await api_client
         .post("/postOutfit",
             body: jsonEncode(
-                <String, dynamic>{'name': "outfitName", 'clothing': items}))
+                <String, dynamic>{'name': "outfitName", 'ids': items}))
         .then((e) {
       print("in closet container");
       print(e.statusCode);

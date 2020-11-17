@@ -71,14 +71,14 @@ class _DressingRoomState extends State<DressingRoom> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          setState(() {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Closet(selectingOutfit: true)));
-            outfits = this.getOutfits();
-          });
-        },
+          Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          Closet(selectingOutfit: true))).then((value) {
+                  setState(() {
+                    outfits = this.getOutfits();
+                  });});},        
         label: Text('Add Outfit'),
         icon: Icon(Icons.add),
       ),

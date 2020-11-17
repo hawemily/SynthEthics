@@ -8,9 +8,10 @@ import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 
 class ClothingCard extends StatefulWidget {
-  const ClothingCard({Key key, this.clothingItem, this.isOutfit = false})
+  const ClothingCard({Key key, this.clothingItem, this.isOutfit = false, this.selectItemForOutfit})
       : super(key: key);
 
+  final Function selectItemForOutfit;
   final ClothingItemObject clothingItem;
   final bool isOutfit;
 
@@ -74,6 +75,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
           setState(() {
             this.isSelectedOutfit = !this.isSelectedOutfit;
           });
+           widget.selectItemForOutfit(this.currentClothingItem.id, this.isSelectedOutfit);
         },
         child: Container(
             width: 20.0,
