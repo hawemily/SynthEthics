@@ -12,7 +12,8 @@ export const addNewUser = async (req:Request, res:Response, db:FirebaseFirestore
         userId: uid,
         carmaPoints: 0,
         itemsDonated: 0,
-        achieved: []
+        achieved: [],
+        carmaRecord: {days: [], months: [], years: []}
     }
 
     await userRef.doc(uid).set(newUser);

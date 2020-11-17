@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 
 import { addNewUser } from "./endpoints/post_new_user";
+import { addCarmaPoints } from "./endpoints/post_add_carma_points";
 
 import { getAllClothes } from "./endpoints/get_all_clothes";
 import { getCarmaValue } from "./endpoints/get_carma_value";
@@ -85,6 +86,12 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.post("/carma", (req: Request, res: Response) => {
     getCarmaValue(req, res);
+    return;
+  });
+
+  // 
+  app.post("/carma/add", (req: Request, res:Response) => {
+    addCarmaPoints(req, res, db);
     return;
   });
 
