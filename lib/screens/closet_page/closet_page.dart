@@ -361,7 +361,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         backgroundColor: Colors.white70,
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text(_mode == ClosetMode.Donate ? 'Select Donations' : 'Closet',
+        title: Text(_mode == ClosetMode.Donate ? 'Select Donations' : _mode == ClosetMode.UnDonate ? 'Undo Donations' : 'Closet',
             style: TextStyle(color: Colors.black)),
         actions: actions,
         bottom: TabBar(
