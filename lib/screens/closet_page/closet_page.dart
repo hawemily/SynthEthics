@@ -53,6 +53,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   //Outfit selection
   Set<String> outfitItems = Set();
+  bool _savingInProgress = false;
 
   ClosetMode _mode = ClosetMode.Normal;
   String uid = CurrentUser.getInstance().getUID();
@@ -141,8 +142,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   bool isSelectedForOutfit(String id) {
-    return outfitItems.firstWhere((el) => el == id, orElse: () => null) !=
-        null;
+    return outfitItems.firstWhere((el) => el == id, orElse: () => null) != null;
   }
 
   void addToOutfit(String id, bool toAddToOutfit) {
@@ -221,6 +221,10 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   void outfitSelected() async {
+    setState(() {
+      _savingInProgress = true;
+    });
+
     print("OUTFIT SELECTED");
     if (outfitItems.isEmpty) {
       Navigator.pop(context, "none");
@@ -230,9 +234,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     print("printing list of items for outfit before pushing");
     print(items);
 
-    print(jsonEncode(
-                <String, dynamic>{'name': "outfitName", 'ids': items}));
-  // put in try, loading icon
+    print(jsonEncode(<String, dynamic>{'name': "outfitName", 'ids': items}));
+    // put in try, loading icon
     await api_client
         .post("/postOutfit",
             body: jsonEncode(
@@ -358,16 +361,23 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
           padding: EdgeInsets.all(10.0),
           child: RaisedButton(
               color: CustomColours.greenNavy(),
-              child: Text('Finish Outfit',
-                  style:
-                      TextStyle(fontSize: 16, color: CustomColours.offWhite())),
+              child: ((!_savingInProgress)
+                  ? Text('Finish Outfit',
+                      style: TextStyle(
+                          fontSize: 16, color: CustomColours.offWhite()))
+                  : CircularProgressIndicator()),
               onPressed: outfitSelected)));
     }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text(_mode == ClosetMode.Donate ? 'Select Donations' : _mode == ClosetMode.UnDonate ? 'Undo Donations' : 'Closet',
+        title: Text(
+            _mode == ClosetMode.Donate
+                ? 'Select Donations'
+                : _mode == ClosetMode.UnDonate
+                    ? 'Undo Donations'
+                    : 'Closet',
             style: TextStyle(color: Colors.black)),
         actions: actions,
         bottom: TabBar(
