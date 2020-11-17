@@ -27,7 +27,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
   void initState() {
     this.index = 0;
     this.currentClothingItem = widget.outfitClothingList[this.index];
-    currClothingItemImage = getImage();
+    this.currClothingItemImage = getImage();
   }
 
   Widget getIcon() {
