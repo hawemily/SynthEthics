@@ -11,6 +11,7 @@ import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/screens/closet_page/donation_action_buttons.dart';
 import 'package:synthetics/screens/closet_page/flippy_card.dart';
 import 'package:synthetics/screens/closet_page/outfit_card.dart';
+import 'package:synthetics/screens/closet_page/select_card.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'action_icons_and_text.dart';
 
@@ -19,7 +20,7 @@ class ClosetContainer extends StatelessWidget {
       {Key key,
       this.clothingItemObjects,
       this.setMode,
-      this.donate,
+      this.action,
       this.isUnconfirmedDonation,
       this.stagnant = false})
       : super(key: key);
@@ -27,20 +28,12 @@ class ClosetContainer extends StatelessWidget {
   final List<ClothingItemObject> clothingItemObjects;
   final ClosetMode mode;
   final Function setMode;
-  final Function donate;
+  final Function action;
   final Function isUnconfirmedDonation;
   final bool stagnant;
 
   @override
   Widget build(BuildContext context) {
-    // List<ActionIconsAndText> actionButtons = [
-    //   ActionIconsAndText(
-    //       icon: Icon(Icons.check),
-    //       text: Text("Done"),
-    //       onClick: () {
-    //         setMode(ClosetMode.Normal);
-    //       })
-    // ];
 
     return Stack(children: [
       Container(
@@ -62,8 +55,10 @@ class ClosetContainer extends StatelessWidget {
                     case (ClosetMode.Donate):
                       return stagnant
                           ? ClothingCard(clothingItem: item)
-                          : FlippyCard(donate, isUnconfirmedDonation(item.id),
+                          : FlippyCard(action, isUnconfirmedDonation(item.id),
                               clothingItem: item);
+                    case (ClosetMode.UnDonate):
+                      return SelectCard(action, clothingItem: item);
                     case (ClosetMode.Normal):
                     default:
                       return ClothingCard(clothingItem: item);
@@ -71,9 +66,6 @@ class ClosetContainer extends StatelessWidget {
                 }()
             ],
           )),
-      // mode == ClosetMode.Donate
-      //     ? DonationActionButton(floatingActionButtons: actionButtons)
-      //     : Container()
     ]);
   }
 }
