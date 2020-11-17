@@ -47,6 +47,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   //Future<List<String>> categories;
   Future<GetClosetResponse> clothingItems;
   Future<ClothingTypeObject> confirmedDonations;
+
   // can use to hold unconfirmed 'to be donated' clothes, 'undonate' clothes etc
   Set<DonatedItemMetadata> tempClothingBin = Set();
 
@@ -74,15 +75,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     _tabController =
         TabController(vsync: this, initialIndex: 1, length: _tabs.length);
-    _tabController.addListener(() {
-      if (_mode == ClosetMode.UnDonate) {
-        setState(() {
-          if (_tabController.previousIndex != _tabController.index) {
-            _tabController.index = _tabController.previousIndex;
-          }
-        });
-      }
-    });
   }
 
   @override
@@ -169,7 +161,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       tempClothingBin.remove(new DonatedItemMetadata(id));
     }
   }
-  
+
   void undonateClothingItem(String id, bool isSelected) {
     donateClothingItem(id, isSelected);
   }
@@ -211,12 +203,12 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       return;
     }
     print(tempClothingBin);
-    
+
     var ls = tempClothingBin.map((each) => each.id).toList();
 
     api_client
         .post("/unmarkForDonation",
-        body: jsonEncode(<String, dynamic>{'ids': ls}))
+            body: jsonEncode(<String, dynamic>{'ids': ls}))
         .then((e) {
       setState(() {
         tempClothingBin.clear();
@@ -373,13 +365,19 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             style: TextStyle(color: Colors.black)),
         actions: actions,
         bottom: TabBar(
-          tabs: _tabs,
-          controller: _tabController,
-          isScrollable: true,
-          unselectedLabelColor: Colors.black.withOpacity(0.4),
-          labelColor: Colors.black,
-          indicatorColor: Colors.black54,
-        ),
+            tabs: _tabs,
+            controller: _tabController,
+            isScrollable: true,
+            unselectedLabelColor: Colors.black.withOpacity(0.4),
+            labelColor: Colors.black,
+            indicatorColor: Colors.black54,
+            onTap: (index) {
+              setState(() {
+                _tabController.index = _mode == ClosetMode.UnDonate
+                    ? widget.categories.indexOf("to be donated")
+                    : index;
+              });
+            }),
       ),
       // call future builder here
       body: TabBarView(
