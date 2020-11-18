@@ -127,6 +127,9 @@ class _SignInOrRegisterWithEmailSectionState
       CurrentUser currUser = CurrentUser.getInstance();
       currUser.setUID(user.uid);
 
+      // TODO: Remove User init code once deployed
+      api_client.post("/initUsers", body: jsonEncode({"uid": user.uid}));
+
       Navigator.pushNamed(context, routeMapping[Screens.Home]);
     } else {
       setState(() {
