@@ -1,14 +1,9 @@
 import { User } from "../models/users";
 import * as moment from 'moment';
 
-var today = moment("2020-11-30");
-var anotherDay = moment("2020-11-01");
-// var lastWeek = today.subtract(1, 'month');
-console.log(today);
-console.log(anotherDay);
-console.log(anotherDay.add(1, 'month'));
-console.log(anotherDay);
-
+type recordEntry = {
+  [x: string]: string;
+}
 
 function updateFieldAccordingTo(record: any,
                                 resolution: string,
@@ -20,11 +15,11 @@ function updateFieldAccordingTo(record: any,
         current.isSame(moment(record[resolution][0][factor]), factor)) {
         record[resolution][0]["value"] += carmaAmount;
     } else {
-        record[resolution] = record[resolution].filter(entry => {
+        record[resolution] = record[resolution].filter(
+          (entry: recordEntry) => {
             const entryMoment = moment(entry[factor]);
             return entryMoment.add(offset, factor).isSameOrAfter(current);
         });
-        console.log(record[resolution]);
         record[resolution].unshift({
             [factor]: current.format("YYYY-MM-DD"),
             "value": carmaAmount,
@@ -45,55 +40,57 @@ export const updateCarmaRecord = (user: User, carmaAmount: number) => {
 }
 
 
-var user = {
-  userId: "ha",
-  carmaPoints: 0,
-  itemsDonated: 0,
-  achieved: [],
-  carmaRecord: {
-                "days": [
-                {
-                  day: "2020-11-10",
-                  value: 10
-                },
-                {
-                  day: "2020-11-11",
-                  value: 10
-                },
-                {
-                  day: "2020-11-09",
-                  value: 10
-                }],
-                "months": [{
-                  month: "2020-10-10",
-                  value: 10
-                },
-                {
-                  month: "2019-11-02",
-                  value: 10
-                },
-                {
-                  month: "2019-10-31",
-                  value: 10
-                }],
-                "years": [{
-                  year: "2014-01-01",
-                  value: 10
-                },
-                {
-                  year: "2016-01-01",
-                  value: 10
-                },
-                {
-                  year: "2015-12-31",
-                  value: 10
-                },
-                {
-                  year: "2015-11-18",
-                  value: 10
-                }],
-  }
-}
-console.log(JSON.stringify(user));
-updateCarmaRecord(user, 20);
-console.log(JSON.stringify(user));
+// Use the following code for testing at a later date
+
+// var user = {
+//   userId: "ha",
+//   carmaPoints: 0,
+//   itemsDonated: 0,
+//   achieved: [],
+//   carmaRecord: {
+//                 "days": [
+//                 {
+//                   day: "2020-11-10",
+//                   value: 10
+//                 },
+//                 {
+//                   day: "2020-11-11",
+//                   value: 10
+//                 },
+//                 {
+//                   day: "2020-11-09",
+//                   value: 10
+//                 }],
+//                 "months": [{
+//                   month: "2020-10-10",
+//                   value: 10
+//                 },
+//                 {
+//                   month: "2019-11-02",
+//                   value: 10
+//                 },
+//                 {
+//                   month: "2019-10-31",
+//                   value: 10
+//                 }],
+//                 "years": [{
+//                   year: "2014-01-01",
+//                   value: 10
+//                 },
+//                 {
+//                   year: "2016-01-01",
+//                   value: 10
+//                 },
+//                 {
+//                   year: "2015-12-31",
+//                   value: 10
+//                 },
+//                 {
+//                   year: "2015-11-18",
+//                   value: 10
+//                 }],
+//   }
+// }
+// console.log(JSON.stringify(user));
+// updateCarmaRecord(user, 20);
+// console.log(JSON.stringify(user));
