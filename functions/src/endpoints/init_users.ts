@@ -19,7 +19,7 @@ export const initUsers = async (
         carmaPoints: 250,
         itemsDonated: 1,
         achieved: [2],
-        carmaRecord: {days: [], months: [], years: []}
+        carmaRecord: {days: [{day: "MON", value:23}], months: [], years: []}
       }
       await userRef.doc(uid).set(user);
       res.status(200);

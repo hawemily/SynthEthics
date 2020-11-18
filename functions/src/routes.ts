@@ -9,6 +9,7 @@ import { getAllClothingTypes } from "./endpoints/get_all_types";
 import { getAllDonatedItems } from "./endpoints/get_all_donated_items";
 import { getAllOutfits } from "./endpoints/get_all_outfits";
 import { getAchievements } from "./endpoints/get_achievements";
+import { getCarmaRecords } from "./endpoints/get_carma_records";
 
 import { postClothingItem } from "./endpoints/post_clothing_item";
 import { postOutfit } from "./endpoints/post_outfit";
@@ -39,6 +40,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.get("/initAchievements", (req: Request, res: Response) => {
     initAchievementTypes(res, db);
+    return;
+  });
+
+  app.get("/getCarmaRecords", (req: Request, res: Response) => {
+    getCarmaRecords(req, res, db);
     return;
   });
 

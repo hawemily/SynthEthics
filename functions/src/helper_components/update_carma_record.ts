@@ -15,11 +15,7 @@ function updateFieldAccordingTo(record: any,
         current.isSame(moment(record[resolution][0][factor]), factor)) {
         record[resolution][0]["value"] += carmaAmount;
     } else {
-        record[resolution] = record[resolution].filter(
-          (entry: recordEntry) => {
-            const entryMoment = moment(entry[factor]);
-            return entryMoment.add(offset, factor).isSameOrAfter(current);
-        });
+        cleanFieldAccordingTo(record, resolution, offset, factor, current);
         record[resolution].unshift({
             [factor]: current.format("YYYY-MM-DD"),
             "value": carmaAmount,
@@ -27,8 +23,31 @@ function updateFieldAccordingTo(record: any,
     }
 }
 
+function cleanFieldAccordingTo(record: any,
+                               resolution: string,
+                               offset: number,
+                               factor: "day" | "month" | "year",
+                               current: moment.Moment) {
+  record[resolution] = record[resolution].filter(
+    (entry: recordEntry) => {
+      const entryMoment = moment(entry[factor]);
+      return entryMoment.add(offset, factor).isSameOrAfter(current);
+  });
+}
 
-export const updateCarmaRecord = (user: User, carmaAmount: number) => {
+
+export const cleanCarmaRecord = (user: User) => {
+  const currentDay: moment.Moment = moment();
+  const currentMonth: moment.Moment = moment(currentDay.format("YYYY-MM-01"));
+  const currentYear: moment.Moment = moment(currentDay.format("YYYY-01-01"));
+  const carmaRecord = user['carmaRecord'];
+
+  cleanFieldAccordingTo(carmaRecord, "days", 6, "day", currentDay);
+  cleanFieldAccordingTo(carmaRecord, "months", 11, "month", currentMonth);
+  cleanFieldAccordingTo(carmaRecord, "years", 4, "year", currentYear);
+}
+
+export const addToCarmaRecord = (user: User, carmaAmount: number) => {
     const currentDay: moment.Moment = moment();
     const currentMonth: moment.Moment = moment(currentDay.format("YYYY-MM-01"));
     const currentYear: moment.Moment = moment(currentDay.format("YYYY-01-01"));
