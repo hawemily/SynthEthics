@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/screens/home_page/carma_record_viewer.dart';
+import 'package:synthetics/screens/home_page/widget/right_side_drawer.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/initialiser/initialiser.dart';
 import 'package:synthetics/theme/custom_colours.dart';
@@ -20,6 +20,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final double _iconSize = 30.0;
   bool _openAchievements = false;
   String uid;
@@ -43,6 +45,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<Widget> stackWidgets = [
       Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: CustomColours.greenNavy(),
           automaticallyImplyLeading: false,
@@ -60,34 +63,31 @@ class HomePageState extends State<HomePage> {
           actions: [
             IconButton(
                 icon: Icon(
-                  Icons.info,
-                  size: _iconSize,
-                  color: CustomColours.offWhite(),
+                    Icons.info,
+                    size: _iconSize,
+                    color: CustomColours.offWhite()
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => InformationPage()),
                   );
-                }),
+                }
+            ),
             IconButton(
-                icon: Icon(
-                  Icons.exit_to_app,
+              icon: Icon(
+                  Icons.settings,
                   size: _iconSize,
-                  color: CustomColours.offWhite(),
-                ),
-                onPressed: () {
-                  FirebaseAuth auth = FirebaseAuth.instance;
-                  auth.signOut().then((res) => {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: routes[routeMapping[Screens.Login]]),
-                            (route) => false)
-                      });
-                })
+                  color: CustomColours.offWhite()
+              ),
+              onPressed: () {
+                _scaffoldKey.currentState.openEndDrawer();
+              },
+            )
+            // HomeDropdownMenu()
           ],
         ),
+        endDrawer: HomeRightDrawer(),
         body: Center(
           child: Container(
             child: Column(
