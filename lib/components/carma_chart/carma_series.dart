@@ -9,4 +9,10 @@ class CarmaSeries {
     @required this.dateLabel,
     @required this.carma,
   });
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "{Date : $dateLabel , Carma : $carma}";
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
+import 'package:synthetics/components/carma_chart/carma_series.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
+import 'package:synthetics/services/record_dates_padder/record_dates_padder.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class CarmaRecordViewer extends StatefulWidget {
@@ -10,6 +12,10 @@ class CarmaRecordViewer extends StatefulWidget {
 }
 
 class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
+
+  List<CarmaSeries> daysRecord;
+  List<CarmaSeries> monthsRecord;
+  List<CarmaSeries> yearsRecord;
 
   @override
   void initState() {
@@ -21,11 +27,25 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
   }
 
   void getCarmaRecords() async {
-    String uid = CurrentUser.getInstance().getUID();
-    await api_client.get("/getCarmaRecords", headers: {"uid" : uid})
-      .then((result) {
-       print("carma records: " + result.body);
-    });
+    // String uid = CurrentUser.getInstance().getUID();
+    // await api_client.get("/getCarmaRecords", headers: {"uid" : uid})
+    //   .then((result) {
+    //    print("carma records: " + result.body);
+    // });
+
+    var res = {"days" : [{"day" : 3, "value" : 230},
+      {"day" : 6, "value" : 100},
+      {"day" : 4, "value" : 200}],
+      "months" : [{"month" : 11, "value": 2000},
+        {"month" : 6, "value": 1205},
+        {"month" : 3, "value": 2200}],
+      "years" : [{"year" : 2020, "value": 20000},
+        {"year" : 2018, "value": 18000}]
+    };
+
+    daysRecord = RecordDatesPadder.padDays(res["days"]);
+    monthsRecord = RecordDatesPadder.padMonths(res["months"]);
+    yearsRecord = RecordDatesPadder.padYears(res["years"]);
   }
 
   @override
@@ -61,11 +81,11 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
                 child: TabBarView(
                   children: [
                     CarmaResolutionView(
-                        resolution: CarmaViewResolution.WEEK),
+                        data: daysRecord),
                     CarmaResolutionView(
-                        resolution: CarmaViewResolution.MONTH),
+                        data: monthsRecord),
                     CarmaResolutionView(
-                        resolution: CarmaViewResolution.YEAR),
+                        data: yearsRecord),
                   ],
                 ),
               )

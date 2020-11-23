@@ -32,11 +32,19 @@ export const getCarmaRecords = async (
         "value" : val["value"]
       }));
 
+      if (result["days"].length == 0) {
+        result["days"] = [{"day" : moment().day(), "value" : 0}]
+      }
+
       const monthRecords : {"month" : number, "value" : number}[] = userData!["carmaRecord"]["months"];
       result["months"] = monthRecords.map(val => ({
         "month" : moment(val["month"]).month(),
         "value" : val["value"]
       }));
+
+      if (result["months"].length == 0) {
+        result["months"] = [{"month" : moment().month(), "value" : 0}]
+      }
 
       const yearRecords : {"year" : number, "value" : number}[] = userData!["carmaRecord"]["years"];
       result["years"] = yearRecords.map(val => ({
@@ -44,7 +52,11 @@ export const getCarmaRecords = async (
         "value" : val["value"]
       }));
 
-      res.status(200).send({carmaRecord : result});
+      if (result["years"].length == 0) {
+        result["years"] = [{"year" : moment().year(), "value" : 0}]
+      }
+
+      res.status(200).send(result);
     }
   } catch (e) {
       console.log(e);
