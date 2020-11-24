@@ -35,20 +35,13 @@ class _DressingRoomState extends State<DressingRoom> {
 
   // Get all clothes from closet
   Future<GetClosetResponse> getClothes() async {
-    print("trying get all clothes from backend");
     final response = await api_client.get("/closet/allClothes");
-
     if (response.statusCode == 200) {
-//      print("respBody: ${response.body}");
       final resBody = jsonDecode(response.body);
       final closet = GetClosetResponse.fromJson(resBody);
-//      print("itemsInCloset");
-
       closet.clothingTypes.forEach((element) {
         randomClothing.addAll(element.clothingItems);
       });
-      print("Hiiiiiiiiiiiiiiiiiiiiiiiiii");
-      print(randomClothing);
       return closet;
     } else {
       throw Exception("Failed to load closet");
@@ -61,14 +54,12 @@ class _DressingRoomState extends State<DressingRoom> {
   // }
 
   Future<GetOutfitResponse> getOutfits() async {
-    print("trying get all outfits from backend");
     final response = await api_client.get("/outfits");
 
     if (response.statusCode == 200) {
-      print(response.body);
       final resBody = jsonDecode(response.body);
-      final closet = GetOutfitResponse.fromJson(resBody);
-      return closet;
+      final outfits = GetOutfitResponse.fromJson(resBody);
+      return outfits;
     } else {
       throw Exception("Failed to load closet");
     }
@@ -136,7 +127,6 @@ class _DressingRoomState extends State<DressingRoom> {
               backgroundColor: CustomColours.greenNavy(),
               heroTag: null,
               onPressed: () {
-                print(" This is sooooooooooooo stupid ${this.randomClothing}");
                 Navigator.push(
                     context,
                     MaterialPageRoute(
