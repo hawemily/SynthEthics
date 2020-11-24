@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
@@ -17,6 +16,8 @@ class RandomOutfit extends StatefulWidget {
 
 class _RandomOutfitState extends State<RandomOutfit> {
   List<ClothingItemObject> randomItems = [];
+  int noOfItems = 2;
+  var types = new Set();
 
   @override
   void initState() {
@@ -25,7 +26,14 @@ class _RandomOutfitState extends State<RandomOutfit> {
   }
 
   List<ClothingItemObject> generateRandom() {
-    return widget.clothingItems;
+    for (var i in widget.clothingItems) {
+      var type = i.data.clothingType;
+      if (!types.contains(type)) {
+        types.add(type);
+        randomItems.add(i);
+      }
+    }
+    return randomItems;
   }
 
   void saveOutfit() async {
@@ -77,6 +85,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   }()
               ],
             ),
+            Padding(padding: EdgeInsets.all(20)),
             ButtonBar(
               alignment: MainAxisAlignment.spaceEvenly,
               buttonHeight: 20,
