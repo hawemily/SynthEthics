@@ -114,7 +114,10 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Colour Room")),
+      appBar: AppBar(
+        title: Text("Colour Room"),
+        backgroundColor: CustomColours.greenNavy(),
+      ),
       body: Container(
         child: Center(
           child: Column(
