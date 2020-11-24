@@ -48,7 +48,7 @@ class _DressingRoomState extends State<DressingRoom> {
         randomClothing.addAll(element.clothingItems);
       });
       print("Hiiiiiiiiiiiiiiiiiiiiiiiiii");
-      print(closet);
+      print(randomClothing);
       return closet;
     } else {
       throw Exception("Failed to load closet");
@@ -108,11 +108,17 @@ class _DressingRoomState extends State<DressingRoom> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(
+          bottom: 80.0,
+          left: 30,
+          right: 30,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            FloatingActionButton.extended(
+            FloatingActionButton(
+              backgroundColor: CustomColours.greenNavy(),
+              heroTag: null,
               onPressed: () {
                 Navigator.push(
                     context,
@@ -124,11 +130,13 @@ class _DressingRoomState extends State<DressingRoom> {
                   });
                 });
               },
-              label: Text('Add Outfit'),
-              icon: Icon(Icons.add),
+              child: Icon(Icons.add),
             ),
-            FloatingActionButton.extended(
+            FloatingActionButton(
+              backgroundColor: CustomColours.greenNavy(),
+              heroTag: null,
               onPressed: () {
+                print(" This is sooooooooooooo stupid ${this.randomClothing}");
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -139,8 +147,7 @@ class _DressingRoomState extends State<DressingRoom> {
                   });
                 });
               },
-              label: Text('Add Outfit'),
-              icon: Icon(Icons.add),
+              child: Icon(Icons.create_outlined),
             ),
           ],
         ),
