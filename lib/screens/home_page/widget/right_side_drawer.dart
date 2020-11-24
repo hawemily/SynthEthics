@@ -33,6 +33,18 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                 )
               ),
               _HomeRightDrawerItem(
+                // TODO: Remove this and implement functionalities to scanner
+                icon: Icons.format_paint,
+                text: "Colour Room",
+                onTap: () {
+                  Navigator.popUntil(
+                    context,
+                    ModalRoute.withName(routeMapping[Screens.Home])
+                  );
+                  Navigator.pushNamed(context, routeMapping[Screens.ColourRoom]);
+                },
+              ),
+              _HomeRightDrawerItem(
                 icon: Icons.accessibility,
                 text: "Accessibility",
                 onTap: () {
