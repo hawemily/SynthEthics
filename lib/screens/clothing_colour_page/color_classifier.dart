@@ -18,9 +18,13 @@ class ColorClassifier {
       return OutfitColor.Grey;
     }
 
-    if (hue < 30) {
+    if (hue < 15 && lum < 50) {
+      return OutfitColor.Brown;
+    } else if (hue < 30) {
       return OutfitColor.Red;
-    } else if(hue < 90) {
+    } else if (hue < 45) {
+      return OutfitColor.Orange;
+    } else if (hue < 90) {
       return OutfitColor.Yellow;
     } else if (hue < 150) {
       return OutfitColor.Green;
@@ -32,7 +36,7 @@ class ColorClassifier {
       return OutfitColor.Magenta;
     }
 
-    return OutfitColor.Red;
+    return OutfitColor.Pink;
   }
 
   Map<String, int> convertRGBToHSL(Color color) {
@@ -83,6 +87,6 @@ class ColorClassifier {
   }
 }
 
-enum OutfitColor { Black, White, Grey, Red, Yellow, Green, Cyan, Blue, Magenta }
+enum OutfitColor { Black, White, Grey, Red, Yellow, Green, Cyan, Blue, Magenta, Brown, Orange, Pink }
 
 enum AccentColor { Red, Blue, Purple }
