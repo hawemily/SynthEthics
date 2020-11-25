@@ -15,7 +15,7 @@ class ColourSchemeChecker {
   ];
 
   bool isValid(List<OutfitColor> colors) {
-    // if (colors.length > 4) return false;
+    if (colors.length > 4) return false;
     print("================= colours =================");
 
     print("colous :               $colors");

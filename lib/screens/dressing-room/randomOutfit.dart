@@ -16,6 +16,7 @@ import '../clothing_colour_page/color_classifier.dart';
 import '../clothing_colour_page/color_classifier.dart';
 import '../clothing_colour_page/color_classifier.dart';
 import '../clothing_colour_page/color_classifier.dart';
+import '../clothing_colour_page/color_classifier.dart';
 import '../clothing_colour_page/colour_scheme_checker.dart';
 
 class RandomOutfit extends StatefulWidget {
@@ -30,12 +31,12 @@ class RandomOutfit extends StatefulWidget {
 class _RandomOutfitState extends State<RandomOutfit> {
   List<ClothingItemObject> randomItems = [];
   int noOfItems = 2;
-  List<OutfitColor> outfitColorsList = [];
+  Set<OutfitColor> outfitColorsList = Set();
 
   @override
   void initState() {
     super.initState();
-    randomItems = generateRandom();
+    generateRandom();
   }
 
   ImageOps.Image _cropToCenter(ImageOps.Image image, double portion) {
@@ -51,7 +52,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
     return ImageManager.getInstance().loadPictureFromDevice(id);
   }
 
-  Future<List<OutfitColor>> getDominantColours(File image) async {
+  Future<Set<OutfitColor>> getDominantColours(File image) async {
     ImageOps.Image customImage = ImageOps.decodeImage(image.readAsBytesSync());
     customImage = _cropToCenter(customImage, 0.8);
 
@@ -63,44 +64,95 @@ class _RandomOutfitState extends State<RandomOutfit> {
         await PaletteGenerator.fromImage(frameInfo.image);
 
     final List<PaletteColor> colors = paletteGenerator.paletteColors;
-    final List<OutfitColor> res = [];
+    final Set<OutfitColor> res = Set();
     for (PaletteColor color in colors) {
       res.add(ColorClassifier().classifyColor(color.color));
     }
     return res;
   }
 
-  List<ClothingItemObject> generateRandom() {
+  generateRandom() async {
     var clothingItems = widget.clothingItems;
-    Random random = new Random();
-    clothingItems.forEach((key, value) async {
-      var item = value[random.nextInt(value.length)];
-      File image = await getImage(item.id);
-      List<OutfitColor> temp = await getDominantColours(image);
+    // await Future.wait(clothingItems.entries.map((i) async {
+    for (var elem in clothingItems.entries) {
+      print("IIIIIIIIIIIIIIIII");
+      List<ClothingItemObject> value = elem.value;
+      Random random = new Random();
+      int i = random.nextInt(value.length);
+      print("RANDOM INDEX  $i");
+      var item = value[i];
+      print("INITIAL ITEM ----------");
+      print(item);
+      File image;
+      try {
+        image = await getImage(item.id);
+        print('Awaiting image...');
+      } catch (err) {
+        print('Caught error: $err');
+      }
+      print("GETS IMAGE");
+      print(image);
+      Set<OutfitColor> temp = Set();
+      try {
+        temp = await getDominantColours(image);
+        print('Awaiting colours...');
+      } catch (err) {
+        print('Caught error: $err');
+      }
 
+      print("DOMINANT COLOURS");
+      print(temp);
       if (randomItems.isEmpty) {
-        randomItems.add(item);
-        outfitColorsList.addAll(temp);
-      } else {
         print("--------------------gets here --------------------------");
-        var check = [];
+        print(item);
+
+        randomItems.add(item);
+        print(randomItems);
+
+        outfitColorsList.addAll(temp);
+        print("--------------------outfit colours --------------------------");
+        print(outfitColorsList);
+      } else {
+        print("--------------------SECOND here --------------------------");
+        List<OutfitColor> check = [];
         check.addAll(outfitColorsList);
-        check.addAll(temp);
-        while (!ColourSchemeChecker().isValid(check)) {
+        print("TEMP: $temp");
+        if (temp != null) check.addAll(temp.toList());
+        print("PROBLEM");
+        print(check);
+        while (!ColourSchemeChecker().isValid(check) && value.length > 1) {
+          print("INSIDE WHILE");
           value.remove(item);
-          item = value[random.nextInt(value.length)];
+          i = random.nextInt(value.length);
+          print("Inside loop index $i");
+          item = value[i];
           //need to change control flow - only checks for one clash
-          image = await getImage(item.id);
-          temp = await getDominantColours(image);
+          try {
+            image = await getImage(item.id);
+            print('Awaiting image...');
+          } catch (err) {
+            print('Caught error: $err');
+          }
+          print("GETS IMAGE");
+          print(image);
+          try {
+            temp = await getDominantColours(image);
+            print('Awaiting colours...');
+          } catch (err) {
+            print('Caught error: $err');
+          }
           check = [];
           check.addAll(outfitColorsList);
           check.addAll(temp);
         }
         //gets here if valid
+        print("gets here if valid");
         randomItems.add(item);
         outfitColorsList.addAll(temp);
       }
-    });
+      print("ITERATION ");
+    }
+    ;
     print("------------------------Generate-----------------------");
     print(randomItems);
     return randomItems;
