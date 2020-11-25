@@ -1,18 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/responseObjects/getClosetResponse.dart';
 import 'package:synthetics/responseObjects/getOutfitResponse.dart';
-import 'package:synthetics/screens/closet_page/closet_container.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
-import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/screens/dressing-room/randomOutfit.dart';
-import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-import '../closet_page/outfit_card.dart';
 import 'outfitContainer.dart';
 
 class DressingRoom extends StatefulWidget {
@@ -25,7 +20,8 @@ class _DressingRoomState extends State<DressingRoom> {
 
   //tentative: gets all clothing items from closet
   Future<GetClosetResponse> clothingItems;
-  List<ClothingItemObject> randomClothing = [];
+  Map<String, List<ClothingItemObject>> randomClothing = new Map();
+
   @override
   void initState() {
     super.initState();
@@ -40,18 +36,15 @@ class _DressingRoomState extends State<DressingRoom> {
       final resBody = jsonDecode(response.body);
       final closet = GetClosetResponse.fromJson(resBody);
       closet.clothingTypes.forEach((element) {
-        randomClothing.addAll(element.clothingItems);
+        if (element.clothingItems.isNotEmpty)
+          randomClothing[element.clothingType] = element.clothingItems;
       });
+
       return closet;
     } else {
       throw Exception("Failed to load closet");
     }
   }
-
-  // List<ClothingItemObject> getRandomOutfit() {
-  //   //do something
-  //   return [];
-  // }
 
   Future<GetOutfitResponse> getOutfits() async {
     final response = await api_client.get("/outfits");

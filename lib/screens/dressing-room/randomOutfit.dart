@@ -1,4 +1,7 @@
+import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
@@ -8,7 +11,7 @@ import 'package:synthetics/theme/custom_colours.dart';
 class RandomOutfit extends StatefulWidget {
   RandomOutfit(this.clothingItems);
 
-  final List<ClothingItemObject> clothingItems;
+  final Map<String, List<ClothingItemObject>> clothingItems;
 
   @override
   _RandomOutfitState createState() => _RandomOutfitState();
@@ -25,14 +28,18 @@ class _RandomOutfitState extends State<RandomOutfit> {
     randomItems = generateRandom();
   }
 
+  // Future<File> getImage() {
+  //   return ImageManager.getInstance()
+  //       .loadPictureFromDevice(this.currentClothingItem.id);
+  // }
+
   List<ClothingItemObject> generateRandom() {
-    for (var i in widget.clothingItems) {
-      var type = i.data.clothingType;
-      if (!types.contains(type)) {
-        types.add(type);
-        randomItems.add(i);
-      }
-    }
+    var clothingItems = widget.clothingItems;
+    Random random = new Random();
+    clothingItems.forEach((key, value) {
+      randomItems.add(value[random.nextInt(value.length)]);
+    });
+
     return randomItems;
   }
 
