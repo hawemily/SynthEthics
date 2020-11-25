@@ -83,6 +83,6 @@ class ColorClassifier {
   }
 }
 
-enum OutfitColor { Black, White, Grey, Red, Yellow, Green, Cyan, Blue, Magenta }
+enum OutfitColor { Black, White, Grey, Red, Yellow, Green, Cyan, Blue, Magenta, Orange, Brown}
 
 enum AccentColor { Red, Blue, Purple }
