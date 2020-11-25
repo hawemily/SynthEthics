@@ -52,6 +52,9 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
     List<Widget> colourDisplays = [];
 
     final List<PaletteColor> colors = paletteGenerator.paletteColors;
+
+    // Use this list for colours not the above
+    List<Color> colorsList = [];
     print("Num colours: ${colors.length}");
 
     for (PaletteColor color in colors) {
@@ -60,6 +63,7 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
       print("population: ${color.population}");
       print("title text color: ${color.titleTextColor}");
       print("");
+      colorsList.add(color.color);
       colourDisplays.add(Container(
         height: 40,
         width: 40,
