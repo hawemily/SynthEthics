@@ -29,7 +29,7 @@ class RandomOutfit extends StatefulWidget {
 }
 
 class _RandomOutfitState extends State<RandomOutfit> {
-  List<ClothingItemObject> randomItems = [];
+  Set<ClothingItemObject> randomItems = Set();
   int noOfItems = 2;
   Set<OutfitColor> outfitColorsList = Set();
 
@@ -224,6 +224,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
                     color: CustomColours.greenNavy(),
                     tooltip: 'Refresh',
                     onPressed: () => {
+                          print("RANDOM ITEMS"),
+                          print(randomItems),
                           setState(() {
                             this.randomItems = generateRandom();
                           })
