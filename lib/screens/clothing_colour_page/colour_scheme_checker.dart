@@ -15,8 +15,10 @@ class ColourSchemeChecker {
   ];
 
   bool isValid(List<OutfitColor> colors) {
-    if (colors.length > 4) return false;
+    // if (colors.length > 4) return false;
+    print("================= colours =================");
 
+    print("colous :               $colors");
     for (int i = 0; i < colors.length - 1; i++) {
       if (neutrals.contains(colors[i])) continue;
       for (int j = i + 1; j < colors.length; j++) {
