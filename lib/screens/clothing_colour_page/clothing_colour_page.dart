@@ -80,7 +80,6 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
           image: DecorationImage(
             fit: BoxFit.fill,
             image: FileImage(fileImage)
-            // image: Image.memory(ImageOps.encodeJpg(customImage)).image
           )
         ),
       );

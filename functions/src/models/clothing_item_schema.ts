@@ -19,4 +19,5 @@ export interface clothingItem {
   clothingType?: ClothingType;
   lastWornDate?: string;
   purchaseDate?: string;
+  dominantColor?: number;
 }

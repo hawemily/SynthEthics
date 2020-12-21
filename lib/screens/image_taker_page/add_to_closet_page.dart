@@ -3,10 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:synthetics/routes.dart';
+import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/colour_fetcher/colour_fetcher.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/theme/custom_colours.dart';
+
+import 'clothing_label_dropdown.dart';
 
 
 class AddToClosetPage extends StatefulWidget {
@@ -34,14 +38,18 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
   String _clothingName = "";
   String _clothingBrand = "";
 
+  OutfitColor _mappedColour;
+
   File _clothingImage;
 
   bool _savingInProgress = false;
+  bool _hasMappedColour = false;
 
   bool _saveActive() {
     return (_clothingImage != null
         && _clothingName != ""
-        && _clothingBrand != null);
+        && _clothingBrand != null
+        && _hasMappedColour);
   }
 
   void _saveToCloset() async {
@@ -61,9 +69,9 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
           'origin': widget.placeOfOrigin,
           'lastWorn': DateTime.now().toString(),
           'dateOfPurchase': DateTime.now().toString(),
+          'mappedColour': OutfitColor.values.indexOf(_mappedColour),
         }.toString());
 
-//    print('clothingType: ${widget.clothingType}');
     try {
       final response = await api_client.post(
           "/closet/addItem",
@@ -79,6 +87,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
             'origin': widget.placeOfOrigin,
             'lastWorn': DateTime.now().toString(),
             'dateOfpurchase': DateTime.now().toString(),
+            'dominantColor': OutfitColor.values.indexOf(_mappedColour),
           })
       );
 
@@ -204,6 +213,25 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                         text: "Material: ${widget.clothingMaterial}"),
                     _ReadOnlyCards(text: "Origin: ${widget.placeOfOrigin}"),
                     _ReadOnlyCards(text: "Type: ${widget.clothingType}"),
+                    Container(
+                      padding: EdgeInsets.only(left: 40, right: 40),
+                      child: ClothingLabelDropdown(
+                        data: OutfitColor.values.map((e) {return e.toString();}).toList(),
+                        selected: (_hasMappedColour)
+                          ? _mappedColour.index
+                          : 1,
+                        label: (_hasMappedColour)
+                            ? "Colour Category"
+                            : "Select an image to see colour category",
+                        onChange: ((_hasMappedColour)
+                          ? (index) {
+                            setState(() {
+                              _mappedColour = OutfitColor.values[index];
+                            });
+                          }
+                          : null),
+                      ),
+                    ),
                   ],
                 )
             )
@@ -212,10 +240,14 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
   }
 
   void _imageGetterCallback(Future<File> futureFile) {
-    futureFile.then((value) {
-      if (value != null) {
-        setState(() {
-          _clothingImage = value;
+    futureFile.then((image) {
+      if (image != null) {
+        ColourFetcher.fetchDominantColour(image).then((dominantColor) {
+          setState(() {
+            _clothingImage = image;
+            _mappedColour = ColorClassifier().classifyColor(dominantColor);
+            _hasMappedColour = true;
+          });
         });
       }
     });

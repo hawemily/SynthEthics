@@ -21,7 +21,7 @@ class CarmaPointDetailsState extends State<CarmaPointDetails> {
   void _getCarmaInfo() {
     if (!widget.hasStarted) {
       carmaWidgetColour = CustomColours.greenNavy();
-      carmaText = "Select a clothing type below and lets get started!";
+      carmaText = "Fill in the details below and lets get started!";
     } else {
       if (widget.valid && widget.points > 0) {
         // Have some carma points
