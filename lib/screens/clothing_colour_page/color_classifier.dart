@@ -11,28 +11,30 @@ class ColorClassifier {
     int sat = HSL["S"];
     int lum = HSL["L"];
 
+    print("H: $hue, S: $sat, L: $lum");
+
     if (lum < 20) {return OutfitColor.Black;}
     if (lum > 80) {return OutfitColor.White;}
 
-    if (sat < 25) {
+    if (sat <= 8) {
       return OutfitColor.Grey;
     }
 
-    if (hue < 15 && lum < 50) {
+    if (hue < 15 && lum < 50 && sat < 50) {
       return OutfitColor.Brown;
-    } else if (hue < 30) {
+    } else if (hue < 25) {
       return OutfitColor.Red;
     } else if (hue < 45) {
       return OutfitColor.Orange;
-    } else if (hue < 90) {
+    } else if (hue < 65) {
       return OutfitColor.Yellow;
     } else if (hue < 150) {
       return OutfitColor.Green;
     } else if(hue < 210){
       return OutfitColor.Cyan;
-    } else if(hue < 270) {
+    } else if(hue < 240) {
       return OutfitColor.Blue;
-    } else if (hue < 330) {
+    } else if (hue < 280) {
       return OutfitColor.Magenta;
     }
 
@@ -40,49 +42,17 @@ class ColorClassifier {
   }
 
   Map<String, int> convertRGBToHSL(Color color) {
-    double r = color.red / MAX_PIXEL;
-    double b = color.blue / MAX_PIXEL;
-    double g = color.green / MAX_PIXEL;
-    String maxColor = "";
+    final hslColor = HSLColor.fromColor(color);
+    final H = hslColor.hue.round();
+    final S = (hslColor.saturation * 100).round();
+    final L = (hslColor.lightness * 100).round();
 
-    double minVal = min(min(r, g), b);
-    double maxVal = max(max(r, g), b);
-    if(maxVal == r) {
-      maxColor = "R";
-    } else if (maxVal == b){
-      maxColor = "B";
-    } else {
-      maxColor = "G";
-    }
-    double range = maxVal - minVal;
-    double sum = minVal + maxVal;
-
-    int L = ((sum) / 2 * 100).round();
-
-    int S = minVal == maxVal
-        ? 0
-        : (L <= 0.5
-        ? (range / sum * 100).round()
-        : (range / (2.0 - sum) * 100).round());
-
-    double doubleH = 0;
-
-    if(maxColor == "R") {
-      doubleH = (g - b)/range;
-    } else if (maxColor == "G") {
-      doubleH = 2 + (b - r)/range;
-    } else if (maxColor == "B") {
-      doubleH = 4 + (r - g)/range;
-    }
-
-    double degree = doubleH * 60;
-
-    int H = degree < 0 ? (degree + 360).round() : degree.round();
-
-    Map<String, int> res = {};
-    res["H"] = H;
-    res["S"] = S;
-    res["L"] = L;
+    print("HSL: $H, $S, $L");
+    Map<String, int> res = {
+      'H': H,
+      'S': S,
+      'L': L
+    };
     return res;
   }
 }

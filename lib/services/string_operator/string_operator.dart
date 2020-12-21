@@ -20,4 +20,12 @@ class StringOperator {
       return "";
     }
   }
+
+  static String enumTrim(String string) {
+    try {
+      return string.substring(string.indexOf(".") + 1);
+    } catch (e) {
+      return "";
+    }
+  }
 }

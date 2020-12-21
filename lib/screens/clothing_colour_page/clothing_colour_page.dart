@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -70,6 +71,10 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
         color: color.color,
       ));
     }
+
+    final dominant = paletteGenerator.dominantColor.color;
+    print("RGB ${dominant.red}, ${dominant.green}, ${dominant.blue}");
+    print("${ColorClassifier().classifyColor(paletteGenerator.dominantColor.color)}");
 
     setState(() {
       _displayImage = Container(

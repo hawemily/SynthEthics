@@ -8,6 +8,7 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/colour_fetcher/colour_fetcher.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
+import 'package:synthetics/services/string_operator/string_operator.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 import 'clothing_label_dropdown.dart';
@@ -216,7 +217,9 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                     Container(
                       padding: EdgeInsets.only(left: 40, right: 40),
                       child: ClothingLabelDropdown(
-                        data: OutfitColor.values.map((e) {return e.toString();}).toList(),
+                        data: OutfitColor.values.map((e) {
+                          return StringOperator.enumTrim(e.toString());
+                        }).toList(),
                         selected: (_hasMappedColour)
                           ? _mappedColour.index
                           : 1,
