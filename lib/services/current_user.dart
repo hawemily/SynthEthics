@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class CurrentUser {
-  String _uid;
+  User _user;
   static CurrentUser _instance;
 
   static CurrentUser getInstance() {
@@ -9,12 +11,12 @@ class CurrentUser {
     return _instance;
   }
 
-  setUID(String uid) {
-    _uid = uid;
+  setUser(User user) {
+    _user = user;
   }
 
   getUID() {
-    return _uid;
+    return _user.uid;
   }
 
   CurrentUser._internal();

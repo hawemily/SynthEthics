@@ -26,7 +26,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
   void getAchievements() async {
     String uid = CurrentUser.getInstance().getUID();
     print("uid: $uid");
-    await api_client.get("/getAchievements", headers: {"uid" : uid})
+    await api_client.get("/getAchievements/" + uid)
         .then((result) {
       List<dynamic> jsonAchievements = json.decode(result.body);
 

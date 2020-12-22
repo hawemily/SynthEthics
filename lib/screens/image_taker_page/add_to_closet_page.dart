@@ -6,6 +6,7 @@ import 'package:synthetics/routes.dart';
 import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/colour_fetcher/colour_fetcher.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
@@ -38,6 +39,7 @@ class AddToClosetPage extends StatefulWidget {
 class _AddToClosetPageState extends State<AddToClosetPage> {
   String _clothingName = "";
   String _clothingBrand = "";
+  CurrentUser user = CurrentUser.getInstance();
 
   OutfitColor _mappedColour;
 
@@ -80,6 +82,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
             'Content-Type': 'application/json',
           },
           body: jsonEncode(<String, dynamic>{
+            'uid': user.getUID(),
             'name': _clothingName,
             'brand': _clothingBrand,
             'materials': [widget.clothingMaterial.toLowerCase()],

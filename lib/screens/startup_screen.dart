@@ -14,8 +14,9 @@ class StartupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     if (result != null) {
+      print("Result in startup screen is not null!");
       CurrentUser user = CurrentUser.getInstance();
-      user.setUID(result.uid);
+      user.setUser(result);
     }
     return new SplashScreen(
       navigateAfterSeconds: result != null ? routeMapping[Screens.Home] : routeMapping[Screens.Login],

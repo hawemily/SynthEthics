@@ -7,6 +7,7 @@ import 'package:synthetics/responseObjects/getOutfitResponse.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/screens/dressing-room/randomOutfit.dart';
 import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'outfitContainer.dart';
 
@@ -17,7 +18,7 @@ class DressingRoom extends StatefulWidget {
 
 class _DressingRoomState extends State<DressingRoom> {
   Future<GetOutfitResponse> outfits;
-
+  CurrentUser user = CurrentUser.getInstance();
   //tentative: gets all clothing items from closet
   Future<GetClosetResponse> clothingItems;
   Map<String, List<ClothingItemObject>> randomClothing = new Map();
@@ -31,7 +32,7 @@ class _DressingRoomState extends State<DressingRoom> {
 
   // Get all clothes from closet
   Future<GetClosetResponse> getClothes() async {
-    final response = await api_client.get("/closet/allClothes");
+    final response = await api_client.get("/closet/allClothes/" + user.getUID());
     if (response.statusCode == 200) {
       final resBody = jsonDecode(response.body);
       final closet = GetClosetResponse.fromJson(resBody);
@@ -47,7 +48,7 @@ class _DressingRoomState extends State<DressingRoom> {
   }
 
   Future<GetOutfitResponse> getOutfits() async {
-    final response = await api_client.get("/outfits");
+    final response = await api_client.get("/outfits/" + user.getUID());
 
     if (response.statusCode == 200) {
       final resBody = jsonDecode(response.body);

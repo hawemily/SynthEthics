@@ -7,6 +7,7 @@ import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class RandomOutfit extends StatefulWidget {
@@ -22,6 +23,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> randomItems = Set();
   int noOfItems = 2;
   bool ref;
+  CurrentUser user = CurrentUser.getInstance();
   // var types = new Set();
 
   @override
@@ -70,7 +72,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
     await api_client
         .post("/postOutfit",
             body: jsonEncode(
-                <String, dynamic>{'name': "outfitName", 'ids': items}))
+                <String, dynamic>{'uid': user.getUID(), 'name': "outfitName", 'ids': items}))
         .then((e) {
       print("in closet container");
       print(e.statusCode);

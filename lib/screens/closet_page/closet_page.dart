@@ -43,6 +43,7 @@ class Closet extends StatefulWidget {
 class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   List<Tab> _tabs;
   TabController _tabController;
+  CurrentUser user = CurrentUser.getInstance();
 
   //Future<List<String>> categories;
   Future<GetClosetResponse> clothingItems;
@@ -103,7 +104,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   Future<ClothingTypeObject> getDonatedItems() async {
     print("get all items marked as to be donated from backend");
-    final response = await api_client.get("/closet/allDonatedItems");
+    final response = await api_client.get("/closet/allDonatedItems/"+ user.getUID());
 
     if (response.statusCode == 200) {
       print("respBodyInGetDonatedIitems: ${response.body}");
@@ -121,7 +122,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   Future<GetClosetResponse> getClothes() async {
     print("trying get all clothes from backend");
-    final response = await api_client.get("/closet/allClothes");
+    final response = await api_client.get("/closet/allClothes/" + user.getUID());
 
     if (response.statusCode == 200) {
 //      print("respBody: ${response.body}");
@@ -182,7 +183,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     api_client
         .post("/markForDonation",
-            body: jsonEncode(<String, dynamic>{'ids': ls}))
+            body: jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) {
       print("in closet container");
       print(e.statusCode);
@@ -209,7 +210,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     api_client
         .post("/unmarkForDonation",
-            body: jsonEncode(<String, dynamic>{'ids': ls}))
+            body: jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) {
       setState(() {
         tempClothingBin.clear();
@@ -239,7 +240,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     await api_client
         .post("/postOutfit",
             body: jsonEncode(
-                <String, dynamic>{'name': "outfitName", 'ids': items}))
+                <String, dynamic>{'uid': user.getUID(), 'name': "outfitName", 'ids': items}))
         .then((e) {
       print("in closet container");
       print(e.statusCode);

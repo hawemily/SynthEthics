@@ -71,7 +71,7 @@ class _SignInOrRegisterWithEmailSectionState
       api_client.post("/addUser", body: jsonEncode(req));
 
       CurrentUser currUser = CurrentUser.getInstance();
-      currUser.setUID(user.uid);
+      currUser.setUser(user);
 
       Navigator.pushNamed(context, routeMapping[Screens.Home]);
     } else {
@@ -125,7 +125,7 @@ class _SignInOrRegisterWithEmailSectionState
       print("user.uid, ${user.uid}");
 
       CurrentUser currUser = CurrentUser.getInstance();
-      currUser.setUID(user.uid);
+      currUser.setUser(user);
 
       // TODO: Remove User init code once deployed
       api_client.post("/initUsers", body: jsonEncode({"uid": user.uid}));
