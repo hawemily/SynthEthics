@@ -18,19 +18,18 @@ class OutfitContainer extends StatelessWidget {
           child: FlipCard(
               front: OutfitCard(outfitClothingList: oF.data.clothing),
               back: Card(
-                  color: CustomColours.offWhite(),
+                  elevation: 5,
+                  color: CustomColours.greenNavy(),
                   shadowColor: CustomColours.baseBlack(),
                   child: Center(
                     child: SizedBox(
                         width: 70,
                         height: 70,
-                        child: RaisedButton(
-                            color: CustomColours.negativeRed(),
+                        child: FlatButton(
+                            color: CustomColours.greenNavy(),
                             textColor: CustomColours.offWhite(),
-                            elevation: 10.0,
                             // splashColor: CustomColours.greenNavy(),
-                            highlightColor: CustomColours.accentCopper(),
-                            animationDuration: Duration(microseconds: 5),
+                            highlightColor: CustomColours.iconGreen(),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50)),
                             child: Text(
