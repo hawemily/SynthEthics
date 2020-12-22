@@ -8,10 +8,11 @@ export const getAllClothes = async (
   db: FirebaseFirestore.Firestore
 ) => {
   // TODO: uncomment the uids when user is implemented
-  // const {uid} = req;
+  const uid = req.params.uid;
+
   try {
-    const closetRef = await db.collection(Collections.Closet);
-    // const clothingUserQuerySnapshot = await db.collection(uid).get();
+    const closetRef = await db.collection(Collections.Users).doc(uid).collection(Collections.Closet);
+    
     const clothingItems: any[] = [];
   
     for (const type of Object.values(ClothingType)) {

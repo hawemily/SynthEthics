@@ -43,17 +43,17 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
-  app.get("/getCarmaRecords", (req: Request, res: Response) => {
+  app.get("/getCarmaRecords/:uid", (req: Request, res: Response) => {
     getCarmaRecords(req, res, db);
     return;
   });
 
-  app.get("/getAchievements", (req: Request, res: Response) => {
+  app.get("/getAchievements/:uid", (req: Request, res: Response) => {
     getAchievements(req, res, db);
     return;
   })
 
-  app.get("/closet/allClothes", (req: Request, res: Response) => {
+  app.get("/closet/allClothes/:uid", (req: Request, res: Response) => {
     getAllClothes(req, res, db);
     return;
   });
@@ -63,12 +63,12 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
-  app.get("/closet/allDonatedItems", (req: Request, res: Response)=> {
+  app.get("/closet/allDonatedItems/:uid", (req: Request, res: Response)=> {
     getAllDonatedItems(req, res, db);
     return;
   });
 
-  app.get("/outfits", (req: Request, res: Response) => {
+  app.get("/outfits/:uid", (req: Request, res: Response) => {
     getAllOutfits(req, res, db);
     return;
   })
@@ -125,19 +125,4 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
-
-  app.get("/closet/allDonatedItems", (req: Request, res: Response)=> {
-    getAllDonatedItems(req, res, db);
-    return;
-  });
-
-  app.get("/outfits", (req: Request, res: Response) => {
-    getAllOutfits(req, res, db);
-    return;
-  })
-
-  app.post("/outfits/add", (req: Request, res: Response) => {
-    postOutfit(req, res, db);
-    return;
-  })
 };

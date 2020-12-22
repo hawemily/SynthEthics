@@ -26,6 +26,6 @@ export const initUsers = async (
     }
   } catch (e) {
     console.log(e);
+    res.status(400);
   }
-  res.send(400);
 }

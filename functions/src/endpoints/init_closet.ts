@@ -1,11 +1,12 @@
 import { clothingItem, ClothingType } from "../models/clothing_item_schema";
 import { Response } from "express";
+import { Collections } from "../helper_components/db_collections";
 
 export const initCloset = async (
   res: Response,
   db: FirebaseFirestore.Firestore
 ) => {
-  const closetRef = db.collection("closet");
+  const closetRef = db.collection(Collections.Users).doc("user1").collection(Collections.Closet);
   const ap1: clothingItem = {
     name: "black crop",
     materials: ["cotton", "polyester"],

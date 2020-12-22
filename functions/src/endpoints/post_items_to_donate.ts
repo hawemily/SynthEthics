@@ -4,13 +4,13 @@ import {Collections} from "../helper_components/db_collections";
 export const markItemsAsDonate = async (req: Request, res: Response, db: FirebaseFirestore.Firestore) => {
     
     try {
-        const {ids} = req.body;
+         const {uid, ids} = req.body;
 
-        // const userRef = db.collection(Collections.Users).doc(uid);
+         const userRef = db.collection(Collections.Users).doc(uid);
 
-         const closetRef = db.collection(Collections.Closet);
+         const closetRef = userRef.collection(Collections.Closet);
     
-         const toDonateRef = db.collection(Collections.ToDonate);
+         const toDonateRef = userRef.collection(Collections.ToDonate);
 
          for (var i = 0; i < ids.length; i++) {
             const clothingItem = await closetRef.doc(ids[i]).get();
