@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CurrentUser {
   User _user;
+  GoogleSignIn _googleSignIn;
   static CurrentUser _instance;
 
   static CurrentUser getInstance() {
@@ -13,6 +15,14 @@ class CurrentUser {
 
   setUser(User user) {
     _user = user;
+  }
+
+  setGoogleSignIn(GoogleSignIn gSI) {
+    _googleSignIn = gSI;
+  }
+
+  googleSignIn() {
+    return _googleSignIn;
   }
 
   getUID() {

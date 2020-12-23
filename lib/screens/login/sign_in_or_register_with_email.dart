@@ -12,14 +12,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 
 class SignInOrRegisterWithEmailSection extends StatefulWidget {
-  SignInOrRegisterWithEmailSection({
-    Key key,
-    this.auth,
-    this.isSignIn,
-  });
-
-  FirebaseAuth auth;
-  bool isSignIn;
 
   @override
   _SignInOrRegisterWithEmailSectionState createState() =>
@@ -33,16 +25,13 @@ class _SignInOrRegisterWithEmailSectionState
   final TextEditingController _passwordController = TextEditingController();
   bool _registerSuccess;
   bool _loginSuccess;
-  bool isSignIn;
   String _email;
   String _errorText;
-  FirebaseAuth _auth;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
-    this._auth = widget.auth;
-    isSignIn = true;
   }
 
   void _register() async {
@@ -203,7 +192,23 @@ class _SignInOrRegisterWithEmailSectionState
                                   : "Username does not exist! Please sign up instead.")
                           : (_registerSuccess
                               ? "Successfully registered " + _email
-                              : "Failedc to register")))
+                              : "Failed to register")))
                 ])));
+  }
+}
+
+class SignInOrRegisterWithEmailPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Welcome to Synthetics"),
+        centerTitle: true,
+        backgroundColor: CustomColours.greenNavy(),
+      ),
+      body: Center(
+        child: SignInOrRegisterWithEmailSection(),
+      )
+    );
   }
 }
