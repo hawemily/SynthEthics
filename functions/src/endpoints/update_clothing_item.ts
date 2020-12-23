@@ -16,7 +16,8 @@ export const updateClothingItem = async (
             clothingId,
             lastWorn,
             timesWorn,
-            carmaGain
+            carmaGain,
+            action
         } = req.body;
        
         const userRef = db.collection(Collections.Users).doc(uid);
@@ -37,7 +38,12 @@ export const updateClothingItem = async (
         if (user.exists) {
             const userData = user.data();
             var currentCarmaPoints = userData!['carmaPoints'];
-            currentCarmaPoints += carmaGain;
+            if (action != "INC" && currentCarmaPoints!= 0) {
+                currentCarmaPoints -= carmaGain;
+            } else {
+                currentCarmaPoints += carmaGain;
+            }
+            
             userData!['carmaPoints'] = currentCarmaPoints;
             await userRef.set(userData!);
           }

@@ -25,7 +25,7 @@ class _ClothingItemState extends State<ClothingItem> {
   CurrentUser user = CurrentUser.getInstance();
   var progress;
   int timesWorn;
-  int karma = 0;
+  int karma;
   File image;
   String lastWorn;
 
@@ -44,6 +44,8 @@ class _ClothingItemState extends State<ClothingItem> {
     this.timesWorn = clothingID.data.currentTimesWorn.round();
     this.lastWorn = clothingID.data.lastWornDate;
     this.progress =  this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
+    this.karma = this.timesWorn * ((this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
+            .round());
   }
 
   void updateProgress(String action) async {
@@ -73,7 +75,8 @@ class _ClothingItemState extends State<ClothingItem> {
               'clothingId': this.clothingID.id,
               'timesWorn': this.timesWorn,
               'lastWorn': DateTime.now().toString(),
-              'carmaGain': amount
+              'carmaGain': amount,
+              'action': action
             }))
         .then((e) {
       print(e.statusCode);
