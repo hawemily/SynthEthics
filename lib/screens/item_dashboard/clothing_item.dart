@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +7,6 @@ import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
-
-import '../../services/api_client.dart';
-import '../../services/api_client.dart';
 
 class ClothingItem extends StatefulWidget {
   ClothingItem({Key key, this.clothingItem}) : super(key: key);
@@ -42,47 +38,22 @@ class _ClothingItemState extends State<ClothingItem> {
     this.timesWorn = clothingID.data.currentTimesWorn.round();
   }
 
-  void updateProgress(String action) async {
-      if (action == 'INC') {
-
-        this.timesWorn++;
-        int amount = (this.clothingID.data.cF /
-                this.clothingID.data.maxNoOfTimesToBeWorn)
+  void updateProgress(String action) {
+    int amount =
+        (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
             .round();
+    setState(() {
+      if (action == 'INC') {
+        this.timesWorn++;
+
         this.karma += amount;
-
-        // await api_client
-        //   .post("/carma/add", 
-        //       body: jsonEncode(
-        //         <String, dynamic>{'uid': user_id, 'carma': carma}
-        //       )).then((e) {
-        //         print(e.statusCode);
-        //         print(e.body);
-        //       });
-        
-        // await api_client
-        //   .post("closet/updateItem", 
-        //   body: jsonEncode(
-        //     <String, dynamic>{ 'id': this.clothingID, 'timesWorn' : tw, 'lastWorn' : DateTime.now().toString()}
-
-        //   )).then((e) {
-        //     print(e.statusCode);
-        //     print(e.body);
-        //   });
-
-        // setState(() {
-        //   this.timesWorn = tw;
-        // });
-
-
       } else {
         if (this.timesWorn > 0) this.timesWorn--;
+        this.karma -= amount;
       }
-      setState(() {
-        this.progress =
+      this.progress =
           this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
-      });
-    
+    });
 
     if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
         this.timesWorn != 0) {
@@ -93,7 +64,7 @@ class _ClothingItemState extends State<ClothingItem> {
                 child: Text(
                     "Congrats! You have used this piece of clothing sustainably!"));
           });
-    
+    }
   }
 
   String customFormatDateTime(String string) {
