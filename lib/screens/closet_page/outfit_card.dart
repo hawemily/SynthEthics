@@ -124,6 +124,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
     Stack stack = this.buildBaseStack(() => print("Get item dashboard page"),
         clear: this.clear);
     stack.children.add(Positioned(top: 0.0, right: 0.0, child: getIcon()));
+
     // if (!clear) {
     stack.children.addAll(getLeftRightControls());
     // }

@@ -5,13 +5,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
+import 'package:synthetics/screens/closet_page/closet_container.dart';
+import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class RandomOutfit extends StatefulWidget {
-  RandomOutfit(this.clothingItems);
+  const RandomOutfit(this.clothingItems, {Key key}) : super(key: key);
 
   final Map<String, List<ClothingItemObject>> clothingItems;
 
@@ -35,7 +37,6 @@ class _RandomOutfitState extends State<RandomOutfit> {
 
   Set<ClothingItemObject> generateRandom(bool ref) {
     var clothingItems = widget.clothingItems;
-    this.randomItems = Set();
     print("Hiiiiiiiiiiiiiiiiiiiiii");
 
     // Random random = new Random();
@@ -43,11 +44,19 @@ class _RandomOutfitState extends State<RandomOutfit> {
       // randomItems.add(value[random.nextInt(value.length)]);
       if (!ref) {
         value.forEach((element) {
-          if (element.data.brand == "Zara") this.randomItems.add(element);
+          if (element.data.brand == "Zara") {
+            setState(() {
+              this.randomItems.add(element);
+            });
+          }
         });
       } else {
         value.forEach((element) {
-          if (element.data.brand == "Uqlo") this.randomItems.add(element);
+          if (element.data.brand == "Uqlo") {
+            setState(() {
+              this.randomItems.add(element);
+            });
+          }
         });
       }
     });
@@ -92,16 +101,15 @@ class _RandomOutfitState extends State<RandomOutfit> {
           () {
             print("BUILD RENDER");
             print(item.data.brand);
-            // return ClothingCard(clothingItem: item);
-            return Text(item.data.brand);
+            return ClothingCard(clothingItem: item);
+            // return Text(item.data.brand);
           }()
       ],
     );
   }
 
   @override
-  Widget build(Object context) {
-    print("++++++++++++++++");
+  Widget build(BuildContext context) {
     this.randomItems.forEach((element) {
       print(element.data.brand);
     });
@@ -130,14 +138,17 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   icon: Icon(Icons.refresh),
                   color: CustomColours.greenNavy(),
                   tooltip: 'Refresh',
-                  onPressed: () => setState(() {
-                        this.ref = !this.ref;
-                        this.randomItems = this.generateRandom(!this.ref);
-                        print("------SETSTAE---------");
-                        this.randomItems.forEach((element) {
-                          print(element.data.brand);
-                        });
-                      })),
+                  onPressed: () {
+                    this.ref = !this.ref;
+                    this.randomItems.clear();
+                    this.randomItems = this.generateRandom(!this.ref);
+                    setState(() {
+                      print("------SETSTATE---------");
+                      this.randomItems.forEach((element) {
+                        print(element.data.brand);
+                      });
+                    });
+                  }),
               IconButton(
                 color: CustomColours.greenNavy(),
                 icon: Icon(Icons.check),
