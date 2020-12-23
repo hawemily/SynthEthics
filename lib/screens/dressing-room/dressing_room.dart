@@ -1,12 +1,14 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
+import 'package:synthetics/responseObjects/clothingItemObject.dart';
+import 'package:synthetics/responseObjects/getClosetResponse.dart';
 import 'package:synthetics/responseObjects/getOutfitResponse.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
+import 'package:synthetics/screens/dressing-room/randomOutfit.dart';
 import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-import '../closet_page/outfit_card.dart';
 import 'outfitContainer.dart';
 
 class DressingRoom extends StatefulWidget {
@@ -16,22 +18,42 @@ class DressingRoom extends StatefulWidget {
 
 class _DressingRoomState extends State<DressingRoom> {
   Future<GetOutfitResponse> outfits;
+  CurrentUser user = CurrentUser.getInstance();
+  //tentative: gets all clothing items from closet
+  Future<GetClosetResponse> clothingItems;
+  Map<String, List<ClothingItemObject>> randomClothing = new Map();
 
   @override
   void initState() {
     super.initState();
+    clothingItems = getClothes();
     outfits = this.getOutfits();
   }
 
+  // Get all clothes from closet
+  Future<GetClosetResponse> getClothes() async {
+    final response = await api_client.get("/closet/allClothes/" + user.getUID());
+    if (response.statusCode == 200) {
+      final resBody = jsonDecode(response.body);
+      final closet = GetClosetResponse.fromJson(resBody);
+      closet.clothingTypes.forEach((element) {
+        if (element.clothingItems.isNotEmpty)
+          randomClothing[element.clothingType] = element.clothingItems;
+      });
+
+      return closet;
+    } else {
+      throw Exception("Failed to load closet");
+    }
+  }
+
   Future<GetOutfitResponse> getOutfits() async {
-    print("trying get all outfits from backend");
-    final response = await api_client.get("/outfits");
+    final response = await api_client.get("/outfits/" + user.getUID());
 
     if (response.statusCode == 200) {
-      print(response.body);
       final resBody = jsonDecode(response.body);
-      final closet = GetOutfitResponse.fromJson(resBody);
-      return closet;
+      final outfits = GetOutfitResponse.fromJson(resBody);
+      return outfits;
     } else {
       throw Exception("Failed to load closet");
     }
@@ -69,18 +91,50 @@ class _DressingRoomState extends State<DressingRoom> {
           child: generateOutfits(),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          Closet(selectingOutfit: true))).then((value) {
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(
+          bottom: 80.0,
+          left: 30,
+          right: 30,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            FloatingActionButton(
+              backgroundColor: CustomColours.greenNavy(),
+              heroTag: null,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Closet(selectingOutfit: true))).then((value) {
                   setState(() {
                     outfits = this.getOutfits();
-                  });});},        
-        label: Text('Add Outfit'),
-        icon: Icon(Icons.add),
+                  });
+                });
+              },
+              child: Icon(Icons.add),
+            ),
+            FloatingActionButton(
+              backgroundColor: CustomColours.greenNavy(),
+              heroTag: null,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            RandomOutfit(this.randomClothing))).then((value) {
+                  setState(() {
+                    outfits = this.getOutfits();
+                  });
+                });
+              },
+              child: Icon(Icons.create_outlined),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: NavBar(selected: 3),
     );

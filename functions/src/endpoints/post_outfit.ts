@@ -15,6 +15,7 @@ export const postOutfit = async (
 ) => {
     try {
         const {
+            uid,
             name,
             ids
         } = req.body;
@@ -23,8 +24,9 @@ export const postOutfit = async (
             name: name,
             clothing: []
         }
-
-        const closetRef = db.collection(Collections.Closet);
+        
+        const userRef = db.collection(Collections.Users).doc(uid);
+        const closetRef = userRef.collection(Collections.Closet);
 
         for (var i = 0; i < ids.length; i++) {
             const clothingItem = await closetRef.doc(ids[i]).get();
@@ -33,7 +35,7 @@ export const postOutfit = async (
          }
 
 
-        const outfitRef = await db.collection('outfit').add(outfit);
+        const outfitRef = await userRef.collection(Collections.Outfit).add(outfit);
         const result = { clothingID: outfitRef.id};
         res.json(result);
         res.send(200);

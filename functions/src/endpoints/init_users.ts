@@ -16,7 +16,7 @@ export const initUsers = async (
       // addNewUser(req, res, db);
       const user: User = {
         userId: uid,
-        carmaPoints: 250,
+        carmaPoints: 0,
         itemsDonated: 1,
         achieved: [2],
         carmaRecord: {days: [{day: "MON", value:23}], months: [], years: []}
@@ -26,6 +26,6 @@ export const initUsers = async (
     }
   } catch (e) {
     console.log(e);
+    res.status(400);
   }
-  res.send(400);
 }

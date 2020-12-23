@@ -29,10 +29,11 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     // not sure if this widget will be rebuilt if uid changes
-    uid = CurrentUser.getInstance().getUID();
+//    CurrentUser user = CurrentUser.getInstance();
+//    uid = user.getUID();
 
     // TODO: REMOVE TESTING DATA INITIALISER
-    LocalDatabaseInitialiser.initUsers(uid);
+//    LocalDatabaseInitialiser.initUsers(uid);
 
     super.initState();
   }

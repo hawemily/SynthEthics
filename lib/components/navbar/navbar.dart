@@ -59,10 +59,6 @@ class _NavBarState extends State<NavBar> {
             label: 'donate_item',
             icon: Icon(Icons.place, size: _iconSize),
           ),
-          BottomNavigationBarItem(
-            label: 'colour_room',
-            icon: Icon(Icons.format_paint, size: _iconSize),
-          )
         ],
         onTap: (index) {
           switch (index) {
@@ -88,10 +84,6 @@ class _NavBarState extends State<NavBar> {
             case 4:
               // Go to Donations Page
               _clearStackAndPush(Screens.Donation);
-              break;
-
-            case 5:
-              _clearStackAndPush(Screens.ColourRoom);
               break;
           }
         });

@@ -10,7 +10,7 @@ export const getAchievements = async (
     const achievementsRef = await db.collection(Collections.Achievements);
     const userRef = await db.collection(Collections.Users);
     console.log(req.headers);
-    console.log(req.headers['uid']);
+    console.log(req.params.uid);
     if (req.headers['uid'] != null) {
       const currentUserSnapshot = await userRef.where("userId", "==", req.headers["uid"]).get();
       const result: any[] = [];

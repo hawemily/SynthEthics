@@ -57,13 +57,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   bool _updatedCarma = false;
   bool _hasInitialQuery = false;
 
-  void initFirebase() async {
-    await Firebase.initializeApp();
-  }
-
   @override
   void initState() {
-    initFirebase();
     _getClothingData();
     _getUserPosition();
     _detectText();
@@ -101,20 +96,19 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   }
 
   void _detectText() async {
-    // final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    // final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-    // final VisionText visionText = await textRecognizer.processImage(visionImage);
-    //
-    // // Parse using regex parser with VisionText as label source
-    // var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
-    // var labelProperties = labelParser.parseLabel();
-    // var origin = labelProperties["origin"];
-    // var material = labelProperties["material"];
+    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
+    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    final VisionText visionText = await textRecognizer.processImage(visionImage);
+
+    // Parse using regex parser with VisionText as label source
+    var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
+    var labelProperties = labelParser.parseLabel();
+    var origin = labelProperties["origin"];
+    var material = labelProperties["material"];
 
     // TODO: Remove testing variables
-    // Testing Variables
-    final origin = "MADE IN MYANMAR";
-    final material = "%POLYESTER";
+    // final origin = "MADE IN MYANMAR";
+    // final material = "%POLYESTER";
 
     setState(() {
       _placeOfOrigin = StringOperator.capitaliseClear(_cleanOriginText(origin));
@@ -126,6 +120,9 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     _validateCountryData();
     _validateMaterialData();
     _setValidData();
+
+    // Release resources allocated to text recogniser
+    textRecognizer.close();
   }
 
   void _setValidData() {

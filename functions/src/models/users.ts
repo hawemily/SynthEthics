@@ -4,17 +4,17 @@ export interface User {
   itemsDonated: number;
   achieved: number[];
   carmaRecord: {
-                "days": {
-                           "day": string; // These are string representtions of datetime
-                           "value": number
-                }[];
-                "months": {
-                            "month": string;
-                            "value": number
-                }[];
-                "years": {
-                            "year": string;
-                            "value": number
-                }[];
+    "days": {
+                "day": string; // These are string representtions of datetime
+                "value": number
+    }[];
+    "months": {
+                "month": string;
+                "value": number
+    }[];
+    "years": {
+                "year": string;
+                "value": number
+    }[];
   };
 }

@@ -17,6 +17,7 @@ export const addNewUser = async (req:Request, res:Response, db:FirebaseFirestore
     }
 
     await userRef.doc(uid).set(newUser);
+
     res.send(200);
    } catch (e) {
        console.log("User could not be created!");

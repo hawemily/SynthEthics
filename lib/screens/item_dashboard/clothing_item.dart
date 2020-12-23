@@ -20,13 +20,9 @@ class ClothingItem extends StatefulWidget {
 class _ClothingItemState extends State<ClothingItem> {
   ClothingItemObject clothingID;
   var progress = 0.0;
-
   int timesWorn;
-
+  int karma = 0;
   File image;
-
-  // double _scale;
-  // AnimationController _controller;
 
   @override
   void initState() {
@@ -43,15 +39,20 @@ class _ClothingItemState extends State<ClothingItem> {
   }
 
   void updateProgress(String action) {
+    int amount =
+        (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
+            .round();
     setState(() {
       if (action == 'INC') {
         this.timesWorn++;
+
+        this.karma += amount;
       } else {
         if (this.timesWorn > 0) this.timesWorn--;
+        this.karma -= amount;
       }
       this.progress =
-          // this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
-          this.timesWorn / 15;
+          this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
     });
 
     if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
@@ -216,12 +217,14 @@ class _ClothingItemState extends State<ClothingItem> {
                       children: <Widget>[
                         InfoBlock(
                           color: CustomColours.baseBlack(),
-                          value: "${this.timesWorn} / 15",
+                          value:
+                              "${this.timesWorn} / ${this.clothingID.data.maxNoOfTimesToBeWorn.round()}",
                           label: "Times Worn",
                         ),
                         InfoBlock(
                           color: CustomColours.negativeRed(),
-                          value: "${clothingID.data.cF.round()}",
+                          value:
+                              "${this.karma} / ${this.clothingID.data.cF.round()}",
                           label: "Carma Pts",
                         ),
                       ],

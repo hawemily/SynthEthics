@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { clothingItem, ClothingType } from "../models/clothing_item_schema";
 import { calculateCarma } from "./get_carma_value";
+import {Collections} from "../helper_components/db_collections";
 
 const max = 30;
 const min = 5;
@@ -18,7 +19,7 @@ export const postClothingItem = async (
 ) => {
   try {
     const {
-      // userId,
+      uid,
       name,
       brand,
       materials,
@@ -27,8 +28,9 @@ export const postClothingItem = async (
       origin,
       lastWorn,
       dateOfpurchase,
+      dominantColor,
     } = req.body;
-    
+
     const cf = await calculateCarma(
       materials,
       currLocation,
@@ -36,11 +38,11 @@ export const postClothingItem = async (
       clothingType
     );
 
-    
-    console.log(`cf: ${cf}`); 
+
+    console.log(`cf: ${cf}`);
     const timesToBeWorn = Math.round(calcTimesToBeWorn(cf));
     const cPerWear = Math.round(cf / timesToBeWorn);
-    console.log(`cperewear: ${cPerWear}`); 
+    console.log(`cperewear: ${cPerWear}`);
 
     const apparel: clothingItem = {
       name: name,
@@ -53,15 +55,16 @@ export const postClothingItem = async (
       clothingType: ClothingType[clothingType as keyof typeof ClothingType],
       lastWornDate: lastWorn,
       purchaseDate: dateOfpurchase,
+      dominantColor: dominantColor,
     };
 
-    // const userRef = db.collection("users").doc('uid');
+    const userRef = db.collection(Collections.Users).doc(uid);
     console.log(`apparel cf" ${apparel.cF}`)
     console.log(`apparel brand" ${apparel.brand}`)
-    
-    // userRef.collection("closet").add(apparel);
-    const newClothingItem = await db.collection("closet").add(apparel);
-    // const newClothingItem = await db.collection(uid).add(apparel); 
+
+    // const newClothingItem = await db.collection("closet").add(apparel);
+    const newClothingItem = await userRef.collection(Collections.Closet).add(apparel);
+
     console.log(`apparel name" ${apparel.name}`)
     const result = { clothingID: newClothingItem.id};
     res.json(result);
