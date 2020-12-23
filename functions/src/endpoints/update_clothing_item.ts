@@ -15,22 +15,26 @@ export const updateClothingItem = async (
             uid,
             clothingId,
             lastWorn,
-            timesWorn
+            timesWorn,
+            carmaGain
         } = req.body;
-
-        console.log("-------------------Before -------------------");
-
        
         const userRef = db.collection(Collections.Users).doc(uid);
         const closetRef = userRef.collection(Collections.Closet);
 
+        // updating fields in clothing item
         await closetRef.doc(clothingId).set({'lastWornDate': lastWorn, 'currentTimesWorn': timesWorn});
-        
-        console.log("-------------------AFTER -------------------");
 
+        // updating user's carma points
+        const user = await userRef.get();
+        if (user.exists) {
+            const userData = user.data();
+            var currentCarmaPoints = userData!['carmaPoints'];
+            currentCarmaPoints += carmaGain;
+            userData!['carmaPoints'] = currentCarmaPoints;
+            await userRef.set(userData!);
+          }
 
-        // const result = { clothingID: updatedItem.};
-        // res.json(result);
         res.send(200);
     } catch (error) {
         res.status(400).send('Failed to post outfit');

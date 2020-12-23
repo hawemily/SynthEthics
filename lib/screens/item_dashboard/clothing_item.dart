@@ -70,7 +70,8 @@ class _ClothingItemState extends State<ClothingItem> {
               'uid': user.getUID(),
               'clothingId': this.clothingID.id,
               'timesWorn': this.timesWorn,
-              'lastWorn': DateTime.now().toString()
+              'lastWorn': DateTime.now().toString(),
+              'carmaGain': amount
             }))
         .then((e) {
       print(e.statusCode);
