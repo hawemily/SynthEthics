@@ -23,8 +23,15 @@ export const updateClothingItem = async (
         const closetRef = userRef.collection(Collections.Closet);
 
         // updating fields in clothing item
-        await closetRef.doc(clothingId).set({'lastWornDate': lastWorn, 'currentTimesWorn': timesWorn});
+        const clothingItem = await closetRef.doc(clothingId).get();
 
+        if (clothingItem.exists) {
+            const itemData = clothingItem.data();
+            itemData!['lastWornDate'] = lastWorn;
+            itemData!['currentTimesWorn'] = timesWorn;
+            await closetRef.doc(clothingId).set(itemData!);
+        }
+        
         // updating user's carma points
         const user = await userRef.get();
         if (user.exists) {

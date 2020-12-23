@@ -23,7 +23,7 @@ class ClothingItem extends StatefulWidget {
 class _ClothingItemState extends State<ClothingItem> {
   ClothingItemObject clothingID;
   CurrentUser user = CurrentUser.getInstance();
-  var progress = 0.0;
+  var progress;
   int timesWorn;
   int karma = 0;
   File image;
@@ -40,8 +40,10 @@ class _ClothingItemState extends State<ClothingItem> {
         image = value;
       });
     });
+
     this.timesWorn = clothingID.data.currentTimesWorn.round();
     this.lastWorn = clothingID.data.lastWornDate;
+    this.progress =  this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
   }
 
   void updateProgress(String action) async {
