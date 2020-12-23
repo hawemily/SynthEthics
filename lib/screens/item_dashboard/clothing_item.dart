@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
+import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
@@ -19,10 +22,12 @@ class ClothingItem extends StatefulWidget {
 
 class _ClothingItemState extends State<ClothingItem> {
   ClothingItemObject clothingID;
+  CurrentUser user = CurrentUser.getInstance();
   var progress = 0.0;
   int timesWorn;
   int karma = 0;
   File image;
+  String lastWorn;
 
   @override
   void initState() {
@@ -36,23 +41,40 @@ class _ClothingItemState extends State<ClothingItem> {
       });
     });
     this.timesWorn = clothingID.data.currentTimesWorn.round();
+    this.lastWorn = clothingID.data.lastWornDate;
   }
 
-  void updateProgress(String action) {
+  void updateProgress(String action) async {
     int amount =
         (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
             .round();
+
     setState(() {
       if (action == 'INC') {
         this.timesWorn++;
-
         this.karma += amount;
+        this.lastWorn = DateTime.now().toString();
       } else {
-        if (this.timesWorn > 0) this.timesWorn--;
-        this.karma -= amount;
+        if (this.timesWorn > 0) {
+          this.timesWorn--;
+          this.karma -= amount;
+        }
       }
       this.progress =
           this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
+    });
+
+    await api_client
+        .post("/closet/updateItem",
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'clothingId': this.clothingID.id,
+              'timesWorn': this.timesWorn,
+              'lastWorn': DateTime.now().toString()
+            }))
+        .then((e) {
+      print(e.statusCode);
+      print(e.body);
     });
 
     if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
