@@ -5,10 +5,9 @@ const db_collections_1 = require("../helper_components/db_collections");
 const clothing_item_schema_1 = require("../models/clothing_item_schema");
 exports.getAllClothes = async (req, res, db) => {
     // TODO: uncomment the uids when user is implemented
-    // const {uid} = req;
+    const uid = req.params.uid;
     try {
-        const closetRef = await db.collection(db_collections_1.Collections.Closet);
-        // const clothingUserQuerySnapshot = await db.collection(uid).get();
+        const closetRef = await db.collection(db_collections_1.Collections.Users).doc(uid).collection(db_collections_1.Collections.Closet);
         const clothingItems = [];
         for (const type of Object.values(clothing_item_schema_1.ClothingType)) {
             const itemsByTypeSnapshot = await closetRef.where('clothingType', '==', type).get();

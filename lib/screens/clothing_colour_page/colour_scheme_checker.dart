@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 
 class ColourSchemeChecker {
