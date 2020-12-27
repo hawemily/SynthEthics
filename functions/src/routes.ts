@@ -23,6 +23,7 @@ import { initAchievementTypes } from "./endpoints/init_achievement_types";
 import { unmarkItemsAsDonate } from "./endpoints/post_items_not_to_donate";
 import { updateClothingItem } from "./endpoints/update_clothing_item";
 import { deleteUser } from "./endpoints/delete_user";
+import { updateOutfit } from "./endpoints/update_outfit";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -129,6 +130,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.post("/postOutfit", (req: Request, res:Response) => {
     postOutfit(req, res, db);
+    return;
+  });
+
+  app.post("/updateOutfit", (req: Request, res:Response) => {
+    updateOutfit(req, res, db);
     return;
   });
 
