@@ -27,12 +27,14 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   ClothingItemObject currentClothingItem;
   Future<File> currClothingItemImage;
   bool isSelectedOutfit;
+  int timesWorn;
   @override
   void initState() {
     currentClothingItem = widget.clothingItem;
     super.initState();
     currClothingItemImage = getImage();
     isSelectedOutfit = false;
+    timesWorn = this.currentClothingItem.data.currentTimesWorn.round();
   }
 
   Future<File> getImage() {
@@ -45,7 +47,13 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ClothingItem(clothingItem: this.currentClothingItem)));
+                ClothingItem(clothingItem: this.currentClothingItem, initialTimesWorn: timesWorn, incrementTimesWorn: returnTimesWorn)));
+  }
+
+  void returnTimesWorn(int tw) {
+    setState(() {
+      timesWorn = tw;
+    });
   }
 
   Widget buildImage() {
