@@ -110,10 +110,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                         child: clear
                             ? Container()
                             : EcoBar(
-                                current: this
-                                    .currentClothingItem
-                                    .data
-                                    .currentTimesWorn,
+                                current: timesWorn,
                                 max: this
                                     .currentClothingItem
                                     .data
