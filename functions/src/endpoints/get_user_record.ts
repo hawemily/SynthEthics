@@ -7,9 +7,11 @@ export const getUserRecords = async (
   db: FirebaseFirestore.Firestore
 ) => {
   try {
+    console.log("Entered function")
     const userRef = await db.collection(Collections.Users);
     if (req.headers['uid'] != null) {
         const userID: any = req.headers["uid"];
+        console.log("UID : " + userID);
         const user = await userRef.doc(userID).get();
 
         if (user.exists) {
