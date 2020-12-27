@@ -10,17 +10,7 @@ import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/routes.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-
 class SignInOrRegisterWithEmailSection extends StatefulWidget {
-  SignInOrRegisterWithEmailSection({
-    Key key,
-    this.auth,
-    this.isSignIn,
-  });
-
-  FirebaseAuth auth;
-  bool isSignIn;
-
   @override
   _SignInOrRegisterWithEmailSectionState createState() =>
       _SignInOrRegisterWithEmailSectionState();
@@ -33,16 +23,13 @@ class _SignInOrRegisterWithEmailSectionState
   final TextEditingController _passwordController = TextEditingController();
   bool _registerSuccess;
   bool _loginSuccess;
-  bool isSignIn;
   String _email;
   String _errorText;
-  FirebaseAuth _auth;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
-    this._auth = widget.auth;
-    isSignIn = true;
   }
 
   void _register() async {
@@ -97,20 +84,18 @@ class _SignInOrRegisterWithEmailSectionState
       print(e);
 
       showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Error"),
-            content: Text(e.message),
-            actions:  [
-              FlatButton(
-                child: Text("Ok"),
-                onPressed: Navigator.of(context).pop,
-              )
-            ]
-          );
-        }
-      );
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text("Error"),
+                content: Text(e.message),
+                actions: [
+                  FlatButton(
+                    child: Text("Ok"),
+                    onPressed: Navigator.of(context).pop,
+                  )
+                ]);
+          });
     } catch (e) {
       print("Non firebase auth error related $e");
     }
@@ -150,9 +135,11 @@ class _SignInOrRegisterWithEmailSectionState
         key: _formKey,
         child: Container(
             padding: EdgeInsets.all(50.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                    children: <Widget>[
                   TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(labelText: "Email"),
@@ -203,7 +190,20 @@ class _SignInOrRegisterWithEmailSectionState
                                   : "Username does not exist! Please sign up instead.")
                           : (_registerSuccess
                               ? "Successfully registered " + _email
-                              : "Failedc to register")))
-                ])));
+                              : "Failed to register")))
+                ]))));
+  }
+}
+
+class SignInOrRegisterWithEmailPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Welcome to Synthetics"),
+          centerTitle: true,
+          backgroundColor: CustomColours.greenNavy(),
+        ),
+        body: SignInOrRegisterWithEmailSection());
   }
 }

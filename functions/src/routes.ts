@@ -22,6 +22,9 @@ import { initUsers } from "./endpoints/init_users";
 import { initOutfits } from "./endpoints/init_outfits";
 import { initAchievementTypes } from "./endpoints/init_achievement_types";
 import { unmarkItemsAsDonate } from "./endpoints/post_items_not_to_donate";
+import { updateClothingItem } from "./endpoints/update_clothing_item";
+import { deleteUser } from "./endpoints/delete_user";
+import { updateOutfit } from "./endpoints/update_outfit";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -79,6 +82,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   })
 
+  app.get("/deleteUser/:uid", (req: Request, res: Response) => {
+    deleteUser(req, res, db);
+    return;
+  })
+
   app.get("/dummy", (req: Request, res: Response) => {
     console.log("called dummy");
     res.status(200).json({ data: "dsfdf" });
@@ -128,6 +136,16 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.post("/postOutfit", (req: Request, res:Response) => {
     postOutfit(req, res, db);
+    return;
+  });
+
+  app.post("/updateOutfit", (req: Request, res:Response) => {
+    updateOutfit(req, res, db);
+    return;
+  });
+
+  app.post("/closet/updateItem", (req: Request, res:Response) => {
+    updateClothingItem(req, res, db);
     return;
   });
 

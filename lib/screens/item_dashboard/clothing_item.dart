@@ -1,17 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
+import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
 
 class ClothingItem extends StatefulWidget {
-  ClothingItem({Key key, this.clothingItem}) : super(key: key);
+  ClothingItem({Key key, this.clothingItem, this.initialTimesWorn, this.incrementTimesWorn}) : super(key: key);
 
   final clothingItem;
+  final Function incrementTimesWorn;
+  final int initialTimesWorn;
 
   @override
   _ClothingItemState createState() => _ClothingItemState();
@@ -19,10 +24,12 @@ class ClothingItem extends StatefulWidget {
 
 class _ClothingItemState extends State<ClothingItem> {
   ClothingItemObject clothingID;
-  var progress = 0.0;
+  CurrentUser user = CurrentUser.getInstance();
+  var progress;
   int timesWorn;
-  int karma = 0;
+  int karma;
   File image;
+  String lastWorn;
 
   @override
   void initState() {
@@ -35,24 +42,47 @@ class _ClothingItemState extends State<ClothingItem> {
         image = value;
       });
     });
-    this.timesWorn = clothingID.data.currentTimesWorn.round();
+
+    this.timesWorn = widget.initialTimesWorn;
+    this.lastWorn = clothingID.data.lastWornDate;
+    this.progress =  this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
+    this.karma = this.timesWorn * ((this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
+            .round());
   }
 
-  void updateProgress(String action) {
+  void updateProgress(String action) async {
     int amount =
         (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
             .round();
+
     setState(() {
       if (action == 'INC') {
         this.timesWorn++;
-
         this.karma += amount;
+        this.lastWorn = DateTime.now().toString();
       } else {
-        if (this.timesWorn > 0) this.timesWorn--;
-        this.karma -= amount;
+        if (this.timesWorn > 0) {
+          this.timesWorn--;
+          this.karma -= amount;
+        }
       }
       this.progress =
           this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
+    });
+
+    await api_client
+        .post("/closet/updateItem",
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'clothingId': this.clothingID.id,
+              'timesWorn': this.timesWorn,
+              'lastWorn': DateTime.now().toString(),
+              'carmaGain': amount,
+              'action': action
+            }))
+        .then((e) {
+      print(e.statusCode);
+      print(e.body);
     });
 
     if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
@@ -65,6 +95,8 @@ class _ClothingItemState extends State<ClothingItem> {
                     "Congrats! You have used this piece of clothing sustainably!"));
           });
     }
+
+    widget.incrementTimesWorn(this.timesWorn);
   }
 
   String customFormatDateTime(String string) {

@@ -6,18 +6,23 @@ import {User} from "../models/users";
 export const addNewUser = async (req:Request, res:Response, db:FirebaseFirestore.Firestore) => {
    try {
     const {uid} = req.body;
-    const userRef = db.collection(Collections.Users);
+    const usersCollectionRef = db.collection(Collections.Users)
+    const userRef = usersCollectionRef.doc(uid);
 
-    const newUser: User = {
-        userId: uid,
-        carmaPoints: 0,
-        itemsDonated: 0,
-        achieved: [],
-        carmaRecord: {days: [], months: [], years: []}
+    const userSnapshot = await userRef.get();
+
+    if (!userSnapshot.exists) {
+        const newUser: User = {
+            userId: uid,
+            carmaPoints: 0,
+            itemsDonated: 0,
+            achieved: [],
+            carmaRecord: {days: [], months: [], years: []}
+        };
+
+        await usersCollectionRef.doc(uid).set(newUser);
     }
-
-    await userRef.doc(uid).set(newUser);
-
+    
     res.send(200);
    } catch (e) {
        console.log("User could not be created!");

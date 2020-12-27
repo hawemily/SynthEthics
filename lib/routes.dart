@@ -4,6 +4,7 @@ import 'package:synthetics/screens/clothing_colour_page/clothing_colour_page.dar
 import 'package:synthetics/screens/donation/donation.dart';
 import 'package:synthetics/screens/dressing-room/dressing_room.dart';
 import 'package:synthetics/screens/home_page/home_page.dart';
+import 'package:synthetics/screens/login/sign_in_or_register_with_email.dart';
 import 'package:synthetics/screens/startup_screen.dart';
 import 'package:synthetics/screens/login/login_page.dart';
 import 'package:synthetics/screens/example_pages/example_empty_page.dart';
@@ -20,7 +21,8 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   routeMapping[Screens.Closet]: (BuildContext context) => Closet(),
   routeMapping[Screens.Start]: (BuildContext context) => StartupScreen(),
   routeMapping[Screens.DressingRoom]: (BuildContext context) => DressingRoom(),
-  routeMapping[Screens.ColourRoom]: (BuildContext context) => ClothingColourPage()
+  routeMapping[Screens.ColourRoom]: (BuildContext context) => ClothingColourPage(),
+  routeMapping[Screens.EmailSignIn]: (BuildContext context) => SignInOrRegisterWithEmailPage(),
 };
 
 // Enum representation of pages, so that we don't have to keep writing strings
@@ -33,7 +35,8 @@ enum Screens {
   Login,
   Start,
   DressingRoom,
-  ColourRoom
+  ColourRoom,
+  EmailSignIn,
 }
 
 // Mapping between Screens and routes
@@ -45,5 +48,6 @@ Map<Screens, String> routeMapping = {
   Screens.Empty: '/empty',
   Screens.Start: '/start',
   Screens.DressingRoom: '/dressingRoom',
-  Screens.ColourRoom: '/colour'
+  Screens.ColourRoom: '/colour',
+  Screens.EmailSignIn: '/emailSignIn'
 };

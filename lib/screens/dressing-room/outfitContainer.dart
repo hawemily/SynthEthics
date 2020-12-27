@@ -1,13 +1,52 @@
+import 'dart:convert';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/responseObjects/outfitListItem.dart';
 import 'package:synthetics/screens/closet_page/outfit_card.dart';
+import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class OutfitContainer extends StatelessWidget {
   OutfitContainer({Key key, this.outfits}) : super(key: key);
 
   final List<OutfitListItem> outfits;
+  CurrentUser user = CurrentUser.getInstance();
+
+  Future<void> updateAllItems(OutfitListItem oF) async {
+    List<ClothingItemObject> clothing = oF.data.clothing;
+
+    List<String> clothingIds = new List(clothing.length);
+    List<double> timesWorns = new List(clothing.length);
+    List<int> carmaGains = new List(clothing.length);
+
+    int i = 0;
+    for (ClothingItemObject c in clothing) {
+      clothingIds[i] = c.id;
+      timesWorns[i] = c.data.currentTimesWorn + 1;
+      carmaGains[i] = (c.data.cF / c.data.maxNoOfTimesToBeWorn).round();
+      i++;
+    }
+
+
+    await api_client
+        .post("/updateOutfit",
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'clothingIds': clothingIds,
+              'timesWorns': timesWorns,
+              'lastWorn': DateTime.now().toString(),
+              'carmaGains': carmaGains,
+              'outfitId': oF.id
+            }))
+        .then((e) {
+      print(e.statusCode);
+      print(e.body);
+    });
+
+  }
 
   Widget buildOutfitCard(OutfitListItem oF) {
     return Column(children: [
@@ -36,7 +75,7 @@ class OutfitContainer extends StatelessWidget {
                               "Wear",
                               style: TextStyle(fontSize: 16),
                             ),
-                            onPressed: () => print("DoSomething"))),
+                            onPressed: () => updateAllItems(oF))),
                   )))),
     ]);
   }
