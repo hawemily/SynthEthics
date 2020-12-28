@@ -391,7 +391,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             onTap: (index) {
               setState(() {
                 _tabController.index = _mode == ClosetMode.UnDonate
-                    ? widget.categories.indexOf("to be donated")
+                    ? widget.categories.indexOf("To Be Donated")
                     : index;
               });
             }),
@@ -401,9 +401,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         controller: _tabController,
         children: _tabs.map((Tab tab) {
           final String label = tab.text;
-          if (label == "to be donated") {
+          if (label == "To Be Donated") {
             return generateDonationPage();
-          } else if (label == "suggested donations") {
+          } else if (label == "Suggested Donations") {
             return generateSuggestionPage();
           } else {
             return generateCloset(tab.text);
