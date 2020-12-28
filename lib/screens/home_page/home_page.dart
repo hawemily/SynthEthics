@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/screens/home_page/carma_record_viewer.dart';
 import 'package:synthetics/screens/home_page/widget/right_side_drawer.dart';
+import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/initialiser/initialiser.dart';
 import 'package:synthetics/theme/custom_colours.dart';
@@ -21,9 +24,11 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
   final double _iconSize = 30.0;
+
   bool _openAchievements = false;
+
+  int carmaPoints = 0;
   String uid;
 
   @override
@@ -34,12 +39,21 @@ class HomePageState extends State<HomePage> {
 
     // TODO: REMOVE TESTING DATA INITIALISER
 //    LocalDatabaseInitialiser.initUsers(uid);
+    getUserRecords();
 
     super.initState();
   }
 
-  void _gotoEmptyPage() {
-    Navigator.pushNamed(context, routeMapping[Screens.Empty]);
+  void getUserRecords() async {
+    String uid = CurrentUser.getInstance().getUID();
+    final resp = await api_client.get("/getUserRecords/" + uid);
+
+    if (resp.statusCode == 200) {
+      final body = jsonDecode(resp.body);
+      carmaPoints = body["carmaPoints"];
+    } else {
+      print("Failed to fetch user records");
+    }
   }
 
   @override
@@ -103,26 +117,26 @@ class HomePageState extends State<HomePage> {
                         width: 400,
                         height: 180,
                         child: Container(
-                          margin: EdgeInsets.only(bottom: 20, top: 20),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Expanded(
-                                child: Container(
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.contain,
-                                          image: NetworkImage("https://cdn.icon"
-                                              "scout.com/icon/free/png-512/avata"
-                                              "r-369-456321.png"),
-                                        ))),
+                                flex: 4,
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: Icon(Icons.eco_outlined,
+                                    color: CustomColours.iconGreen(),
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "Mrs Chanandler Bong",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CustomColours.greenNavy()),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "CARMA : " + carmaPoints.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: CustomColours.greenNavy()),
+                                ),
                               )
                             ],
                           ),
