@@ -21,6 +21,9 @@ class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> randomItems = Set();
   int noOfItems = 2;
   CurrentUser user = CurrentUser.getInstance();
+  Random random = new Random();
+  Random r2 = new Random();
+
   final List<Set<String>> outfitTypes = [
     {"Tops", "Bottoms", "Outerwear"},
     {"Dresses", "Outerwear"},
@@ -39,12 +42,13 @@ class _RandomOutfitState extends State<RandomOutfit> {
 
   Set<ClothingItemObject> generateRandom() {
     var clothingItems = widget.clothingItems;
-    Random random = new Random();
+
     int randomOutfitType = random.nextInt(outfitTypes.length);
-    outfitTypes[randomOutfitType].forEach((type) {
-      var items = clothingItems[type];
-      setState(() {
-        this.randomItems.add(items[random.nextInt(items.length)]);
+
+    setState(() {
+      outfitTypes[randomOutfitType].forEach((type) {
+        var items = clothingItems[type];
+        this.randomItems.add(items[r2.nextInt(items.length)]);
       });
     });
     return this.randomItems;
@@ -88,10 +92,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
       children: [
         for (var item in this.randomItems)
           () {
-            print("BUILD RENDER");
-            print(item.data.brand);
+            print("rendered");
             return ClothingCard(clothingItem: item);
-            // return Text(item.data.brand);
           }()
       ],
     );
@@ -99,9 +101,6 @@ class _RandomOutfitState extends State<RandomOutfit> {
 
   @override
   Widget build(BuildContext context) {
-    this.randomItems.forEach((element) {
-      print(element.data.brand);
-    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColours.greenNavy(),
@@ -128,13 +127,9 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   color: CustomColours.greenNavy(),
                   tooltip: 'Refresh',
                   onPressed: () {
-                    this.randomItems.clear();
-                    this.randomItems = this.generateRandom();
                     setState(() {
-                      print("------SETSTATE---------");
-                      this.randomItems.forEach((element) {
-                        print(element.data.brand);
-                      });
+                      this.randomItems.clear();
+                      this.randomItems = this.generateRandom();
                     });
                   }),
               IconButton(
