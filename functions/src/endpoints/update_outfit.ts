@@ -1,8 +1,7 @@
-import {
-    Request,
-    Response
-} from "express";
+import { Request, Response } from "express";
 import { Collections } from "../helper_components/db_collections";
+import { addToCarmaRecord } from "../helper_components/update_carma_record";
+import { User } from "../models/users";
 
 
 export const updateOutfit = async (
@@ -28,7 +27,7 @@ export const updateOutfit = async (
 
         var totalGain = 0;
         for (var i = 0; i < clothingIds.length; i++) {
-            
+
              // updating fields in each clothing item
             const clothingItem = await closetRef.doc(clothingIds[i]).get();
 
@@ -57,10 +56,10 @@ export const updateOutfit = async (
             var currentCarmaPoints = userData!['carmaPoints'];
             currentCarmaPoints += totalGain;
             userData!['carmaPoints'] = currentCarmaPoints;
+            addToCarmaRecord(userData as User, totalGain)
             await userRef.set(userData!);
       }
-      
-        res.send(200);
+      res.status(200).send("Outfit updated");
     } catch (error) {
         res.status(400).send('Failed to post outfit');
     }

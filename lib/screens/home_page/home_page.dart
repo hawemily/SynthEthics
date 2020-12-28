@@ -33,14 +33,8 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // not sure if this widget will be rebuilt if uid changes
-//    CurrentUser user = CurrentUser.getInstance();
-//    uid = user.getUID();
-
-    // TODO: REMOVE TESTING DATA INITIALISER
-//    LocalDatabaseInitialiser.initUsers(uid);
+    print("STARTING PAGE");
     getUserRecords();
-
     super.initState();
   }
 
@@ -50,7 +44,9 @@ class HomePageState extends State<HomePage> {
 
     if (resp.statusCode == 200) {
       final body = jsonDecode(resp.body);
-      carmaPoints = body["carmaPoints"];
+      setState(() {
+        carmaPoints = body["carmaPoints"];
+      });
     } else {
       print("Failed to fetch user records");
     }
@@ -132,7 +128,7 @@ class HomePageState extends State<HomePage> {
                               Expanded(
                                 flex: 1,
                                 child: Text(
-                                  "CARMA : " + carmaPoints.toString(),
+                                  "${carmaPoints.toString()} Carma Points",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: CustomColours.greenNavy()),
