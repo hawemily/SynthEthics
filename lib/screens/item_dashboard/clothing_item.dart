@@ -12,11 +12,10 @@ import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
 
 class ClothingItem extends StatefulWidget {
-  ClothingItem({Key key, this.clothingItem, this.initialTimesWorn, this.incrementTimesWorn}) : super(key: key);
+  ClothingItem({Key key, this.clothingItem, this.incrementTimesWorn}) : super(key: key);
 
   final clothingItem;
   final Function incrementTimesWorn;
-  final int initialTimesWorn;
 
   @override
   _ClothingItemState createState() => _ClothingItemState();
@@ -43,7 +42,7 @@ class _ClothingItemState extends State<ClothingItem> {
       });
     });
 
-    this.timesWorn = widget.initialTimesWorn;
+    this.timesWorn = this.clothingID.data.currentTimesWorn.round();
     this.lastWorn = clothingID.data.lastWornDate;
     this.progress =  this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
     this.karma = this.timesWorn * ((this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
@@ -96,7 +95,7 @@ class _ClothingItemState extends State<ClothingItem> {
           });
     }
 
-    widget.incrementTimesWorn(this.timesWorn);
+    widget.incrementTimesWorn();
   }
 
   String customFormatDateTime(String string) {

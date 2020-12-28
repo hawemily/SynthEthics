@@ -25,6 +25,7 @@ import { unmarkItemsAsDonate } from "./endpoints/post_items_not_to_donate";
 import { updateClothingItem } from "./endpoints/update_clothing_item";
 import { deleteUser } from "./endpoints/delete_user";
 import { updateOutfit } from "./endpoints/update_outfit";
+import { getAClothingItem } from "./endpoints/get_a_clothing_item";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -64,6 +65,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.get("/closet/allClothes/:uid", (req: Request, res: Response) => {
     getAllClothes(req, res, db);
+    return;
+  });
+
+  app.get("/closet/allClothes/:itemId/:uid", (req: Request, res: Response) => {
+    getAClothingItem(req, res, db);
     return;
   });
 
