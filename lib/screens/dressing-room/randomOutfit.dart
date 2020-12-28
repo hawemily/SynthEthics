@@ -19,7 +19,6 @@ class RandomOutfit extends StatefulWidget {
 
 class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> randomItems = Set();
-  int noOfItems = 2;
   CurrentUser user = CurrentUser.getInstance();
   Random random = new Random();
   Random r2 = new Random();
@@ -44,11 +43,16 @@ class _RandomOutfitState extends State<RandomOutfit> {
     var clothingItems = widget.clothingItems;
 
     int randomOutfitType = random.nextInt(outfitTypes.length);
-
+    print("Random Outfit Type: $randomOutfitType");
+    print(outfitTypes[randomOutfitType]);
     setState(() {
+      this.randomItems.clear();
       outfitTypes[randomOutfitType].forEach((type) {
         var items = clothingItems[type];
-        this.randomItems.add(items[r2.nextInt(items.length)]);
+        ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
+        print("Selected Item : ${selectedItem.data.name}");
+
+        this.randomItems.add(selectedItem);
       });
     });
     return this.randomItems;
