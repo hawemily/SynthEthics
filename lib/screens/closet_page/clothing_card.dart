@@ -43,6 +43,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
     currClothingItemImage = getImage();
     isSelectedOutfit = false;
     updatedClothingItem = this.getAClothingItem();
+    this.returnTimesWorn();
   }
 
   Future<File> getImage() {
