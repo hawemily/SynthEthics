@@ -27,7 +27,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   ClothingItemObject currentClothingItem;
   Future<File> currClothingItemImage;
   bool isSelectedOutfit;
-  int timesWorn;
+  int timesWorn = 0;
   @override
   void initState() {
     currentClothingItem = widget.clothingItem;
