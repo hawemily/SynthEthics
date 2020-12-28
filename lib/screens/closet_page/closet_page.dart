@@ -32,8 +32,8 @@ class Closet extends StatefulWidget {
     "Dresses",
     "Outerwear",
     "Headgear",
-    "to be donated",
-    "suggested donations"
+    "To Be Donated",
+    "Suggested Donations"
   ];
 
   @override
