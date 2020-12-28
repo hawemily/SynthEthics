@@ -1,9 +1,7 @@
-import {
-    Request,
-    Response
-} from "express";
+import { Request, Response } from "express";
 import { Collections } from "../helper_components/db_collections";
-
+import { addToCarmaRecord } from "../helper_components/update_carma_record";
+import { User } from "../models/users";
 
 export const updateClothingItem = async (
     req: Request,
@@ -19,7 +17,7 @@ export const updateClothingItem = async (
             carmaGain,
             action
         } = req.body;
-       
+
         const userRef = db.collection(Collections.Users).doc(uid);
         const closetRef = userRef.collection(Collections.Closet);
 
@@ -32,7 +30,7 @@ export const updateClothingItem = async (
             itemData!['currentTimesWorn'] = timesWorn;
             await closetRef.doc(clothingId).set(itemData!);
         }
-        
+
         // updating user's carma points
         const user = await userRef.get();
         if (user.exists) {
@@ -40,10 +38,14 @@ export const updateClothingItem = async (
             var currentCarmaPoints = userData!['carmaPoints'];
             if (action != "INC" && currentCarmaPoints!= 0) {
                 currentCarmaPoints -= carmaGain;
+                // Add/Update entry in user's carma records, for graph
+                addToCarmaRecord(userData as User, -carmaGain);
             } else {
                 currentCarmaPoints += carmaGain;
+                // Add/Update entry in user's carma records, for graph
+                addToCarmaRecord(userData as User, carmaGain);
             }
-            
+
             userData!['carmaPoints'] = currentCarmaPoints;
             await userRef.set(userData!);
           }

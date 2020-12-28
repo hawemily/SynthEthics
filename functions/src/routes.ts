@@ -109,7 +109,6 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
-  // 
   app.post("/carma/add", (req: Request, res:Response) => {
     addCarmaPoints(req, res, db);
     return;

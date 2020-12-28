@@ -9,8 +9,8 @@ export const getUserRecords = async (
   try {
     console.log("Entered function")
     const userRef = await db.collection(Collections.Users);
-    if (req.headers['uid'] != null) {
-        const userID: any = req.headers["uid"];
+    if (req.params.uid != null) {
+        const userID: any = req.params.uid;
         console.log("UID : " + userID);
         const user = await userRef.doc(userID).get();
 
@@ -18,10 +18,15 @@ export const getUserRecords = async (
             const userData = user.data();
             res.status(200).json(userData!);
         }
+        else {
+          res.status(204).send("User does not exist");
+        }
     }
-    res.status(204).json();
+    else {
+      res.status(204).send("User does not exist");
+    }
   } catch (e) {
     console.log(e);
-    res.status(400);
+    res.status(400).send("Error: Failed to fetch user records");
   }
 };
