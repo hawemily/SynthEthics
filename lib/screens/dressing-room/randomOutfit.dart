@@ -45,16 +45,15 @@ class _RandomOutfitState extends State<RandomOutfit> {
     int randomOutfitType = random.nextInt(outfitTypes.length);
     print("Random Outfit Type: $randomOutfitType");
     print(outfitTypes[randomOutfitType]);
-    setState(() {
-      this.randomItems.clear();
-      outfitTypes[randomOutfitType].forEach((type) {
-        var items = clothingItems[type];
-        ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
-        print("Selected Item : ${selectedItem.data.name}");
 
-        this.randomItems.add(selectedItem);
-      });
+    outfitTypes[randomOutfitType].forEach((type) {
+      var items = clothingItems[type];
+      ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
+      print("Selected Item : ${selectedItem.data.name}");
+
+      this.randomItems.add(selectedItem);
     });
+
     return this.randomItems;
   }
 
@@ -88,6 +87,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
   }
 
   Widget clothingcardbuild() {
+    print("Build");
     return GridView.count(
       crossAxisCount: 2,
       childAspectRatio: 0.8,
@@ -96,8 +96,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
       children: [
         for (var item in this.randomItems)
           () {
-            print("rendered");
-            return ClothingCard(clothingItem: item);
+            print("rendered item: ${item.data.name}");
+            return ClothingCard(
+              clothingItem: item,
+              isRandom: true,
+            );
           }()
       ],
     );
@@ -133,7 +136,12 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   onPressed: () {
                     setState(() {
                       this.randomItems.clear();
+                      print("Random items empty? : $randomItems");
                       this.randomItems = this.generateRandom();
+                      print("Random items regenerated?");
+                      randomItems.forEach((element) {
+                        print(element.data.name);
+                      });
                     });
                   }),
               IconButton(
