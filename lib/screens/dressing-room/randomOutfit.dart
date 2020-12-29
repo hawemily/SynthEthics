@@ -19,7 +19,6 @@ class RandomOutfit extends StatefulWidget {
 
 class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> randomItems = Set();
-  int noOfItems = 2;
   CurrentUser user = CurrentUser.getInstance();
   Random random = new Random();
   Random r2 = new Random();
@@ -33,24 +32,23 @@ class _RandomOutfitState extends State<RandomOutfit> {
   void initState() {
     super.initState();
     this.randomItems = generateRandom();
-    // print("RANDOM CLOTHING");
-    // widget.clothingItems.forEach((key, value) {
-    //   print(key);
-    //   print(value.length);
-    // });
   }
 
   Set<ClothingItemObject> generateRandom() {
     var clothingItems = widget.clothingItems;
 
     int randomOutfitType = random.nextInt(outfitTypes.length);
+    print("Random Outfit Type: $randomOutfitType");
+    print(outfitTypes[randomOutfitType]);
 
-    setState(() {
-      outfitTypes[randomOutfitType].forEach((type) {
-        var items = clothingItems[type];
-        this.randomItems.add(items[r2.nextInt(items.length)]);
-      });
+    outfitTypes[randomOutfitType].forEach((type) {
+      var items = clothingItems[type];
+      ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
+      print("Selected Item : ${selectedItem.data.name}");
+
+      this.randomItems.add(selectedItem);
     });
+
     return this.randomItems;
   }
 
@@ -84,6 +82,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
   }
 
   Widget clothingcardbuild() {
+    print("Build");
     return GridView.count(
       crossAxisCount: 2,
       childAspectRatio: 0.8,
@@ -92,8 +91,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
       children: [
         for (var item in this.randomItems)
           () {
-            print("rendered");
-            return ClothingCard(clothingItem: item);
+            print("rendered item: ${item.data.name}");
+            return ClothingCard(
+              clothingItem: item,
+              isRandom: true,
+            );
           }()
       ],
     );
@@ -129,7 +131,12 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   onPressed: () {
                     setState(() {
                       this.randomItems.clear();
+                      print("Random items empty? : $randomItems");
                       this.randomItems = this.generateRandom();
+                      print("Random items regenerated?");
+                      randomItems.forEach((element) {
+                        print(element.data.name);
+                      });
                     });
                   }),
               IconButton(
