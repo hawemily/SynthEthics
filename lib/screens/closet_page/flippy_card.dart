@@ -25,6 +25,7 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
   void initState() {
     super.currentClothingItem = widget.clothingItem;
     currClothingItemImage = super.getImage();
+    super.returnTimesWorn();
     _confettiControl =
         ConfettiController(duration: const Duration(milliseconds: 300));
     if (widget.initFlip) {

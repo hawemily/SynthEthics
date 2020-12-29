@@ -29,7 +29,6 @@ class ClothingCard extends StatefulWidget {
 class ClothingCardState<T extends ClothingCard> extends State<T> {
 
   ClothingItemObject currentClothingItem;
-  // Future<ClothingItemObject> updatedClothingItem;
   Future<File> currClothingItemImage;
   bool isSelectedOutfit;
   int timesWorn = 0;
@@ -42,7 +41,6 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
     super.initState();
     currClothingItemImage = getImage();
     isSelectedOutfit = false;
-    // updatedClothingItem = this.getAClothingItem();
     this.returnTimesWorn();
   }
 
@@ -60,8 +58,6 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   }
 
   Future<ClothingItemObject> getAClothingItem() async {
-    print("BEFOREEEEEEEEEEEE FDSFDSFDSF");
-    print(this.currentClothingItem.data.currentTimesWorn);
     final response = await api_client.get("/closet/allClothes/" + this.currentClothingItem.id + "/" + user.getUID());
 
     if (response.statusCode == 200) {
@@ -84,8 +80,6 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
         if (clothingItem.data != null && clothingItem.data.currentTimesWorn != this.currentClothingItem.data.currentTimesWorn) {
           this.currentClothingItem = clothingItem;
         }
-        print("AFTER FDSFDSFDSF");
-        print(clothingItem.data);
       });
     });
     
