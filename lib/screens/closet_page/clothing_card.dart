@@ -29,7 +29,6 @@ class ClothingCard extends StatefulWidget {
 class ClothingCardState<T extends ClothingCard> extends State<T> {
 
   ClothingItemObject currentClothingItem;
-  Future<ClothingItemObject> updatedClothingItem;
   Future<File> currClothingItemImage;
   bool isSelectedOutfit;
   int timesWorn = 0;
@@ -42,7 +41,6 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
     super.initState();
     currClothingItemImage = getImage();
     isSelectedOutfit = false;
-    updatedClothingItem = this.getAClothingItem();
     this.returnTimesWorn();
   }
 
@@ -79,7 +77,9 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
 
     getAClothingItem().then((clothingItem) {
       setState(() {
-        this.currentClothingItem = clothingItem;
+        if (clothingItem.data != null && clothingItem.data.currentTimesWorn != this.currentClothingItem.data.currentTimesWorn) {
+          this.currentClothingItem = clothingItem;
+        }
       });
     });
     
@@ -124,6 +124,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   }
 
   Widget buildBaseStack(on_tap, {clear = false}) {
+    print(this.currentClothingItem.data);
     return Stack(children: [
       Card(
           color: CustomColours.offWhite(),

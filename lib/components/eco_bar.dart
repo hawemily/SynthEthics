@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class EcoBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     this.barWidth = MediaQuery.of(context).size.width * 0.25;
-    this.maxWidth = barWidth * 0.8;
+    this.maxWidth = barWidth * 0.8 - 5.5;
     return Container(
       height: 13.0,
       width: barWidth,
@@ -40,7 +42,7 @@ class EcoBar extends StatelessWidget {
                 Align(
                     alignment: Alignment.topLeft,
                     child: Container(
-                      width: maxWidth - 5.5,
+                      width: maxWidth,
                       margin: EdgeInsets.fromLTRB(0.5, 2.5, 5.0, 2.5),
                       decoration: BoxDecoration(
                           color: Colors.black12,
@@ -51,7 +53,7 @@ class EcoBar extends StatelessWidget {
                 Align(
                     alignment: Alignment.topLeft,
                     child: Container(
-                      width: maxWidth * current / max,
+                      width: min(maxWidth * current / max, maxWidth),
                       margin: EdgeInsets.fromLTRB(0.5, 2.5, 3.0, 2.5),
                       decoration: BoxDecoration(
                           color: Colors.green,

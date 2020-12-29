@@ -34,7 +34,6 @@ class ClosetContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Stack(children: [
       Container(
           margin: const EdgeInsets.all(5.0),
