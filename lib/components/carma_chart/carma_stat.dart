@@ -17,7 +17,7 @@ class _CarmaStatState extends State<CarmaStat> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-          color: CustomColours.greenNavy(),
+          color: CustomColours.offWhite(),
           child : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -30,7 +30,7 @@ class _CarmaStatState extends State<CarmaStat> {
               Text(
                 widget.statLabel,
                 style: TextStyle(
-                    color: CustomColours.offWhite()
+                    color: CustomColours.baseBlack()
                 ),
               )
             ],

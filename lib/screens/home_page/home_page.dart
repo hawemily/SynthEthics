@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
+import 'package:synthetics/components/carma_chart/carma_stat.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/screens/home_page/carma_record_viewer.dart';
@@ -10,10 +10,8 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/initialiser/initialiser.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
 
-import '../../routes.dart';
 import 'info_page.dart';
 
 // Home page, currently standing in for the user home page
@@ -29,6 +27,10 @@ class HomePageState extends State<HomePage> {
   bool _openAchievements = false;
 
   int carmaPoints = 0;
+  int donated = 0;
+  int worn = 0;
+  int bought = 0;
+
   String uid;
 
   @override
@@ -46,6 +48,9 @@ class HomePageState extends State<HomePage> {
       final body = jsonDecode(resp.body);
       setState(() {
         carmaPoints = body["carmaPoints"];
+        donated = body["itemsDonated"];
+
+        // TODO: Add bought and worn totals
       });
     } else {
       print("Failed to fetch user records");
@@ -105,7 +110,7 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Stack(children: [
                     Center(
                       child: Container(
@@ -141,8 +146,32 @@ class HomePageState extends State<HomePage> {
                     ),
                   ]),
                 ),
+
                 Expanded(
-                    flex: 3,
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CarmaStat(
+                        statColor: CustomColours.iconGreen(),
+                        statLabel: "Worn",
+                        statValue: worn,
+                      ),
+                      CarmaStat(
+                        statColor: CustomColours.negativeRed(),
+                        statLabel: "Bought",
+                        statValue: bought,
+                      ),
+                      CarmaStat(
+                        statColor: CustomColours.iconGreen(),
+                        statLabel: "Donated",
+                        statValue: donated,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                    flex: 6,
                     child: CarmaRecordViewer()
                 ),
               ],
