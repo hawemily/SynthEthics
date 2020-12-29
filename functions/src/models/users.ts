@@ -1,6 +1,7 @@
 export interface User {
   userId: string;
-  username: string;
+  lastName: string;
+  firstName: string;
   carmaPoints: number;
   itemsDonated: number;
   achieved: number[];
