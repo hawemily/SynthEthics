@@ -19,25 +19,38 @@ class LoginPage extends StatelessWidget {
           backgroundColor: CustomColours.greenNavy(),
           automaticallyImplyLeading: false,
         ),
-        body: Container(
-            child: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-//                  SignInOrRegisterWithEmailSection(),
-              SignInButton(
-                img: "lib/assets/google_logo.png",
-                name: "Google",
-                signInMethod: (BuildContext context) {
-                  print("sign in method called!");
-                  onGoogleSignIn(context);
-                },
-              ),
-              SignInButton(img: "lib/assets/fb_logo.png", name: "Facebook"),
-              SignInButton(
-                  img: "lib/assets/email_logo.png",
-                  name: "Email",
-                  signInScreen: Screens.EmailSignIn)
-            ]))));
+        body: Center(
+            child: ListView(shrinkWrap: true, children: <Widget>[
+          Container(
+              padding: EdgeInsets.all(20.0),
+              margin: EdgeInsets.all(16.0),
+              child: Column(children: <Widget>[
+                Image(
+                    image: AssetImage("lib/assets/leaf.jpg"),
+                    width: 100,
+                    height: 100),
+                Text("Synthetics",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: CustomColours.greenNavy(),
+                        fontSize: 30)),
+              ])),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                SignInButton(
+                  img: "lib/assets/google_logo.png",
+                  name: "Google",
+                  signInMethod: (BuildContext context) {
+                    print("sign in method called!");
+                    onGoogleSignIn(context);
+                  },
+                ),
+                SignInButton(
+                    img: "lib/assets/email_logo.png",
+                    name: "Email",
+                    signInScreen: Screens.EmailSignIn),
+              ])
+        ])));
   }
 }

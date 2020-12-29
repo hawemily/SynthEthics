@@ -3,6 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class CurrentUser {
   User _user;
+  String _username;
   GoogleSignIn _googleSignIn;
   static CurrentUser _instance;
 
@@ -15,6 +16,10 @@ class CurrentUser {
 
   setUser(User user) {
     _user = user;
+  }
+
+  setUsername(String username) {
+    _username = username;
   }
 
   setGoogleSignIn(GoogleSignIn gSI) {

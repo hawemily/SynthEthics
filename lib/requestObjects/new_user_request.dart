@@ -6,8 +6,9 @@ part 'new_user_request.g.dart';
 
 class NewUserRequest {
   String uid;
+  String username;
 
-  NewUserRequest(this.uid);
+  NewUserRequest(this.uid, this.username);
 
   Map<String, dynamic> toJson() => _$NewUserRequestToJson(this);
 }

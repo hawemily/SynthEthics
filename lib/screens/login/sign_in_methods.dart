@@ -49,7 +49,7 @@ Future<User> _handleSignIn() async {
     print('user uid: ${user.uid}');
     print('user: $user');
 
-    NewUserRequest req = new NewUserRequest(user.uid);
+    NewUserRequest req = new NewUserRequest(user.uid, user.displayName);
     api_client.post("/addUser", body: jsonEncode(req));
 
     await GoogleSignIn().isSignedIn();
