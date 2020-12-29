@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
+import 'package:synthetics/screens/clothing_colour_page/colour_scheme_checker.dart';
+import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
@@ -22,6 +24,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
   CurrentUser user = CurrentUser.getInstance();
   Random random = new Random();
   Random r2 = new Random();
+  ColourSchemeChecker colourChecker = ColourSchemeChecker();
 
   final List<Set<String>> outfitTypes = [
     {"Tops", "Bottoms", "Outerwear"},
@@ -41,15 +44,17 @@ class _RandomOutfitState extends State<RandomOutfit> {
     print("Random Outfit Type: $randomOutfitType");
     print(outfitTypes[randomOutfitType]);
 
+    Set<ClothingItemObject> newItems = Set();
     outfitTypes[randomOutfitType].forEach((type) {
       var items = clothingItems[type];
-      ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
-      print("Selected Item : ${selectedItem.data.name}");
-
-      this.randomItems.add(selectedItem);
+      if (items != null) {
+        ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
+        newItems.add(selectedItem);
+      }
+      
     });
 
-    return this.randomItems;
+    return newItems;
   }
 
   void saveOutfit() async {
@@ -91,7 +96,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
       children: [
         for (var item in this.randomItems)
           () {
-            print("rendered item: ${item.data.name}");
+            print("printing item");
+            print(item.data.name);
             return ClothingCard(
               clothingItem: item,
               isRandom: true,
@@ -131,9 +137,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   onPressed: () {
                     setState(() {
                       this.randomItems.clear();
-                      print("Random items empty? : $randomItems");
                       this.randomItems = this.generateRandom();
-                      print("Random items regenerated?");
+                      print("Random items regenerated");
                       randomItems.forEach((element) {
                         print(element.data.name);
                       });
