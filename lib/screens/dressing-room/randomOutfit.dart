@@ -1,12 +1,8 @@
-import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
-import 'package:synthetics/screens/closet_page/closet_container.dart';
-import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
@@ -24,41 +20,36 @@ class RandomOutfit extends StatefulWidget {
 class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> randomItems = Set();
   int noOfItems = 2;
-  bool ref;
   CurrentUser user = CurrentUser.getInstance();
-  // var types = new Set();
+  Random random = new Random();
+  Random r2 = new Random();
+
+  final List<Set<String>> outfitTypes = [
+    {"Tops", "Bottoms", "Outerwear"},
+    {"Dresses", "Outerwear"},
+  ];
 
   @override
   void initState() {
     super.initState();
-    this.ref = false;
-    this.randomItems = generateRandom(this.ref);
+    this.randomItems = generateRandom();
+    // print("RANDOM CLOTHING");
+    // widget.clothingItems.forEach((key, value) {
+    //   print(key);
+    //   print(value.length);
+    // });
   }
 
-  Set<ClothingItemObject> generateRandom(bool ref) {
+  Set<ClothingItemObject> generateRandom() {
     var clothingItems = widget.clothingItems;
-    print("Hiiiiiiiiiiiiiiiiiiiiii");
 
-    // Random random = new Random();
-    clothingItems.forEach((key, value) {
-      // randomItems.add(value[random.nextInt(value.length)]);
-      if (!ref) {
-        value.forEach((element) {
-          if (element.data.brand == "Zara") {
-            setState(() {
-              this.randomItems.add(element);
-            });
-          }
-        });
-      } else {
-        value.forEach((element) {
-          if (element.data.brand == "Uqlo") {
-            setState(() {
-              this.randomItems.add(element);
-            });
-          }
-        });
-      }
+    int randomOutfitType = random.nextInt(outfitTypes.length);
+
+    setState(() {
+      outfitTypes[randomOutfitType].forEach((type) {
+        var items = clothingItems[type];
+        this.randomItems.add(items[r2.nextInt(items.length)]);
+      });
     });
     return this.randomItems;
   }
@@ -71,7 +62,6 @@ class _RandomOutfitState extends State<RandomOutfit> {
     }
 
     var items = [];
-
     for (var i in randomItems) {
       items.add(i.id);
     }
@@ -80,8 +70,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
     // put in try, loading icon
     await api_client
         .post("/postOutfit",
-            body: jsonEncode(
-                <String, dynamic>{'uid': user.getUID(), 'name': "outfitName", 'ids': items}))
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'name': "outfitName",
+              'ids': items
+            }))
         .then((e) {
       print("in closet container");
       print(e.statusCode);
@@ -99,10 +92,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
       children: [
         for (var item in this.randomItems)
           () {
-            print("BUILD RENDER");
-            print(item.data.brand);
+            print("rendered");
             return ClothingCard(clothingItem: item);
-            // return Text(item.data.brand);
           }()
       ],
     );
@@ -110,16 +101,13 @@ class _RandomOutfitState extends State<RandomOutfit> {
 
   @override
   Widget build(BuildContext context) {
-    this.randomItems.forEach((element) {
-      print(element.data.brand);
-    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColours.greenNavy(),
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Generate Outfit'),
       ),
-      body: Column(
+      body: ListView(
         children: [
           clothingcardbuild(),
           Padding(padding: EdgeInsets.all(20)),
@@ -139,14 +127,9 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   color: CustomColours.greenNavy(),
                   tooltip: 'Refresh',
                   onPressed: () {
-                    this.ref = !this.ref;
-                    this.randomItems.clear();
-                    this.randomItems = this.generateRandom(!this.ref);
                     setState(() {
-                      print("------SETSTATE---------");
-                      this.randomItems.forEach((element) {
-                        print(element.data.brand);
-                      });
+                      this.randomItems.clear();
+                      this.randomItems = this.generateRandom();
                     });
                   }),
               IconButton(

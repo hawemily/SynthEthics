@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/carma_chart/carma_resolution_view.dart';
 import 'package:synthetics/components/carma_chart/carma_series.dart';
@@ -13,39 +15,29 @@ class CarmaRecordViewer extends StatefulWidget {
 
 class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
 
-  List<CarmaSeries> daysRecord;
-  List<CarmaSeries> monthsRecord;
-  List<CarmaSeries> yearsRecord;
+  List<CarmaSeries> daysRecord = [];
+  List<CarmaSeries> monthsRecord = [];
+  List<CarmaSeries> yearsRecord = [];
 
   @override
   void initState() {
     // We want to retrieve the carma records from backend and
     // put them into a format we require
     getCarmaRecords();
-
     super.initState();
   }
 
   void getCarmaRecords() async {
-    // String uid = CurrentUser.getInstance().getUID();
-    // await api_client.get("/getCarmaRecords", headers: {"uid" : uid})
-    //   .then((result) {
-    //    print("carma records: " + result.body);
-    // });
-
-    var res = {"days" : [{"day" : 3, "value" : 230},
-      {"day" : 6, "value" : 100},
-      {"day" : 4, "value" : 200}],
-      "months" : [{"month" : 11, "value": 2000},
-        {"month" : 6, "value": 1205},
-        {"month" : 3, "value": 2200}],
-      "years" : [{"year" : 2020, "value": 20000},
-        {"year" : 2018, "value": 18000}]
-    };
-
-    daysRecord = RecordDatesPadder.padDays(res["days"]);
-    monthsRecord = RecordDatesPadder.padMonths(res["months"]);
-    yearsRecord = RecordDatesPadder.padYears(res["years"]);
+    String uid = CurrentUser.getInstance().getUID();
+    await api_client.get("/getCarmaRecords/" + uid)
+      .then((result) {
+       setState(() {
+         var res = jsonDecode(result.body);
+         daysRecord = RecordDatesPadder.padDays(res["days"]);
+         monthsRecord = RecordDatesPadder.padMonths(res["months"]);
+         yearsRecord = RecordDatesPadder.padYears(res["years"]);
+       });
+    });
   }
 
   @override

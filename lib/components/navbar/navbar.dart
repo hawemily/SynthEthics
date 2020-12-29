@@ -25,6 +25,9 @@ class _NavBarState extends State<NavBar> {
           context, ModalRoute.withName(routeMapping[Screens.Home]));
       if (screen != Screens.Home) {
         Navigator.pushNamed(context, routeMapping[screen]);
+      } else {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, routeMapping[Screens.Home]);
       }
     }
   }
@@ -77,7 +80,6 @@ class _NavBarState extends State<NavBar> {
               break;
 
             case 3:
-              // TODO: Add outfits page navigation here
               _clearStackAndPush(Screens.DressingRoom);
               break;
 

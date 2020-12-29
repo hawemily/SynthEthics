@@ -17,9 +17,6 @@ export const addCarmaPoints = async (req: Request, res: Response, db: FirebaseFi
           var currentCarmaPoints = userData!['carmaPoints'];
           currentCarmaPoints += carmaAmount;
           userData!['carmaPoints'] = currentCarmaPoints;
-
-          // 
-
           await userRef.doc(userID).set(userData!);
         }
         // Update user's carma records for graph

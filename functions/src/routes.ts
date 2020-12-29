@@ -10,6 +10,7 @@ import { getAllDonatedItems } from "./endpoints/get_all_donated_items";
 import { getAllOutfits } from "./endpoints/get_all_outfits";
 import { getAchievements } from "./endpoints/get_achievements";
 import { getCarmaRecords } from "./endpoints/get_carma_records";
+import { getUserRecords } from "./endpoints/get_user_record";
 
 import { postClothingItem } from "./endpoints/post_clothing_item";
 import { postOutfit } from "./endpoints/post_outfit";
@@ -23,6 +24,8 @@ import { initAchievementTypes } from "./endpoints/init_achievement_types";
 import { unmarkItemsAsDonate } from "./endpoints/post_items_not_to_donate";
 import { updateClothingItem } from "./endpoints/update_clothing_item";
 import { deleteUser } from "./endpoints/delete_user";
+import { updateOutfit } from "./endpoints/update_outfit";
+import { getAClothingItem } from "./endpoints/get_a_clothing_item";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -50,6 +53,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
+  app.get("/getUserRecords/:uid", (req: Request, res: Response) => {
+      getUserRecords(req, res, db);
+      return;
+  })
+
   app.get("/getAchievements/:uid", (req: Request, res: Response) => {
     getAchievements(req, res, db);
     return;
@@ -57,6 +65,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.get("/closet/allClothes/:uid", (req: Request, res: Response) => {
     getAllClothes(req, res, db);
+    return;
+  });
+
+  app.get("/closet/allClothes/:itemId/:uid", (req: Request, res: Response) => {
+    getAClothingItem(req, res, db);
     return;
   });
 
@@ -102,7 +115,6 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
-  // 
   app.post("/carma/add", (req: Request, res:Response) => {
     addCarmaPoints(req, res, db);
     return;
@@ -129,6 +141,11 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
 
   app.post("/postOutfit", (req: Request, res:Response) => {
     postOutfit(req, res, db);
+    return;
+  });
+
+  app.post("/updateOutfit", (req: Request, res:Response) => {
+    updateOutfit(req, res, db);
     return;
   });
 

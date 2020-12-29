@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/eco_bar.dart';
 import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
+import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
@@ -24,15 +27,23 @@ class ClothingCard extends StatefulWidget {
 }
 
 class ClothingCardState<T extends ClothingCard> extends State<T> {
+
   ClothingItemObject currentClothingItem;
+  Future<ClothingItemObject> updatedClothingItem;
   Future<File> currClothingItemImage;
   bool isSelectedOutfit;
+  int timesWorn = 0;
+
+  CurrentUser user = CurrentUser.getInstance();
+
   @override
   void initState() {
     currentClothingItem = widget.clothingItem;
     super.initState();
     currClothingItemImage = getImage();
     isSelectedOutfit = false;
+    updatedClothingItem = this.getAClothingItem();
+    this.returnTimesWorn();
   }
 
   Future<File> getImage() {
@@ -45,7 +56,33 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ClothingItem(clothingItem: this.currentClothingItem)));
+                ClothingItem(clothingItem: this.currentClothingItem, incrementTimesWorn: returnTimesWorn)));
+  }
+
+  Future<ClothingItemObject> getAClothingItem() async {
+    final response = await api_client.get("/closet/allClothes/" + this.currentClothingItem.id + "/" + user.getUID());
+
+    if (response.statusCode == 200) {
+      
+      final resBody = jsonDecode(response.body);
+      final clothingItem = ClothingItemObject.fromJson(resBody);
+
+      return clothingItem;
+    } else {
+      throw Exception("Failed to load clothing item");
+    }
+
+  }
+
+  
+  void returnTimesWorn() {
+
+    getAClothingItem().then((clothingItem) {
+      setState(() {
+        this.currentClothingItem = clothingItem;
+      });
+    });
+    
   }
 
   Widget buildImage() {
@@ -102,10 +139,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                         child: clear
                             ? Container()
                             : EcoBar(
-                                current: this
-                                    .currentClothingItem
-                                    .data
-                                    .currentTimesWorn,
+                                current: this.currentClothingItem.data.currentTimesWorn,
                                 max: this
                                     .currentClothingItem
                                     .data
