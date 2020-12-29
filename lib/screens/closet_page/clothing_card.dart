@@ -30,12 +30,12 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   Future<File> currClothingItemImage;
   bool isSelectedOutfit;
   int timesWorn = 0;
+
   @override
   void initState() {
     super.initState();
     isSelectedOutfit = false;
     _init();
-
     timesWorn = this.currentClothingItem.data.currentTimesWorn.round();
   }
 
@@ -106,7 +106,6 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   }
 
   Widget buildBaseStack(on_tap, {clear = false}) {
-    // _init();
     if (widget.isRandom) _init();
     return Stack(children: [
       Card(
