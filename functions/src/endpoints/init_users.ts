@@ -10,12 +10,14 @@ export const initUsers = async (
 ) => {
   try {
     const {uid} = req.body;
-    const userRef = await db.collection(Collections.Users);
+    const userRef = db.collection(Collections.Users);
     const userSnapshot = await userRef.where("userId", "==", uid).get();
     if (userSnapshot.empty) {
       // addNewUser(req, res, db);
       const user: User = {
         userId: uid,
+        lastName: "Random",
+        firstName: "user",
         carmaPoints: 0,
         itemsDonated: 1,
         achieved: [2],

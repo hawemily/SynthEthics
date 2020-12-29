@@ -13,7 +13,7 @@ export const deleteUser = async (req: Request, res: Response, db: FirebaseFirest
     })
 
     await userRef.delete();
-    
+    res.status(200);
 }
 
 async function deleteSubCollection(db: FirebaseFirestore.Firestore, collectionPath: any, batchSize: number) {

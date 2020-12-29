@@ -1,0 +1,4 @@
+enum SignInMethod {
+  Google,
+  EmailPassword
+}

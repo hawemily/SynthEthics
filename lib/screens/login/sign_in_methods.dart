@@ -18,6 +18,7 @@ void onGoogleSignIn(BuildContext context) async {
     currUser.setGoogleSignIn(_googleSignIn);
     User user = await _handleSignIn();
     currUser.setUser(user);
+    currUser.setBgImage(user.photoURL);
 
     Navigator.pushNamed(context, routeMapping[Screens.Home]);
 }
@@ -29,6 +30,7 @@ Future<User> _handleSignIn() async {
   if (userSignedIn) {
       print("usersignedin!");
     user = _auth.currentUser;
+//    _googleSignIn.signOut();
       print('user uid: ${user.uid}');
   } else {
     print("signing in with Google!");
@@ -49,7 +51,7 @@ Future<User> _handleSignIn() async {
     print('user uid: ${user.uid}');
     print('user: $user');
 
-    NewUserRequest req = new NewUserRequest(user.uid);
+    NewUserRequest req = new NewUserRequest(user.uid, user.displayName);
     api_client.post("/addUser", body: jsonEncode(req));
 
     await GoogleSignIn().isSignedIn();

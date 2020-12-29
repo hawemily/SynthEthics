@@ -21,14 +21,18 @@ class _SignInOrRegisterWithEmailSectionState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   bool _registerSuccess;
   bool _loginSuccess;
   String _email;
   String _errorText;
+  bool _isSignUp;
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
+    _isSignUp = false;
     super.initState();
   }
 
@@ -54,7 +58,8 @@ class _SignInOrRegisterWithEmailSectionState
         _email = user.email;
       });
 
-      NewUserRequest req = new NewUserRequest(user.uid);
+      NewUserRequest req = new NewUserRequest(
+          user.uid, _firstNameController.text + " " + _lastNameController.text);
       api_client.post("/addUser", body: jsonEncode(req));
 
       CurrentUser currUser = CurrentUser.getInstance();
@@ -126,8 +131,12 @@ class _SignInOrRegisterWithEmailSectionState
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     super.dispose();
   }
+
+  bool _notNull(Object o) => o != null;
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +149,30 @@ class _SignInOrRegisterWithEmailSectionState
                 scrollDirection: Axis.vertical,
                 child: Column(
                     children: <Widget>[
+                  _isSignUp
+                      ? TextFormField(
+                          controller: _firstNameController,
+                          decoration:
+                              const InputDecoration(labelText: "First Name"),
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "Please enter your first name";
+                            }
+                            return null;
+                          })
+                      : null,
+                  _isSignUp
+                      ? TextFormField(
+                          controller: _lastNameController,
+                          decoration:
+                              const InputDecoration(labelText: "Last Name"),
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "Please enter your last name";
+                            }
+                            return null;
+                          })
+                      : null,
                   TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(labelText: "Email"),
@@ -165,21 +198,29 @@ class _SignInOrRegisterWithEmailSectionState
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
+                            (_isSignUp
+                                ? null
+                                : RaisedButton(
+                                    onPressed: () async {
+                                      if (_formKey.currentState.validate()) {
+                                        _signIn();
+                                      }
+                                    },
+                                    child: Text("Log In"))),
                             RaisedButton(
                                 onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    _signIn();
-                                  }
-                                },
-                                child: Text("Log In")),
-                            RaisedButton(
-                                onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    _register();
+                                  if (!_isSignUp) {
+                                    setState(() {
+                                      _isSignUp = !_isSignUp;
+                                    });
+                                  } else {
+                                    if (_formKey.currentState.validate()) {
+                                      _register();
+                                    }
                                   }
                                 },
                                 child: Text("Sign Up"))
-                          ])),
+                          ].where(_notNull).toList())),
                   Container(
                       alignment: Alignment.center,
                       child: Text(_registerSuccess == null
@@ -191,7 +232,7 @@ class _SignInOrRegisterWithEmailSectionState
                           : (_registerSuccess
                               ? "Successfully registered " + _email
                               : "Failed to register")))
-                ]))));
+                ].where(_notNull).toList()))));
   }
 }
 

@@ -142,8 +142,8 @@ class HomePageState extends State<HomePage> {
                   ]),
                 ),
                 Expanded(
-                  flex: 3,
-                  child: CarmaRecordViewer()
+                    flex: 3,
+                    child: CarmaRecordViewer()
                 ),
               ],
             ),
@@ -166,10 +166,10 @@ class HomePageState extends State<HomePage> {
       AnimatedSwitcher(
         duration: const Duration(milliseconds: 150),
         child: (_openAchievements) ? AchievementsPage(onClose: () {
-            setState(() {
-              _openAchievements = false;
-            });
-          },
+          setState(() {
+            _openAchievements = false;
+          });
+        },
         ) : Container(),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return ScaleTransition(child: child, scale: animation);
