@@ -8,7 +8,7 @@ export const getUserRecords = async (
 ) => {
   try {
     console.log("Entered function")
-    const userRef = await db.collection(Collections.Users);
+    const userRef = db.collection(Collections.Users);
     if (req.params.uid != null) {
         const userID: any = req.params.uid;
         console.log("UID : " + userID);

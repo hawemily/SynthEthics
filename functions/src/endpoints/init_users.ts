@@ -16,7 +16,8 @@ export const initUsers = async (
       // addNewUser(req, res, db);
       const user: User = {
         userId: uid,
-        username: "Random User",
+        lastName: "Random",
+        firstName: "user",
         carmaPoints: 0,
         itemsDonated: 1,
         achieved: [2],

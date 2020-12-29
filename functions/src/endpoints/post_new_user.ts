@@ -11,10 +11,15 @@ export const addNewUser = async (req:Request, res:Response, db:FirebaseFirestore
 
     const userSnapshot = await userRef.get();
 
+    const names: string[] = username.split(" ");
+    const lastName = names[names.length - 1];
+    const firstName = names[0]
+
     if (!userSnapshot.exists) {
         const newUser: User = {
             userId: uid,
-            username: username,
+            lastName: lastName,
+            firstName: firstName,
             carmaPoints: 0,
             itemsDonated: 0,
             achieved: [],
