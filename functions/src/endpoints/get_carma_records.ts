@@ -10,7 +10,7 @@ export const getCarmaRecords = async (
   db: FirebaseFirestore.Firestore
 ) => {
   const userID: any = req.params.uid;
-  const userRef = await db.collection(Collections.Users);
+  const userRef = db.collection(Collections.Users);
 
   try {
     const user = await userRef.doc(userID).get();
