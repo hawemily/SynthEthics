@@ -20,14 +20,16 @@ class AchievementLevelCalculator {
     // If value is greater than the higher amount for a level we
     // specify, keep adding levels per amount exceeding the difference
     // between the last level amount and its previous
-    if (value > tiers[tiers.length - 1]) {
+    if (value >= tiers[tiers.length - 1]) {
       int amountPerLevel = (tiers.length == 1) ? tiers[0] :
-      tiers[tiers.length - 1] - tiers[tiers.length - 2];
+        tiers[tiers.length - 1] - tiers[tiers.length - 2];
       int excess = value - tiers[tiers.length - 1];
-      int extraLevels = (excess / amountPerLevel) as int;
+      int extraLevels = excess ~/ amountPerLevel;
+
       currentLevel += extraLevels;
       previousAmount = tiers[tiers.length - 1] + extraLevels * amountPerLevel;
       targetAmount = previousAmount + amountPerLevel;
+      value -= previousAmount;
     }
 
     return {"level" : currentLevel, "previousAmount" : previousAmount,

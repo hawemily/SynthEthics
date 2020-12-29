@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/achievements_page/achievement.dart';
+import 'package:synthetics/services/achievements/achievement_images.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class PreviewAchievementCard extends StatefulWidget {
@@ -43,8 +44,11 @@ class _PreviewAchievementCardState extends State<PreviewAchievementCard> {
                   child: Container(
                       padding: EdgeInsets.all(10),
                       child: (widget.achievement.type == AchievementType.Unlock)
-                          ? Image.asset("lib/assets/medal.png") :
-                            Image.asset("lib/assets/medal2.png")),
+                          ? AchievementImages
+                            .retrieveOneTimeImage(widget.achievement.id)
+                          : AchievementImages
+                            .retrieveLevelImage(widget.achievement.id,
+                              widget.achievement.level)),
                 ),
                 onTap: () => widget.onClick(widget.achievement),
               ),

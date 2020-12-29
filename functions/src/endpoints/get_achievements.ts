@@ -9,10 +9,8 @@ export const getAchievements = async (
   try {
     const achievementsRef = await db.collection(Collections.Achievements);
     const userRef = await db.collection(Collections.Users);
-    console.log(req.headers);
-    console.log(req.params.uid);
-    if (req.headers['uid'] != null) {
-      const currentUserSnapshot = await userRef.where("userId", "==", req.headers["uid"]).get();
+    if (req.params.uid != null) {
+      const currentUserSnapshot = await userRef.where("userId", "==", req.params.uid).get();
       const result: any[] = [];
       if (!currentUserSnapshot.empty) {
         var userData: FirebaseFirestore.DocumentData;
