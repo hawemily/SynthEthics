@@ -18,6 +18,7 @@ void onGoogleSignIn(BuildContext context) async {
     currUser.setGoogleSignIn(_googleSignIn);
     User user = await _handleSignIn();
     currUser.setUser(user);
+    currUser.setBgImage(user.photoURL);
 
     Navigator.pushNamed(context, routeMapping[Screens.Home]);
 }
@@ -29,6 +30,7 @@ Future<User> _handleSignIn() async {
   if (userSignedIn) {
       print("usersignedin!");
     user = _auth.currentUser;
+//    _googleSignIn.signOut();
       print('user uid: ${user.uid}');
   } else {
     print("signing in with Google!");

@@ -27,13 +27,13 @@ class LoginPage extends StatelessWidget {
               child: Column(children: <Widget>[
                 Image(
                     image: AssetImage("lib/assets/leaf.jpg"),
-                    width: 100,
-                    height: 100),
+                    width: MediaQuery.of(context).size.width / 3,
+                    height: MediaQuery.of(context).size.height / 4),
                 Text("Synthetics",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: CustomColours.greenNavy(),
-                        fontSize: 30)),
+                        fontSize: MediaQuery.of(context).size.width / 13,)),
               ])),
           Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

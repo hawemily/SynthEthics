@@ -21,7 +21,8 @@ class _SignInOrRegisterWithEmailSectionState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   bool _registerSuccess;
   bool _loginSuccess;
   String _email;
@@ -57,7 +58,8 @@ class _SignInOrRegisterWithEmailSectionState
         _email = user.email;
       });
 
-      NewUserRequest req = new NewUserRequest(user.uid, _usernameController.text);
+      NewUserRequest req = new NewUserRequest(
+          user.uid, _firstNameController.text + " " + _lastNameController.text);
       api_client.post("/addUser", body: jsonEncode(req));
 
       CurrentUser currUser = CurrentUser.getInstance();
@@ -129,7 +131,8 @@ class _SignInOrRegisterWithEmailSectionState
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _usernameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     super.dispose();
   }
 
@@ -148,12 +151,24 @@ class _SignInOrRegisterWithEmailSectionState
                     children: <Widget>[
                   _isSignUp
                       ? TextFormField(
-                          controller: _usernameController,
+                          controller: _firstNameController,
                           decoration:
-                              const InputDecoration(labelText: "Username"),
+                              const InputDecoration(labelText: "First Name"),
                           validator: (String value) {
                             if (value.isEmpty) {
-                              return "Please enter your username";
+                              return "Please enter your first name";
+                            }
+                            return null;
+                          })
+                      : null,
+                  _isSignUp
+                      ? TextFormField(
+                          controller: _lastNameController,
+                          decoration:
+                              const InputDecoration(labelText: "Last Name"),
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "Please enter your last name";
                             }
                             return null;
                           })
