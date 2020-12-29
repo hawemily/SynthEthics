@@ -10,6 +10,7 @@ const get_all_donated_items_1 = require("./endpoints/get_all_donated_items");
 const get_all_outfits_1 = require("./endpoints/get_all_outfits");
 const get_achievements_1 = require("./endpoints/get_achievements");
 const get_carma_records_1 = require("./endpoints/get_carma_records");
+const get_user_record_1 = require("./endpoints/get_user_record");
 const post_clothing_item_1 = require("./endpoints/post_clothing_item");
 const post_outfit_1 = require("./endpoints/post_outfit");
 const post_items_to_donate_1 = require("./endpoints/post_items_to_donate");
@@ -20,6 +21,8 @@ const init_achievement_types_1 = require("./endpoints/init_achievement_types");
 const post_items_not_to_donate_1 = require("./endpoints/post_items_not_to_donate");
 const update_clothing_item_1 = require("./endpoints/update_clothing_item");
 const delete_user_1 = require("./endpoints/delete_user");
+const update_outfit_1 = require("./endpoints/update_outfit");
+const get_a_clothing_item_1 = require("./endpoints/get_a_clothing_item");
 exports.routes = (app, db) => {
     // ===========================================================================
     //      *** GET REQUESTS
@@ -40,12 +43,20 @@ exports.routes = (app, db) => {
         get_carma_records_1.getCarmaRecords(req, res, db);
         return;
     });
+    app.get("/getUserRecords/:uid", (req, res) => {
+        get_user_record_1.getUserRecords(req, res, db);
+        return;
+    });
     app.get("/getAchievements/:uid", (req, res) => {
         get_achievements_1.getAchievements(req, res, db);
         return;
     });
     app.get("/closet/allClothes/:uid", (req, res) => {
         get_all_clothes_1.getAllClothes(req, res, db);
+        return;
+    });
+    app.get("/closet/allClothes/:itemId/:uid", (req, res) => {
+        get_a_clothing_item_1.getAClothingItem(req, res, db);
         return;
     });
     app.get("/getAllClothingTypes", (req, res) => {
@@ -80,7 +91,6 @@ exports.routes = (app, db) => {
         get_carma_value_1.getCarmaValue(req, res);
         return;
     });
-    // 
     app.post("/carma/add", (req, res) => {
         post_add_carma_points_1.addCarmaPoints(req, res, db);
         return;
@@ -103,6 +113,10 @@ exports.routes = (app, db) => {
     });
     app.post("/postOutfit", (req, res) => {
         post_outfit_1.postOutfit(req, res, db);
+        return;
+    });
+    app.post("/updateOutfit", (req, res) => {
+        update_outfit_1.updateOutfit(req, res, db);
         return;
     });
     app.post("/closet/updateItem", (req, res) => {
