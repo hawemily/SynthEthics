@@ -32,11 +32,6 @@ class _RandomOutfitState extends State<RandomOutfit> {
   void initState() {
     super.initState();
     this.randomItems = generateRandom();
-    // print("RANDOM CLOTHING");
-    // widget.clothingItems.forEach((key, value) {
-    //   print(key);
-    //   print(value.length);
-    // });
   }
 
   Set<ClothingItemObject> generateRandom() {
