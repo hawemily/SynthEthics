@@ -41,19 +41,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> generateRandom() {
     
     int randomOutfitType = random.nextInt(outfitTypes.length);
-    print("Random Outfit Type: $randomOutfitType");
-    print(outfitTypes[randomOutfitType]);
-
-    return generateRandomOutfit(outfitTypes[randomOutfitType]);
-  }
-
-  Set<ClothingItemObject> generateRandomOutfit(Set<String> outfitTypes) {
-  
     var clothingItems = widget.clothingItems;
     Set<ClothingItemObject> newItems = Set();
     Set<OutfitColor> colors = Set();
 
-    outfitTypes.forEach((type) {
+    outfitTypes[randomOutfitType].forEach((type) {
       var items = clothingItems[type];
       if (items != null) {
         ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
@@ -69,6 +61,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
       return generateRandom();
     }
   }
+
 
   void saveOutfit() async {
     print("OUTFIT SELECTED");
