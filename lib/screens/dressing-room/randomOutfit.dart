@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
+import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 import 'package:synthetics/screens/clothing_colour_page/colour_scheme_checker.dart';
 import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/services/api_client.dart';
@@ -38,23 +39,35 @@ class _RandomOutfitState extends State<RandomOutfit> {
   }
 
   Set<ClothingItemObject> generateRandom() {
-    var clothingItems = widget.clothingItems;
-
+    
     int randomOutfitType = random.nextInt(outfitTypes.length);
     print("Random Outfit Type: $randomOutfitType");
     print(outfitTypes[randomOutfitType]);
 
+    return generateRandomOutfit(outfitTypes[randomOutfitType]);
+  }
+
+  Set<ClothingItemObject> generateRandomOutfit(Set<String> outfitTypes) {
+  
+    var clothingItems = widget.clothingItems;
     Set<ClothingItemObject> newItems = Set();
-    outfitTypes[randomOutfitType].forEach((type) {
+    Set<OutfitColor> colors = Set();
+
+    outfitTypes.forEach((type) {
       var items = clothingItems[type];
       if (items != null) {
         ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
         newItems.add(selectedItem);
+        print(OutfitColor.values[selectedItem.data.dominantColor]);
+        colors.add(OutfitColor.values[selectedItem.data.dominantColor]);
       }
-      
     });
 
-    return newItems;
+    if (colourChecker.isValid(colors)) {
+      return newItems;
+    } else {
+      return generateRandom();
+    }
   }
 
   void saveOutfit() async {
