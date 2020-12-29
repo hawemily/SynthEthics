@@ -23,7 +23,7 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
 
   @override
   void initState() {
-    this.currentClothingItem = widget.clothingItem;
+    super.currentClothingItem = widget.clothingItem;
     currClothingItemImage = super.getImage();
     _confettiControl =
         ConfettiController(duration: const Duration(milliseconds: 300));
@@ -92,7 +92,7 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
                                         color: CustomColours.iconGreen())))),
                         Expanded(
                             flex: 5,
-                            child: Text('+ ' + donateGain.toString() + ' ',
+                            child: Text('+ ' + (donateGain.round()).toString() + ' ',
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
