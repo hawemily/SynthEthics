@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/routes.dart';
+import 'package:synthetics/screens/login/sign_in_method_enum.dart';
+import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,6 +14,24 @@ class HomeRightDrawer extends StatefulWidget {
 }
 
 class _HomeRightDrawerState extends State<HomeRightDrawer> {
+  CurrentUser currUser = CurrentUser.getInstance();
+
+  void _signOut() {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    if (currUser.signInMethod == SignInMethod.Google) {
+      print("signing out from google!");
+      currUser.googleSignIn.signOut();
+    }
+    auth.signOut().then((res) => {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: routes[routeMapping[Screens.Login]]),
+              (route) => false)
+    }
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,19 +84,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                 icon: Icons.exit_to_app,
                 text: "Logout",
                 onTap: () {
-                  FirebaseAuth auth = FirebaseAuth.instance;
-                  GoogleSignIn gsi = CurrentUser.getInstance().googleSignIn();
-                  if (gsi != null) {
-                    gsi.signOut();
-                  }
-                  auth.signOut().then((res) => {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: routes[routeMapping[Screens.Login]]),
-                            (route) => false)
-                    }
-                  );
+                  _signOut();
                 },
               ),
               Expanded(
@@ -86,7 +94,8 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                     icon: Icons.delete_forever,
                     text: "Delete Account",
                     onTap: () {
-                      print("Delete Account");
+                      api_client.post("/deleteUser/" + currUser.getUID());
+                      _signOut();
                     },
                   )
                 ),

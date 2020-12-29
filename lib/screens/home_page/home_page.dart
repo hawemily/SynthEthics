@@ -6,6 +6,7 @@ import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/screens/home_page/carma_record_viewer.dart';
 import 'package:synthetics/screens/home_page/widget/right_side_drawer.dart';
+import 'package:synthetics/screens/login/sign_in_method_enum.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/initialiser/initialiser.dart';
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final double _iconSize = 30.0;
+  final CurrentUser user = CurrentUser.getInstance();
 
   bool _openAchievements = false;
 
@@ -39,7 +41,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void getUserRecords() async {
-    String uid = CurrentUser.getInstance().getUID();
+    String uid = user.getUID();
     final resp = await api_client.get("/getUserRecords/" + uid);
 
     if (resp.statusCode == 200) {
@@ -47,6 +49,7 @@ class HomePageState extends State<HomePage> {
       setState(() {
         carmaPoints = body["carmaPoints"];
       });
+      user.setUsername(body["firstName"], body["lastName"]);
     } else {
       print("Failed to fetch user records");
     }
@@ -54,6 +57,8 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("image: " + user.bgImage);
+    print("signinmethod: ${user.signInMethod}");
     List<Widget> stackWidgets = [
       Scaffold(
         key: _scaffoldKey,
@@ -73,24 +78,17 @@ class HomePageState extends State<HomePage> {
               }),
           actions: [
             IconButton(
-                icon: Icon(
-                    Icons.info,
-                    size: _iconSize,
-                    color: CustomColours.offWhite()
-                ),
+                icon: Icon(Icons.info,
+                    size: _iconSize, color: CustomColours.offWhite()),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => InformationPage()),
                   );
-                }
-            ),
+                }),
             IconButton(
-              icon: Icon(
-                  Icons.settings,
-                  size: _iconSize,
-                  color: CustomColours.offWhite()
-              ),
+              icon: Icon(Icons.settings,
+                  size: _iconSize, color: CustomColours.offWhite()),
               onPressed: () {
                 _scaffoldKey.currentState.openEndDrawer();
               },
@@ -106,45 +104,41 @@ class HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Stack(children: [
-                    Center(
-                      child: Container(
-                        color: CustomColours.offWhite(),
-                        width: 400,
-                        height: 180,
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Expanded(
-                                flex: 4,
-                                child: FittedBox(
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                              flex: 4,
+                              child: FittedBox(
                                   fit: BoxFit.fill,
-                                  child: Icon(Icons.eco_outlined,
-                                    color: CustomColours.iconGreen(),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  "${carmaPoints.toString()} Carma Points",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: CustomColours.greenNavy()),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                                  child: CircleAvatar(
+                                      backgroundColor:
+                                          CustomColours.greenNavy(),
+                                      child: user.signInMethod ==
+                                              SignInMethod.EmailPassword || user.bgImage == null || user.bgImage == ""
+                                          ? Center(
+                                              child: Text(user.initials,
+                                                  style: TextStyle(color: Colors.white)))
+                                          : CircleAvatar(
+                                              radius: 18, backgroundImage: NetworkImage(user.bgImage))))),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "${carmaPoints.toString()} Carma Points",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: CustomColours.greenNavy()),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  ]),
+                  ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: CarmaRecordViewer()
-                ),
+                Expanded(flex: 3, child: CarmaRecordViewer()),
               ],
             ),
           ),
@@ -156,21 +150,26 @@ class HomePageState extends State<HomePage> {
     stackWidgets.addAll([
       AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        child: (_openAchievements) ? Container(
-          color: CustomColours.baseBlack().withOpacity(0.9),
-        ) : Container(),
+        child: (_openAchievements)
+            ? Container(
+                color: CustomColours.baseBlack().withOpacity(0.9),
+              )
+            : Container(),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return ScaleTransition(child: child, scale: animation);
         },
       ),
       AnimatedSwitcher(
         duration: const Duration(milliseconds: 150),
-        child: (_openAchievements) ? AchievementsPage(onClose: () {
-            setState(() {
-              _openAchievements = false;
-            });
-          },
-        ) : Container(),
+        child: (_openAchievements)
+            ? AchievementsPage(
+                onClose: () {
+                  setState(() {
+                    _openAchievements = false;
+                  });
+                },
+              )
+            : Container(),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return ScaleTransition(child: child, scale: animation);
         },
