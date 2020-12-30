@@ -44,6 +44,7 @@ class _DonationActionButtonState extends State<DonationActionButton>
     print(elem.onClick);
     return SpeedDialChild(
         child: elem.icon,
+        backgroundColor: CustomColours.greenNavy(),
 //        child: Row(
 //          children: <Widget>[
 //            elem.icon,
