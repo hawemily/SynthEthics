@@ -7,7 +7,7 @@ export const getItemsSentForDonation = async (req:Request, res:Response, db: Fir
         const uid = req.params.uid;
 
         const userRef = db.collection(Collections.Users).doc(uid);
-        const toDonateSnapshot = await userRef.collection(Collections.Donated).get();
+        const toDonateSnapshot = await userRef.collection(Collections.ToDonate).get();
 
         const clothingItems: any[] = [];
         

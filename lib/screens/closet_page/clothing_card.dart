@@ -15,33 +15,38 @@ class ClothingCard extends StatefulWidget {
       {Key key,
       this.clothingItem,
       this.isOutfit = false,
+      this.isRandom = false,
       this.selectItemForOutfit})
       : super(key: key);
 
   final Function selectItemForOutfit;
   final ClothingItemObject clothingItem;
   final bool isOutfit;
+  final bool isRandom;
 
   @override
   ClothingCardState createState() => ClothingCardState();
 }
 
 class ClothingCardState<T extends ClothingCard> extends State<T> {
-
   ClothingItemObject currentClothingItem;
   Future<File> currClothingItemImage;
   bool isSelectedOutfit;
   int timesWorn = 0;
-
   CurrentUser user = CurrentUser.getInstance();
 
   @override
   void initState() {
-    currentClothingItem = widget.clothingItem;
     super.initState();
-    currClothingItemImage = getImage();
     isSelectedOutfit = false;
     this.returnTimesWorn();
+    _init();
+  }
+
+  void _init() {
+    currentClothingItem = widget.clothingItem;
+    print("CurrentClothingItem: ${currentClothingItem.data.name}");
+    currClothingItemImage = getImage();
   }
 
   Future<File> getImage() {
@@ -53,15 +58,18 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ClothingItem(clothingItem: this.currentClothingItem, incrementTimesWorn: returnTimesWorn)));
+            builder: (context) => ClothingItem(
+                clothingItem: this.currentClothingItem,
+                incrementTimesWorn: returnTimesWorn)));
   }
 
   Future<ClothingItemObject> getAClothingItem() async {
-    final response = await api_client.get("/closet/allClothes/" + this.currentClothingItem.id + "/" + user.getUID());
+    final response = await api_client.get("/closet/allClothes/" +
+        this.currentClothingItem.id +
+        "/" +
+        user.getUID());
 
     if (response.statusCode == 200) {
-      
       final resBody = jsonDecode(response.body);
       final clothingItem = ClothingItemObject.fromJson(resBody);
 
@@ -69,20 +77,18 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
     } else {
       throw Exception("Failed to load clothing item");
     }
-
   }
 
-  
   void returnTimesWorn() {
-
     getAClothingItem().then((clothingItem) {
       setState(() {
-        if (clothingItem.data != null && clothingItem.data.currentTimesWorn != this.currentClothingItem.data.currentTimesWorn) {
+        if (clothingItem.data != null &&
+            clothingItem.data.currentTimesWorn !=
+                this.currentClothingItem.data.currentTimesWorn) {
           this.currentClothingItem = clothingItem;
         }
       });
     });
-    
   }
 
   Widget buildImage() {
@@ -94,6 +100,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
             future: this.currClothingItemImage,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                print("Gets to correct place");
                 return Image.file(snapshot.data);
               } else if (snapshot.data == null) {
                 return Text("No image from file");
@@ -124,7 +131,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   }
 
   Widget buildBaseStack(on_tap, {clear = false}) {
-    print(this.currentClothingItem.data);
+    if (widget.isRandom) _init();
     return Stack(children: [
       Card(
           color: CustomColours.offWhite(),
@@ -140,7 +147,10 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                         child: clear
                             ? Container()
                             : EcoBar(
-                                current: this.currentClothingItem.data.currentTimesWorn,
+                                current: this
+                                    .currentClothingItem
+                                    .data
+                                    .currentTimesWorn,
                                 max: this
                                     .currentClothingItem
                                     .data

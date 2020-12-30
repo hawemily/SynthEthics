@@ -6,12 +6,11 @@ export const sendItemsForDonation = async (req:Request, res:Response, db: Fireba
         const {uid, ids} = req.body;
         const userRef = db.collection(Collections.Users).doc(uid);
         const toDonateRef = userRef.collection(Collections.ToDonate);
-        const donatedRef = userRef.collection(Collections.Donated);
 
         for(var i = 0; i < ids.length; i++) {
-            const clothingItem = await toDonateRef.doc(ids[i]).get();
-            donatedRef.doc(clothingItem.id).set(clothingItem.data()!);
-            await toDonateRef.doc(ids[i]).delete();
+            await toDonateRef.doc(ids[i]).update({
+                donated: true
+            });
         }
 
         res.send(200);

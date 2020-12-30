@@ -13,6 +13,7 @@ const settings: RuntimeOptions = {
 // add firebase functions here
 export const api = runWith(settings).https.onRequest(express);
 
+
 //// addmessage is a http endpoint
 //exports.addMessage = functions.https.onRequest(async (req , res) => {
 //    //grab the text parameter

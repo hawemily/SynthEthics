@@ -56,6 +56,7 @@ export const postClothingItem = async (
       lastWornDate: lastWorn,
       purchaseDate: dateOfpurchase,
       dominantColor: dominantColor,
+      donated: false,
     };
 
     const userRef = db.collection(Collections.Users).doc(uid);

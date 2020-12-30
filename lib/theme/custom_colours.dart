@@ -24,6 +24,10 @@ class CustomColours {
     return Color(0xFF986C6A);
   }
 
+  static Color oliveGreen() {
+    return Color(0xFF5E5E31);
+  }
+
   static Color baseBlack() {
     return Color(0xFF262626);
   }

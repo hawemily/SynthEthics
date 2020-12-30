@@ -1,1 +1,1 @@
-{"version":3,"file":"firebase.js","sourceRoot":"","sources":["../src/firebase.ts"],"names":[],"mappings":";;;AAAA,wCAAwC;AAExC,KAAK,CAAC,aAAa,EAAE,CAAC;AAET,QAAA,EAAE,GAAG,KAAK,CAAC,SAAS,EAAE,CAAC"}
+{"version":3,"file":"firebase.js","sourceRoot":"","sources":["../src/firebase.ts"],"names":[],"mappings":";;;AAAA,wCAAwC;AACxC,mDAAmD;AAEnD,KAAK,CAAC,aAAa,EAAE,CAAC;AAET,QAAA,EAAE,GAAG,KAAK,CAAC,SAAS,EAAE,CAAC;AAEpC,qFAAqF;AACrF,oCAAoC;AAEpC,kFAAkF;AAElF,KAAK"}

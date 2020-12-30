@@ -34,6 +34,7 @@ class ClosetContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Current Closet mode: ${this.mode}");
     return Stack(children: [
       Container(
           margin: const EdgeInsets.all(5.0),
@@ -58,6 +59,8 @@ class ClosetContainer extends StatelessWidget {
                           : FlippyCard(action, isUnconfirmedDonation(item.id),
                               clothingItem: item);
                     case (ClosetMode.UnDonate):
+                      return SelectCard(action, clothingItem: item);
+                    case (ClosetMode.Donated):
                       return SelectCard(action, clothingItem: item);
                     case (ClosetMode.Normal):
                     default:

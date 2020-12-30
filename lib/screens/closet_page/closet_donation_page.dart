@@ -21,7 +21,7 @@ class ClosetDonationPage extends StatelessWidget {
           text: Text("Confirm Donated"),
           onClick: () {
             // TODO: move to a new mode where users can only select clothing in the 'to be donated' tab to indicate that they have already donated the clothing.
-            // setMode(ClosetMode.Select);
+             setMode(ClosetMode.Donated);
           }),
       ActionIconsAndText(
           icon: Icon(Icons.restore),
@@ -44,7 +44,9 @@ class ClosetDonationPage extends StatelessWidget {
     return Stack(children: [
       ClosetContainer(mode,
           action: action,
-          clothingItemObjects: donatedItems, setMode: setMode, stagnant: mode == ClosetMode.Donate),
+          clothingItemObjects: donatedItems,
+          setMode: setMode,
+          stagnant: mode == ClosetMode.Donate),
       getActionButtons()
     ]);
   }

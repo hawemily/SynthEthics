@@ -37,15 +37,14 @@ class _SelectCardState extends ClothingCardState<SelectCard> {
 
   Widget getIcon() {
     return Container(
-            width: 20.0,
-            height: 20.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-                color: CustomColours.accentCopper()),
-            child: () {
-              return Icon(Icons.done,
-                  color: CustomColours.offWhite(), size: 10.0);
-            }());
+        width: 20.0,
+        height: 20.0,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: CustomColours.accentCopper()),
+        child: () {
+          return Icon(Icons.done, color: CustomColours.offWhite(), size: 10.0);
+        }());
   }
 
   @override
