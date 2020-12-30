@@ -38,6 +38,9 @@ class ClothingMetadata {
   @JsonKey(defaultValue: 1)
   final int dominantColor;
 
+  @JsonKey(defaultValue: false)
+  final bool donated;
+
   ClothingMetadata(this.name,
     this.brand,
     this.cF,
@@ -47,7 +50,7 @@ class ClothingMetadata {
     this.currentTimesWorn,
     this.maxNoOfTimesToBeWorn,
     this.dominantColor,
-      this.clothingType);
+      this.clothingType, this.donated);
 
   factory ClothingMetadata.fromJson(Map<String, dynamic> json) => _$ClothingMetadataFromJson(json);
 

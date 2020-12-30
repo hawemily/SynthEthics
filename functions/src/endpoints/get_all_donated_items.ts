@@ -5,12 +5,18 @@ export const getAllDonatedItems = async(req: Request, res: Response, db: Firebas
     const uid = req.params.uid;
 
     console.log("in get all donated items!!!!");
-    const userRef = db.collection(Collections.Users).doc(uid);
-    const toDonateSnapshot = await userRef.collection(Collections.ToDonate).get();
+    const userToDonateRef = db.collection(Collections.Users).doc(uid).collection(Collections.ToDonate);
+
+    const pendingDonationQuery = await userToDonateRef.where('donated', '==', false).get();
+    const itemsDonatedQuery = await userToDonateRef.where('donated', '==', false).get();
 
     const clothingItems: any[] = [];
     
-    toDonateSnapshot.forEach((doc) => {
+    pendingDonationQuery.forEach((doc) => {
+        clothingItems.push({id: doc.id, data: doc.data()});
+    })
+
+    itemsDonatedQuery.forEach((doc) => {
         clothingItems.push({id: doc.id, data: doc.data()});
     })
 

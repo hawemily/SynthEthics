@@ -187,7 +187,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     donateClothingItem(id, isSelected);
   }
 
-  void donateSelected() async {
+  Future<void> donateSelected() async {
     print("DONATE SELECTED");
     if (tempClothingBin.isEmpty) {
       setState(() {
@@ -199,7 +199,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     var ls = tempClothingBin.map((each) => each.id).toList();
 
-    api_client
+    await api_client
         .post("/markForDonation",
             body:
                 jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
@@ -207,22 +207,20 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       print("in closet container");
       print(e.statusCode);
       print(e.body);
-      confirmedDonations = this.getDonatedItems();
-      clothingItems = this.getClothes();
-      tempClothingBin.clear();
-
-      clothingItems.then((e) {
-        print("HAHAHAHAHA");
-        print(e.clothingTypes.length);
-        setState(() {
-          _mode = ClosetMode.Normal;
-          return;
-        });
+      setState(() {
+        confirmedDonations = this.getDonatedItems();
+        clothingItems = this.getClothes();
+        tempClothingBin.clear();
       });
+
+      var donations = await confirmedDonations;
+      var clothes = await clothingItems;
+
+      return;
     });
   }
 
-  void undonateSelected() {
+  Future<void> undonateSelected() async {
     if (tempClothingBin.isEmpty) {
       setState(() {
         _mode = ClosetMode.Normal;
@@ -233,23 +231,21 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     var ls = tempClothingBin.map((each) => each.id).toList();
 
-    api_client
+    await api_client
         .post("/unmarkForDonation",
             body:
                 jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) async {
-      confirmedDonations = this.getDonatedItems();
-      clothingItems = this.getClothes();
-      tempClothingBin.clear();
-
-      confirmedDonations.then((e) {
-        print("HAHAHAHAHA");
-        print(e.clothingItems.length);
-        setState(() {
-          _mode = ClosetMode.Normal;
-          return;
-        });
+      setState(() {
+        confirmedDonations = this.getDonatedItems();
+        clothingItems = this.getClothes();
+        tempClothingBin.clear();
       });
+
+      var donations = await confirmedDonations;
+      var clothes = await clothingItems;
+
+      return;
     });
   }
 
@@ -446,7 +442,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                   style:
                       TextStyle(fontSize: 16, color: CustomColours.offWhite())),
               onPressed: _mode == ClosetMode.Donate
-                  ? donateSelected
+                  ? () {
+                      donateSelected().then((e) => setMode(ClosetMode.Normal));
+                    }
                   : () {
                       showConfirmDonationsDialog(context);
                     })));
@@ -458,7 +456,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               child: Text('Done',
                   style:
                       TextStyle(fontSize: 16, color: CustomColours.offWhite())),
-              onPressed: undonateSelected)));
+              onPressed: () {
+                undonateSelected().then((e) => setMode(ClosetMode.Normal));
+              })));
     } else if (widget.selectingOutfit) {
       actions.add(Padding(
           padding: EdgeInsets.all(10.0),
