@@ -7,8 +7,73 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 import '../../routes.dart';
 
-class LoginPage extends StatelessWidget {
-//  final FirebaseAuth _auth = FirebaseAuth.instance;
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isLoggingIn = false;
+
+  void toggleIsLoggingIn() {
+    setState(() {
+      _isLoggingIn = !_isLoggingIn;
+    });
+  }
+
+  Widget loadingOverlay() {
+    return _isLoggingIn ? new Container(color: Colors.white,
+        child: Center(child: CircularProgressIndicator())) : Container();
+  }
+
+  Widget _LoginPage() {
+    return Center(
+        child: Stack(children: <Widget>[
+          ListView(shrinkWrap: true, children: <Widget>[
+            Container(
+                padding: EdgeInsets.all(20.0),
+                margin: EdgeInsets.all(16.0),
+                child: Column(children: <Widget>[
+                  Image(
+                      image: AssetImage("lib/assets/leaf.jpg"),
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 3,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 4),
+                  Text("Synthetics",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: CustomColours.greenNavy(),
+                        fontSize: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 13,
+                      )),
+                ])),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SignInButton(
+                    img: "lib/assets/google_logo.png",
+                    name: "Google",
+                    signInMethod: (BuildContext context) {
+                      print("sign in method called!");
+                      onGoogleSignIn(context, toggleIsLoggingIn);
+                    },
+                  ),
+                  SignInButton(
+                      img: "lib/assets/email_logo.png",
+                      name: "Email",
+                      signInScreen: Screens.EmailSignIn),
+                ])
+          ]),
+          loadingOverlay()
+        ]));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,38 +84,6 @@ class LoginPage extends StatelessWidget {
           backgroundColor: CustomColours.greenNavy(),
           automaticallyImplyLeading: false,
         ),
-        body: Center(
-            child: ListView(shrinkWrap: true, children: <Widget>[
-          Container(
-              padding: EdgeInsets.all(20.0),
-              margin: EdgeInsets.all(16.0),
-              child: Column(children: <Widget>[
-                Image(
-                    image: AssetImage("lib/assets/leaf.jpg"),
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: MediaQuery.of(context).size.height / 4),
-                Text("Synthetics",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: CustomColours.greenNavy(),
-                        fontSize: MediaQuery.of(context).size.width / 13,)),
-              ])),
-          Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                SignInButton(
-                  img: "lib/assets/google_logo.png",
-                  name: "Google",
-                  signInMethod: (BuildContext context) {
-                    print("sign in method called!");
-                    onGoogleSignIn(context);
-                  },
-                ),
-                SignInButton(
-                    img: "lib/assets/email_logo.png",
-                    name: "Email",
-                    signInScreen: Screens.EmailSignIn),
-              ])
-        ])));
+        body: _LoginPage());
   }
 }
