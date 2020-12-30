@@ -365,6 +365,11 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   Widget generateDonationPage() {
+    setState(() {
+      confirmedDonations = this.getDonatedItems();
+      clothingItems = this.getClothes();
+    });
+
     return FutureBuilder<ClothingTypeObject>(
         future: confirmedDonations,
         builder: (context, snapshot) {

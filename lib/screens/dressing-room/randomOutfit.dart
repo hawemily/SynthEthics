@@ -6,7 +6,6 @@ import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 import 'package:synthetics/screens/clothing_colour_page/colour_scheme_checker.dart';
-import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
