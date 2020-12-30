@@ -36,15 +36,14 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     print("STARTING PAGE");
-    setState(() {
-      user = CurrentUser.getInstance();
-    });
+    user = CurrentUser.getInstance();
     getUserRecords();
     super.initState();
   }
 
   void getUserRecords() async {
-    String uid = user.getUID();
+    CurrentUser currUser = CurrentUser.getInstance();
+    String uid = currUser.getUID();
     final resp = await api_client.get("/getUserRecords/" + uid);
 
     if (resp.statusCode == 200) {
@@ -52,12 +51,19 @@ class HomePageState extends State<HomePage> {
       setState(() {
         carmaPoints = body["carmaPoints"];
       });
-      user.setUsername(body["firstName"], body["lastName"]);
+      currUser.setUsername(body["firstName"], body["lastName"]);
+      print("user.bgImage: ${user.bgImage}");
     } else {
       print("Failed to fetch user records");
     }
+    setState(() {
+      user = currUser;
+    });
   }
 
+//  ImageProvider<Image> _fetchImage() {
+//
+//  }
   @override
   Widget build(BuildContext context) {
     List<Widget> stackWidgets = [
@@ -118,13 +124,23 @@ class HomePageState extends State<HomePage> {
                                   child: CircleAvatar(
                                       backgroundColor:
                                           CustomColours.greenNavy(),
-                                      child: user.signInMethod ==
-                                              SignInMethod.EmailPassword || user.bgImage == null || user.bgImage == ""
+                                      child: user == null ||
+                                              user.signInMethod ==
+                                                  SignInMethod.EmailPassword ||
+                                              user.bgImage == null ||
+                                              user.bgImage == ""
                                           ? Center(
-                                              child: Text(user.initials == null ? "" : user.initials,
+                                              child: Text(
+                                                  user.initials == null
+                                                      ? ""
+                                                      : user.initials,
                                                   style: TextStyle(
                                                       color: Colors.white)))
-                                          : Container()))),
+                                          : CircleAvatar(
+                                              radius: 18,
+                                              // problem with this is that the user is not instantiated and so it shows the initials
+                                              backgroundImage: NetworkImage(
+                                                  user.bgImage))))),
                           Expanded(
                             flex: 1,
                             child: Text(
