@@ -28,10 +28,9 @@ class Closet extends StatefulWidget {
     "All",
     "Tops",
     "Bottoms",
-    "Skirts",
     "Dresses",
     "Outerwear",
-    "Headgear",
+    "Accessories",
     "To Be Donated",
     "Suggested Donations"
   ];
