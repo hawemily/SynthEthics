@@ -104,7 +104,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   Future<ClothingTypeObject> getDonatedItems() async {
     print("get all items marked as to be donated from backend");
-    final response = await api_client.get("/closet/allDonatedItems/"+ user.getUID());
+    final response =
+        await api_client.get("/closet/allDonatedItems/" + user.getUID());
 
     if (response.statusCode == 200) {
       print("respBodyInGetDonatedIitems: ${response.body}");
@@ -122,7 +123,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   Future<GetClosetResponse> getClothes() async {
     print("trying get all clothes from backend");
-    final response = await api_client.get("/closet/allClothes/" + user.getUID());
+    final response =
+        await api_client.get("/closet/allClothes/" + user.getUID());
 
     if (response.statusCode == 200) {
 //      print("respBody: ${response.body}");
@@ -183,7 +185,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     api_client
         .post("/markForDonation",
-            body: jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
+            body:
+                jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) {
       print("in closet container");
       print(e.statusCode);
@@ -210,7 +213,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     api_client
         .post("/unmarkForDonation",
-            body: jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
+            body:
+                jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) {
       setState(() {
         tempClothingBin.clear();
@@ -239,8 +243,11 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     // put in try, loading icon
     await api_client
         .post("/postOutfit",
-            body: jsonEncode(
-                <String, dynamic>{'uid': user.getUID(), 'name': "outfitName", 'ids': items}))
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'name': "outfitName",
+              'ids': items
+            }))
         .then((e) {
       print("in closet container");
       print(e.statusCode);
@@ -286,6 +293,11 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   Widget generateDonationPage() {
+    setState(() {
+      confirmedDonations = this.getDonatedItems();
+      clothingItems = this.getClothes();
+    });
+
     return FutureBuilder<ClothingTypeObject>(
         future: confirmedDonations,
         builder: (context, snapshot) {

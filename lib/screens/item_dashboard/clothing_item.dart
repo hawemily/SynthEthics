@@ -104,6 +104,21 @@ class _ClothingItemState extends State<ClothingItem> {
     return DateFormat('dd MMM yy').format(datetime);
   }
 
+  void donateItem() {
+    api_client
+        .post("/markForDonation",
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'ids': [this.clothingID.id]
+            }))
+        .then((e) {
+      print("in closet container");
+      print(e.statusCode);
+      print(e.body);
+    });
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,14 +197,13 @@ class _ClothingItemState extends State<ClothingItem> {
                         onPressed: () => updateProgress('DEC'),
                       ),
                       FlatButton(
-                        textColor: CustomColours.greenNavy(),
-                        child: Text(
-                          "Donate",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                          textColor: CustomColours.greenNavy(),
+                          child: Text(
+                            "Donate",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () => donateItem()),
                     ],
                   )
                 ])),
