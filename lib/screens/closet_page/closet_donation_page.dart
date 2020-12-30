@@ -54,7 +54,7 @@ class ClosetDonationPage extends StatelessWidget {
         clothingItemObjects: donatedItems,
         setMode: setMode,
         stagnant: mode == ClosetMode.Donate,
-        isUnconfirmedDonation: isInDonationList,
+        isFlipped: isInDonationList,
       ),
       getActionButtons()
     ]);

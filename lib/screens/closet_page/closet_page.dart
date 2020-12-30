@@ -187,7 +187,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     donateClothingItem(id, isSelected);
   }
 
-  void donateSelected() {
+  void donateSelected() async {
     print("DONATE SELECTED");
     if (tempClothingBin.isEmpty) {
       setState(() {
@@ -207,16 +207,16 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       print("in closet container");
       print(e.statusCode);
       print(e.body);
-      setState(() {
-        tempClothingBin.clear();
-        clothingItems = this.getClothes().whenComplete(() {
-          setState(() {
-            confirmedDonations = this.getDonatedItems().whenComplete(() {
-              setState(() {
-                _mode = ClosetMode.Normal;
-              });
-            });
-          });
+      confirmedDonations = this.getDonatedItems();
+      clothingItems = this.getClothes();
+      tempClothingBin.clear();
+
+      clothingItems.then((e) {
+        print("HAHAHAHAHA");
+        print(e.clothingTypes.length);
+        setState(() {
+          _mode = ClosetMode.Normal;
+          return;
         });
       });
     });
@@ -238,16 +238,16 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             body:
                 jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) async {
-      setState(() {
-        tempClothingBin.clear();
-        clothingItems = this.getClothes().whenComplete(() {
-          setState(() {
-            confirmedDonations = this.getDonatedItems().whenComplete(() {
-              setState(() {
-                _mode = ClosetMode.Normal;
-              });
-            });
-          });
+      confirmedDonations = this.getDonatedItems();
+      clothingItems = this.getClothes();
+      tempClothingBin.clear();
+
+      confirmedDonations.then((e) {
+        print("HAHAHAHAHA");
+        print(e.clothingItems.length);
+        setState(() {
+          _mode = ClosetMode.Normal;
+          return;
         });
       });
     });
@@ -366,7 +366,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               clothingItemObjects: ls,
               setMode: setMode,
               action: widget.selectingOutfit ? addToOutfit : donateClothingItem,
-              isUnconfirmedDonation: isSelectedForDonation,
+              isFlipped: isSelectedForDonation,
             );
           } else if (snapshot.hasError) {
             print(snapshot.error);

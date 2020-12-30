@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 
 class EcoBar extends StatelessWidget {
   EcoBar({this.current, this.max});
@@ -32,7 +33,7 @@ class EcoBar extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: Icon(
                 Icons.eco,
-                color: Colors.green,
+                color: CustomColours.accentGreen(),
                 size: 11.0,
               )
             )
@@ -56,7 +57,7 @@ class EcoBar extends StatelessWidget {
                       width: min(maxWidth * current / max, maxWidth),
                       margin: EdgeInsets.fromLTRB(0.5, 2.5, 3.0, 2.5),
                       decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: CustomColours.accentGreen(),
                           borderRadius: BorderRadius.circular(20)
                       ),
                     )

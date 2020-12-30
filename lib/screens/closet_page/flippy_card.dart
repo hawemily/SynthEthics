@@ -92,14 +92,14 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
                                 child: Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Icon(Icons.eco,
-                                        color: CustomColours.iconGreen())))),
+                                        color: CustomColours.accentGreen())))),
                         Expanded(
                             flex: 5,
                             child: Text('+ ' + (donateGain.round()).toString() + ' ',
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: CustomColours.iconGreen())))
+                                    color: CustomColours.accentGreen())))
                       ]),
                       Align(
                           alignment: Alignment.center,

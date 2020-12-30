@@ -84,15 +84,16 @@ class _SelectCardState extends ClothingCardState<SelectCard> {
                               child: Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Icon(Icons.eco,
-                                      color: CustomColours.iconGreen())))),
+                                      color: CustomColours.accentCopper())))),
                       Expanded(
                           flex: 5,
                           child: Text(
-                              '+ ' + (donateGain.round()).toString() + ' ',
+                              (donateGain.round()).toString(),
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: CustomColours.iconGreen())))
+                                  color: CustomColours.accentCopper())))
                     ]),
                   ]))))
     ]);

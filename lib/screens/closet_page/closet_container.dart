@@ -21,7 +21,7 @@ class ClosetContainer extends StatelessWidget {
       this.clothingItemObjects,
       this.setMode,
       this.action,
-      this.isUnconfirmedDonation,
+      this.isFlipped,
       this.stagnant = false})
       : super(key: key);
 
@@ -29,7 +29,7 @@ class ClosetContainer extends StatelessWidget {
   final ClosetMode mode;
   final Function setMode;
   final Function action;
-  final Function isUnconfirmedDonation;
+  final Function isFlipped;
   final bool stagnant;
 
   @override
@@ -56,16 +56,12 @@ class ClosetContainer extends StatelessWidget {
                     case (ClosetMode.Donate):
                       return stagnant
                           ? ClothingCard(clothingItem: item)
-                          // : FlippyCard(action, isUnconfirmedDonation(item.id),
-                          //     clothingItem: item);
                           : SelectCard(action,
                               clothingItem: item, markForDonation: true);
                     case (ClosetMode.UnDonate):
-                      return SelectCard(action, clothingItem: item);
-                    // return FlippyCard(action, false,
-                    //     clothingItem: item);
+                      return SelectCard(action, clothingItem: item, markForDonation: true);
                     case (ClosetMode.Donated):
-                      return FlippyCard(action, isUnconfirmedDonation(item.id), clothingItem:item);
+                      return FlippyCard(action, isFlipped(item.id), clothingItem:item);
                     case (ClosetMode.Normal):
                     default:
                       return ClothingCard(clothingItem: item);
