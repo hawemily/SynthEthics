@@ -92,9 +92,35 @@ class _ClothingItemState extends State<ClothingItem> {
       showDialog(
           context: context,
           builder: (context) {
-            return Dialog(
-                child: Text(
-                    "Congrats! You have used this piece of clothing sustainably!"));
+            return AlertDialog(
+                title: Text(
+                  "Congratulations!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'lib/assets/leaf.jpg',
+                      width: 80,
+                      height: 80,
+                    ),
+                    Padding(padding: EdgeInsets.only(bottom: 10)),
+                    Text(
+                      "You have used this piece of clothing sustainably!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          height: 1.75,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                ));
           });
     }
     widget.getTimesWorn();
