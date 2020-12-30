@@ -29,15 +29,17 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
 
   void getCarmaRecords() async {
     String uid = CurrentUser.getInstance().getUID();
-    await api_client.get("/getCarmaRecords/" + uid)
-      .then((result) {
-       setState(() {
-         var res = jsonDecode(result.body);
-         daysRecord = RecordDatesPadder.padDays(res["days"]);
-         monthsRecord = RecordDatesPadder.padMonths(res["months"]);
-         yearsRecord = RecordDatesPadder.padYears(res["years"]);
-       });
-    });
+    if (uid != null) {
+      await api_client.get("/getCarmaRecords/" + uid)
+          .then((result) {
+        setState(() {
+          var res = jsonDecode(result.body);
+          daysRecord = RecordDatesPadder.padDays(res["days"]);
+          monthsRecord = RecordDatesPadder.padMonths(res["months"]);
+          yearsRecord = RecordDatesPadder.padYears(res["years"]);
+        });
+      });
+    }
   }
 
   @override

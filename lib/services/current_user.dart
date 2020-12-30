@@ -54,7 +54,9 @@ class CurrentUser {
 //      print("user is null");
 //      return "";
 //    }
-    return _user.uid;
+    if (_user != null) {
+      return _user.uid;
+    }
   }
 
   CurrentUser._internal();

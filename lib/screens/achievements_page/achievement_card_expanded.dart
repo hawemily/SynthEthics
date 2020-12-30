@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/achievements_page/achievement.dart';
+import 'package:synthetics/services/achievements/achievement_images.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class ExpandedAchievementCard extends StatefulWidget {
@@ -18,6 +19,13 @@ class _ExpandedAchievementCardState extends State<ExpandedAchievementCard> {
   @override
   Widget build(BuildContext context) {
     Widget achievementTypeWidget;
+
+    // Prevent division by 0
+    int progressDenominator = widget.achievement.nextTarget -
+        widget.achievement.previousTarget;
+    progressDenominator = (progressDenominator == 0) ?
+      widget.achievement.progressToTarget : progressDenominator;
+
     if (widget.achievement.type == AchievementType.Tiered) {
       achievementTypeWidget = Column (
           children : [
@@ -39,9 +47,7 @@ class _ExpandedAchievementCardState extends State<ExpandedAchievementCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
-                  value: widget.achievement.progressToTarget /
-                      (widget.achievement.nextTarget -
-                          widget.achievement.previousTarget),
+                  value: widget.achievement.progressToTarget / progressDenominator,
                   valueColor: AlwaysStoppedAnimation<Color>(
                       CustomColours.iconGreen()),
                   backgroundColor: CustomColours.offWhite(),
@@ -92,10 +98,12 @@ class _ExpandedAchievementCardState extends State<ExpandedAchievementCard> {
     List<Expanded> achievementCardElements = [
       Expanded(
         flex: 5,
-        child:
-          (widget.achievement.type == AchievementType.Unlock) ?
-            Image.asset("lib/assets/medal.png") :
-            Image.asset("lib/assets/medal2.png"),
+        child:(widget.achievement.type == AchievementType.Unlock)
+            ? AchievementImages
+            .retrieveOneTimeImage(widget.achievement.id)
+            : AchievementImages
+            .retrieveLevelImage(widget.achievement.id,
+            widget.achievement.level),
       )
     ];
     achievementCardElements.add(Expanded(

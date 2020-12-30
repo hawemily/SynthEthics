@@ -60,7 +60,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
         MaterialPageRoute(
             builder: (context) => ClothingItem(
                 clothingItem: this.currentClothingItem,
-                incrementTimesWorn: returnTimesWorn)));
+                getTimesWorn: returnTimesWorn)));
   }
 
   Future<ClothingItemObject> getAClothingItem() async {
