@@ -17,7 +17,7 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 import 'closet_donation_page.dart';
 
-enum ClosetMode { Normal, Select, Donate, UnDonate, Donated, UndoDonated }
+enum ClosetMode { Normal, Select, Donate, UnDonate, Donated }
 
 class Closet extends StatefulWidget {
   Closet({Key key, this.selectingOutfit = false}) : super(key: key);
@@ -196,10 +196,13 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     }
     print(tempClothingBin);
 
-    ItemsToDonateRequest req = new ItemsToDonateRequest(
-        uid, tempClothingBin.length == 0 ? [] : tempClothingBin.toList());
+    var ls = tempClothingBin.map((each) => each.id).toList();
 
-    api_client.post("/markForDonation", body: jsonEncode(req)).then((e) {
+    api_client
+        .post("/markForDonation",
+            body:
+                jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
+        .then((e) {
       print("in closet container");
       print(e.statusCode);
       print(e.body);
@@ -221,10 +224,13 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     }
     print(tempClothingBin);
 
-    ItemsToDonateRequest req = new ItemsToDonateRequest(
-        uid, tempClothingBin.length == 0 ? [] : tempClothingBin.toList());
+    var ls = tempClothingBin.map((each) => each.id).toList();
 
-    api_client.post("/unmarkForDonation", body: jsonEncode(req)).then((e) {
+    api_client
+        .post("/unmarkForDonation",
+            body:
+                jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
+        .then((e) {
       setState(() {
         tempClothingBin.clear();
         _mode = ClosetMode.Normal;
@@ -243,10 +249,13 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       return;
     }
     print(tempClothingBin);
-    ItemsToDonateRequest req = new ItemsToDonateRequest(
-        uid, tempClothingBin.length == 0 ? [] : tempClothingBin.toList());
+    var ls = tempClothingBin.map((each) => each.id).toList();
 
-    api_client.post("/markDonated", body: jsonEncode(req)).then((e) {
+    api_client
+        .post("/markDonated",
+            body:
+                jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
+        .then((e) {
       print("in closet container");
       print(e.statusCode);
       print(e.body);
@@ -258,25 +267,34 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     });
   }
 
-  void undoDonationCenter() {
-    if (tempClothingBin.isEmpty) {
-      setState(() {
-        _mode = ClosetMode.Normal;
-      });
-      return;
-    }
-    print(tempClothingBin);
+  void showConfirmDonationsDialog(BuildContext context) {
+    Widget confirmButton = FlatButton(
+        child: Text(
+          "OK",
+          style: TextStyle(color: CustomColours.greenNavy()),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          this.sendToDonationCenter();
+        });
 
-    ItemsToDonateRequest req = new ItemsToDonateRequest(
-        uid, tempClothingBin.length == 0 ? [] : tempClothingBin.toList());
+    AlertDialog alert = AlertDialog(
+      title: Text("Are all the donated items correct?"),
+      content: Text(
+        "This action is not reversible. All items that have been marked for donation will no longer be in your closet.",
+        textAlign: TextAlign.justify,
+      ),
+      actions: [
+        confirmButton,
+      ],
+    );
 
-    api_client.post("/markUndoDonated", body: jsonEncode(req)).then((e) {
-      setState(() {
-        tempClothingBin.clear();
-        _mode = ClosetMode.Normal;
-        confirmedDonations = this.getDonatedItems();
-      });
-    });
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 
   void outfitSelected() async {
@@ -357,6 +375,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                 setMode: setMode,
                 mode: _mode,
                 action: undonateClothingItem,
+                isInDonationList: isSelectedForDonation,
                 donatedItems: snapshot.data.clothingItems);
           } else if (snapshot.hasError) {
             print(snapshot.error);
@@ -410,9 +429,10 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                       TextStyle(fontSize: 16, color: CustomColours.offWhite())),
               onPressed: _mode == ClosetMode.Donate
                   ? donateSelected
-                  : sendToDonationCenter)));
-    } else if (_mode == ClosetMode.UnDonate ||
-        _mode == ClosetMode.UndoDonated) {
+                  : () {
+                      showConfirmDonationsDialog(context);
+                    })));
+    } else if (_mode == ClosetMode.UnDonate) {
       actions.add(Padding(
           padding: EdgeInsets.all(10.0),
           child: RaisedButton(
@@ -420,9 +440,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               child: Text('Done',
                   style:
                       TextStyle(fontSize: 16, color: CustomColours.offWhite())),
-              onPressed: _mode == ClosetMode.UnDonate
-                  ? undonateSelected
-                  : undoDonationCenter)));
+              onPressed: undonateSelected)));
     } else if (widget.selectingOutfit) {
       actions.add(Padding(
           padding: EdgeInsets.all(10.0),
@@ -445,7 +463,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                 : _mode == ClosetMode.UnDonate
                     ? 'Undo Donations'
                     : _mode == ClosetMode.Donated
-                        ? 'Check Donated'
+                        ? 'Mark Donated'
                         : 'Closet',
             style: TextStyle(color: Colors.black)),
         actions: actions,

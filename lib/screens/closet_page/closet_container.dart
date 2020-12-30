@@ -61,7 +61,7 @@ class ClosetContainer extends StatelessWidget {
                     case (ClosetMode.UnDonate):
                       return SelectCard(action, clothingItem: item);
                     case (ClosetMode.Donated):
-                      return SelectCard(action, clothingItem: item);
+                      return FlippyCard(action, isUnconfirmedDonation(item.id), clothingItem:item);
                     case (ClosetMode.Normal):
                     default:
                       return ClothingCard(clothingItem: item);
