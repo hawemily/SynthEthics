@@ -26,6 +26,9 @@ import { updateClothingItem } from "./endpoints/update_clothing_item";
 import { deleteUser } from "./endpoints/delete_user";
 import { updateOutfit } from "./endpoints/update_outfit";
 import { getAClothingItem } from "./endpoints/get_a_clothing_item";
+import { getItemsSentForDonation } from "./endpoints/get_items_sent_for_donation";
+import { sendItemsForDonation } from "./endpoints/post_items_sent_for_donation";
+import { unmarkItemsAccidentallyDonated } from "./endpoints/post_items_accidentally_marked_as_donated";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -99,6 +102,16 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
+  app.get("/closet/allItemsSentToDonation/:uid", (req: Request, res:Response) => {
+    getItemsSentForDonation(req, res, db);
+    return;
+  });
+
+  app.get("/closet/allDonatedItems/:uid", (req: Request, res: Response)=> {
+    getAllDonatedItems(req, res, db);
+    return;
+  });
+
 
 
   // ===========================================================================
@@ -147,11 +160,22 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
   app.post("/updateOutfit", (req: Request, res:Response) => {
     updateOutfit(req, res, db);
     return;
+  })
+  //TODO: post outfit
+  app.post("/markDonated", (req: Request, res:Response) => {
+    sendItemsForDonation(req, res, db);
+    return;
   });
 
+
+  app.post("/markUndoDonated", (req: Request, res:Response) => {
+    unmarkItemsAccidentallyDonated(req, res, db);
+    return;
+  });
+  
   app.post("/closet/updateItem", (req: Request, res:Response) => {
     updateClothingItem(req, res, db);
     return;
   });
 
-};
+}

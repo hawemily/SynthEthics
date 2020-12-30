@@ -7,9 +7,9 @@ part 'items_to_donate_request.g.dart';
 
 class ItemsToDonateRequest{
   String uid;
-  List<DonatedItemMetadata> items;
+  List<DonatedItemMetadata> ids;
 
-  ItemsToDonateRequest(this.uid, this.items);
+  ItemsToDonateRequest(this.uid, this.ids);
 
   Map<String, dynamic> toJson() => _$ItemsToDonateRequestToJson(this);
 }

@@ -20,7 +20,13 @@ class CurrentUser {
   }
 
   setUser(User user) {
+//    print("setting user");
+//    print("uid: ${user.uid}");
     _user = user;
+    if (user.photoURL != null && user.photoURL != "") {
+      _bgImage = user.photoURL;
+      print("setting bgImage: $_bgImage");
+    }
   }
 
   setUsername(String firstName, String lastName) {
@@ -39,12 +45,15 @@ class CurrentUser {
   String get initials => _initials;
   GoogleSignIn get googleSignIn => _googleSignIn;
   String get bgImage => _bgImage;
-
-  void setBgImage(String value) {
-    _bgImage = value;
-  }
+  User get user => _user;
 
   getUID() {
+//    print("getting uid");
+//    print("user in get uid: $_user");
+//    if (_user == null) {
+//      print("user is null");
+//      return "";
+//    }
     if (_user != null) {
       return _user.uid;
     }

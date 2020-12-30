@@ -3,6 +3,5 @@ export enum Collections {
     Users = "users",
     ToDonate = "toDonate",
     Outfit = "outfit",
-    Donated = "donated",
     Achievements = "achievements",
 }

@@ -6,13 +6,23 @@ export const sendItemsForDonation = async (req:Request, res:Response, db: Fireba
         const {uid, ids} = req.body;
         const userRef = db.collection(Collections.Users).doc(uid);
         const toDonateRef = userRef.collection(Collections.ToDonate);
-        const donatedRef = userRef.collection(Collections.Donated);
+
+        var totalCarmaAddedFromDonatedItems = (await userRef.get()).data()!["cF"];
+
+        const DONATION_CONST = 0.1;
 
         for(var i = 0; i < ids.length; i++) {
-            const clothingItem = await toDonateRef.doc(ids[i]).get();
-            donatedRef.doc(clothingItem.id).set(clothingItem.data()!);
-            await toDonateRef.doc(ids[i]).delete();
+            const donatedItemMetadata= (await toDonateRef.doc(ids[i]).get()).data();
+            totalCarmaAddedFromDonatedItems += donatedItemMetadata!["cF"] * DONATION_CONST;
+
+            await toDonateRef.doc(ids[i]).update({
+                donated: true
+            });
         }
+
+        await userRef.update({
+            carmaPoints: totalCarmaAddedFromDonatedItems
+        });
 
         res.send(200);
     } catch (e) {

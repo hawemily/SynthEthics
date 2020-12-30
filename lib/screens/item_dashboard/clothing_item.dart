@@ -135,183 +135,189 @@ class _ClothingItemState extends State<ClothingItem> {
             Container(
                 color: CustomColours.offWhite(),
                 child: Column(children: [
-                  Padding(padding: EdgeInsets.only(top: 35)),
-                  SizedBox(
-                    height: 170.0,
-                    child: Stack(
-                      children: <Widget>[
-                        Center(
-                            child: Image.asset(
-                          'lib/assets/closet_IT.jpg',
-                          width: double.maxFinite,
-                          height: 160.0,
-                        )),
-                        Center(
-                          child: Container(
-                            width: 170,
-                            height: 170,
-                            child: new CircularProgressIndicator(
-                              strokeWidth: 30,
-                              value: progress,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  CustomColours.iconGreen()),
-                              backgroundColor: Colors.grey[200],
+                  Padding(
+                    padding: EdgeInsets.only(top: 35),
+                    child: SizedBox(
+                      height: 170.0,
+                      child: Stack(
+                        children: <Widget>[
+                          Center(
+                              child: Image.asset(
+                            'lib/assets/closet_IT.jpg',
+                            width: double.maxFinite,
+                            height: 160.0,
+                          )),
+                          Center(
+                            child: Container(
+                              width: 170,
+                              height: 170,
+                              child: new CircularProgressIndicator(
+                                strokeWidth: 30,
+                                value: progress,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CustomColours.iconGreen()),
+                                backgroundColor: Colors.grey[200],
+                              ),
                             ),
                           ),
-                        ),
-                        Center(
-                          child: Container(
-                              decoration: new BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                      fit: BoxFit.fitHeight,
-                                      image: ((this.image == null)
-                                          // TODO: Find a better placeholder image later
-                                          ? new NetworkImage(
-                                              "https://cdn.endource.com/image/s3-49f2938a8e4d8f6c74bccbd2bf800c06/detail/and-other-stories-ribbed-square-neck-crop-top.jpg")
-                                          : FileImage(this.image))))),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 5.0)),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.spaceEvenly,
-                    buttonHeight: 20,
-                    buttonMinWidth: 60,
-                    children: [
-                      FlatButton(
-                        textColor: CustomColours.greenNavy(),
-                        shape: CircleBorder(),
-                        child: Text(
-                          "Wear",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () => updateProgress('INC'),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.undo),
-                        color: CustomColours.greenNavy(),
-                        tooltip: 'Undo',
-                        onPressed: () => updateProgress('DEC'),
-                      ),
-                      FlatButton(
-                          textColor: CustomColours.greenNavy(),
-                          child: Text(
-                            "Donate",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                          Center(
+                            child: Container(
+                                decoration: new BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                        fit: BoxFit.fitHeight,
+                                        image: ((this.image == null)
+                                            // TODO: Find a better placeholder image later
+                                            ? new NetworkImage(
+                                                "https://cdn.endource.com/image/s3-49f2938a8e4d8f6c74bccbd2bf800c06/detail/and-other-stories-ribbed-square-neck-crop-top.jpg")
+                                            : FileImage(this.image))))),
                           ),
-                          onPressed: () => donateItem()),
-                    ],
-                  )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 5.0),
+                      child: ButtonBar(
+                        alignment: MainAxisAlignment.spaceEvenly,
+                        buttonHeight: 20,
+                        buttonMinWidth: 60,
+                        children: [
+                          FlatButton(
+                            textColor: CustomColours.greenNavy(),
+                            shape: CircleBorder(),
+                            child: Text(
+                              "Wear",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () => updateProgress('INC'),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.undo),
+                            color: CustomColours.greenNavy(),
+                            tooltip: 'Undo',
+                            onPressed: () => updateProgress('DEC'),
+                          ),
+                          FlatButton(
+                            textColor: CustomColours.greenNavy(),
+                            child: Text(
+                              "Donate",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () => donateItem(),
+                          ),
+                        ],
+                      )),
                 ])),
-            Padding(padding: EdgeInsets.only(top: 10)),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 4),
-                          blurRadius: 30,
-                          color: Color(0xFFB7B7B7).withOpacity(.16),
-                        ),
-                      ],
+              padding: EdgeInsets.only(top: 10),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            blurRadius: 30,
+                            color: Color(0xFFB7B7B7).withOpacity(.16),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          InfoBlock(
+                            color: Colors.deepOrange[600],
+                            value: StringOperator.capitalise(
+                                clothingID.data.brand),
+                            label: "Brand",
+                          ),
+                          InfoBlock(
+                            color: CustomColours.iconGreen(),
+                            value: StringOperator.capitalise(
+                                clothingID.data.materials[0]),
+                            label: "Material",
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        InfoBlock(
-                          color: Colors.deepOrange[600],
-                          value:
-                              StringOperator.capitalise(clothingID.data.brand),
-                          label: "Brand",
-                        ),
-                        InfoBlock(
-                          color: CustomColours.iconGreen(),
-                          value: StringOperator.capitalise(
-                              clothingID.data.materials[0]),
-                          label: "Material",
-                        ),
-                      ],
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            blurRadius: 30,
+                            color: Color(0xFFB7B7B7).withOpacity(.16),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          InfoBlock(
+                            color: CustomColours.baseBlack(),
+                            value:
+                                "${this.timesWorn} / ${this.clothingID.data.maxNoOfTimesToBeWorn.round()}",
+                            label: "Times Worn",
+                          ),
+                          InfoBlock(
+                            color: CustomColours.negativeRed(),
+                            value:
+                                "${this.karma} / ${this.clothingID.data.cF.round()}",
+                            label: "Carma Pts",
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 10.0)),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 4),
-                          blurRadius: 30,
-                          color: Color(0xFFB7B7B7).withOpacity(.16),
-                        ),
-                      ],
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            blurRadius: 30,
+                            color: Color(0xFFB7B7B7).withOpacity(.16),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          InfoBlock(
+                            color: Colors.red[900],
+                            value: customFormatDateTime(
+                                clothingID.data.purchaseDate),
+                            label: "Purchased",
+                          ),
+                          InfoBlock(
+                            color: Colors.blue[900],
+                            value: customFormatDateTime(
+                                clothingID.data.lastWornDate),
+                            label: "Last Worn",
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        InfoBlock(
-                          color: CustomColours.baseBlack(),
-                          value:
-                              "${this.timesWorn} / ${this.clothingID.data.maxNoOfTimesToBeWorn.round()}",
-                          label: "Times Worn",
-                        ),
-                        InfoBlock(
-                          color: CustomColours.negativeRed(),
-                          value:
-                              "${this.karma} / ${this.clothingID.data.cF.round()}",
-                          label: "Carma Pts",
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 10.0)),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 4),
-                          blurRadius: 30,
-                          color: Color(0xFFB7B7B7).withOpacity(.16),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        InfoBlock(
-                          color: Colors.red[900],
-                          value: customFormatDateTime(
-                              clothingID.data.purchaseDate),
-                          label: "Purchased",
-                        ),
-                        InfoBlock(
-                          color: Colors.blue[900],
-                          value: customFormatDateTime(
-                              clothingID.data.lastWornDate),
-                          label: "Last Worn",
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            )
           ],
         ),
         bottomNavigationBar: NavBar(selected: 1));

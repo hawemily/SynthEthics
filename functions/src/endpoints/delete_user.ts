@@ -5,7 +5,7 @@ export const deleteUser = async (req: Request, res: Response, db: FirebaseFirest
     const uid = req.params.uid;
 
     const userRef = db.collection(Collections.Users).doc(uid);
-    const subCollections: String[] = [Collections.Closet, Collections.ToDonate, Collections.Donated]
+    const subCollections: String[] = [Collections.Closet, Collections.ToDonate]
 
     subCollections.forEach((col) => {
         const path = "/" + Collections.Users + "/" + uid + col;

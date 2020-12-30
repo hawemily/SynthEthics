@@ -11,10 +11,10 @@ export const markItemsAsDonate = async (req: Request, res: Response, db: Firebas
          const closetRef = userRef.collection(Collections.Closet);
     
          const toDonateRef = userRef.collection(Collections.ToDonate);
-
+        
          for (var i = 0; i < ids.length; i++) {
             const clothingItem = await closetRef.doc(ids[i]).get();
-            toDonateRef.doc(clothingItem.id).set(clothingItem.data()!);
+            await toDonateRef.doc(clothingItem.id).set(clothingItem.data()!);
             await closetRef.doc(ids[i]).delete();
          }
         res.send(200);
