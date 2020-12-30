@@ -42,18 +42,20 @@ class HomePageState extends State<HomePage> {
 
   void getUserRecords() async {
     String uid = CurrentUser.getInstance().getUID();
-    final resp = await api_client.get("/getUserRecords/" + uid);
+    if (uid != null) {
+      final resp = await api_client.get("/getUserRecords/" + uid);
 
-    if (resp.statusCode == 200) {
-      final body = jsonDecode(resp.body);
-      setState(() {
-        carmaPoints = body["carmaPoints"];
-        donated = body["itemsDonated"];
+      if (resp.statusCode == 200) {
+        final body = jsonDecode(resp.body);
+        setState(() {
+          carmaPoints = body["carmaPoints"];
+          donated = body["itemsDonated"];
 
-        // TODO: Add bought and worn totals
-      });
-    } else {
-      print("Failed to fetch user records");
+          // TODO: Add bought and worn totals
+        });
+      } else {
+        print("Failed to fetch user records");
+      }
     }
   }
 

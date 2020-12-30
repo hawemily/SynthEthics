@@ -45,7 +45,9 @@ class CurrentUser {
   }
 
   getUID() {
-    return _user.uid;
+    if (_user != null) {
+      return _user.uid;
+    }
   }
 
   CurrentUser._internal();
