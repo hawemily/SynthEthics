@@ -110,19 +110,17 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
             });
   }
 
-  // void tapAction() {
-  //   Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) =>
-  //               ClothingItem(clothingItem: this.currentClothingItem)));
-  // }
+  void tapAction() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ClothingItem(clothingItem: this.currentClothingItem)));
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Stack stack = this.buildBaseStack(this.tapAction, clear: this.clear);
-    Stack stack = this.buildBaseStack(() => print("Get item dashboard page"),
-        clear: this.clear);
+    Stack stack = this.buildBaseStack(this.tapAction, clear: this.clear);
     stack.children.add(Positioned(top: 0.0, right: 0.0, child: getIcon()));
 
     // if (!clear) {
