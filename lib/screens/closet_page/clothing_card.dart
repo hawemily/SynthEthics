@@ -16,6 +16,7 @@ class ClothingCard extends StatefulWidget {
       this.clothingItem,
       this.isOutfit = false,
       this.isRandom = false,
+      this.isDonated = false,
       this.selectItemForOutfit})
       : super(key: key);
 
@@ -23,6 +24,7 @@ class ClothingCard extends StatefulWidget {
   final ClothingItemObject clothingItem;
   final bool isOutfit;
   final bool isRandom;
+  final bool isDonated;
 
   @override
   ClothingCardState createState() => ClothingCardState();
@@ -130,6 +132,17 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
             }()));
   }
 
+  bool notNull(Object o) => o != null;
+
+  Widget buildOverlay() {
+    if (widget.isDonated) {
+      return Container(
+          color: Colors.white70,
+          child: Center(child: Icon(Icons.store_mall_directory, color: Colors.green,)));
+    }
+    return null;
+  }
+
   Widget buildBaseStack(on_tap, {clear = false}) {
     if (widget.isRandom) _init();
     return Stack(children: [
@@ -137,11 +150,13 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
           color: CustomColours.offWhite(),
           margin: EdgeInsets.all(5.0),
           child: InkWell(
-              onTap: on_tap,
+              onTap: widget.isDonated ? () {}: on_tap,
               child: Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: Stack(children: [
+                  child: Stack(
+                      children: [
                     buildImage(),
+                    buildOverlay(),
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: clear
@@ -155,7 +170,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                                     .currentClothingItem
                                     .data
                                     .maxNoOfTimesToBeWorn)),
-                  ]))))
+                  ].where(notNull).toList()))))
     ]);
   }
 
