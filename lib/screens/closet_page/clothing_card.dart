@@ -64,6 +64,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   }
 
   Future<ClothingItemObject> getAClothingItem() async {
+    if (this.currentClothingItem == null) return null;
     final response = await api_client.get("/closet/allClothes/" +
         this.currentClothingItem.id +
         "/" +
@@ -82,7 +83,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   void returnTimesWorn() {
     getAClothingItem().then((clothingItem) {
       setState(() {
-        if (clothingItem.data != null &&
+        if (clothingItem != null && clothingItem.data != null &&
             clothingItem.data.currentTimesWorn !=
                 this.currentClothingItem.data.currentTimesWorn) {
           this.currentClothingItem = clothingItem;
@@ -100,12 +101,12 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
             future: this.currClothingItemImage,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print("Gets to correct place");
                 return Image.file(snapshot.data);
-              } else if (snapshot.data == null) {
+              } else if (snapshot.hasError) {
                 return Text("No image from file");
               }
-              return LinearProgressIndicator();
+              return Container();
+              // return LinearProgressIndicator();
             });
   }
 

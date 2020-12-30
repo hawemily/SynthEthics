@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/requestObjects/donated_item_metadata.dart';
 import 'package:synthetics/requestObjects/items_to_donate_request.dart';
@@ -104,7 +105,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   Future<ClothingTypeObject> getDonatedItems() async {
     print("get all items marked as to be donated from backend");
-    final response = await api_client.get("/closet/allDonatedItems/"+ user.getUID());
+    final response =
+        await api_client.get("/closet/allDonatedItems/" + user.getUID());
 
     if (response.statusCode == 200) {
       print("respBodyInGetDonatedIitems: ${response.body}");
@@ -122,7 +124,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   Future<GetClosetResponse> getClothes() async {
     print("trying get all clothes from backend");
-    final response = await api_client.get("/closet/allClothes/" + user.getUID());
+    final response =
+        await api_client.get("/closet/allClothes/" + user.getUID());
 
     if (response.statusCode == 200) {
 //      print("respBody: ${response.body}");
@@ -183,16 +186,23 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     api_client
         .post("/markForDonation",
-            body: jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
-        .then((e) {
+            body:
+                jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
+        .then((e) async {
       print("in closet container");
       print(e.statusCode);
       print(e.body);
       setState(() {
         tempClothingBin.clear();
-        _mode = ClosetMode.Normal;
-        confirmedDonations = this.getDonatedItems();
-        clothingItems = this.getClothes();
+        clothingItems = this.getClothes().whenComplete(() {
+          setState(() {
+            confirmedDonations = this.getDonatedItems().whenComplete(() {
+              setState(() {
+                _mode = ClosetMode.Normal;
+              });
+            });
+          });
+        });
       });
     });
   }
@@ -210,13 +220,20 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     api_client
         .post("/unmarkForDonation",
-            body: jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
-        .then((e) {
+            body:
+                jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
+        .then((e) async {
       setState(() {
         tempClothingBin.clear();
-        _mode = ClosetMode.Normal;
-        confirmedDonations = this.getDonatedItems();
-        clothingItems = this.getClothes();
+        clothingItems = this.getClothes().whenComplete(() {
+          setState(() {
+            confirmedDonations = this.getDonatedItems().whenComplete(() {
+              setState(() {
+                _mode = ClosetMode.Normal;
+              });
+            });
+          });
+        });
       });
     });
   }
@@ -239,8 +256,11 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     // put in try, loading icon
     await api_client
         .post("/postOutfit",
-            body: jsonEncode(
-                <String, dynamic>{'uid': user.getUID(), 'name': "outfitName", 'ids': items}))
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'name': "outfitName",
+              'ids': items
+            }))
         .then((e) {
       print("in closet container");
       print(e.statusCode);
