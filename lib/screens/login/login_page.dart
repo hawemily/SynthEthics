@@ -23,8 +23,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget loadingOverlay() {
     return _isLoggingIn ? new Container(color: Colors.white,
-        child: Center(child: CircularProgressIndicator())) : Container();
+        child: Center(child: CircularProgressIndicator())) : null;;
   }
+
+  bool notNull(Object o) => o != null;
 
   Widget _LoginPage() {
     return Center(
@@ -71,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                       signInScreen: Screens.EmailSignIn),
                 ])
           ]),
-          loadingOverlay()
-        ]));
+          loadingOverlay(),
+        ].where(notNull).toList()));
   }
 
   @override
