@@ -9,8 +9,9 @@ import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 
 class OutfitCard extends ClothingCard {
-  const OutfitCard({Key key, this.outfitClothingList}) : super(key: key);
+  const OutfitCard({Key key, this.outfitClothingList, this.resetDressingRoom}) : super(key: key);
 
+  final Function resetDressingRoom;
   final List<ClothingItemObject> outfitClothingList;
 
   @override
@@ -110,12 +111,17 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
             });
   }
 
+  void getTimesWornDressingRoom() {
+    this.returnTimesWorn();
+    widget.resetDressingRoom();
+  }
+
   void tapAction() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ClothingItem(clothingItem: this.currentClothingItem)));
+                ClothingItem(clothingItem: this.currentClothingItem, getTimesWorn: getTimesWornDressingRoom,)));
   }
 
   @override
