@@ -23,6 +23,9 @@ const update_clothing_item_1 = require("./endpoints/update_clothing_item");
 const delete_user_1 = require("./endpoints/delete_user");
 const update_outfit_1 = require("./endpoints/update_outfit");
 const get_a_clothing_item_1 = require("./endpoints/get_a_clothing_item");
+const get_items_sent_for_donation_1 = require("./endpoints/get_items_sent_for_donation");
+const post_items_sent_for_donation_1 = require("./endpoints/post_items_sent_for_donation");
+const post_items_accidentally_marked_as_donated_1 = require("./endpoints/post_items_accidentally_marked_as_donated");
 exports.routes = (app, db) => {
     // ===========================================================================
     //      *** GET REQUESTS
@@ -80,6 +83,14 @@ exports.routes = (app, db) => {
         res.status(200).json({ data: "dsfdf" });
         return;
     });
+    app.get("/closet/allItemsSentToDonation/:uid", (req, res) => {
+        get_items_sent_for_donation_1.getItemsSentForDonation(req, res, db);
+        return;
+    });
+    app.get("/closet/allDonatedItems/:uid", (req, res) => {
+        get_all_donated_items_1.getAllDonatedItems(req, res, db);
+        return;
+    });
     // ===========================================================================
     //      *** POST REQUESTS
     // ===========================================================================
@@ -117,6 +128,15 @@ exports.routes = (app, db) => {
     });
     app.post("/updateOutfit", (req, res) => {
         update_outfit_1.updateOutfit(req, res, db);
+        return;
+    });
+    //TODO: post outfit
+    app.post("/markDonated", (req, res) => {
+        post_items_sent_for_donation_1.sendItemsForDonation(req, res, db);
+        return;
+    });
+    app.post("/markUndoDonated", (req, res) => {
+        post_items_accidentally_marked_as_donated_1.unmarkItemsAccidentallyDonated(req, res, db);
         return;
     });
     app.post("/closet/updateItem", (req, res) => {

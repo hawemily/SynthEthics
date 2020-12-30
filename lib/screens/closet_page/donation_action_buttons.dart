@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:synthetics/theme/custom_colours.dart';
 
 import 'action_icons_and_text.dart';
 
@@ -15,7 +16,6 @@ class DonationActionButton extends StatefulWidget {
 
 class _DonationActionButtonState extends State<DonationActionButton>
     with TickerProviderStateMixin {
-
   List<ActionIconsAndText> _floatingActionButtons;
 
   @override
@@ -23,7 +23,6 @@ class _DonationActionButtonState extends State<DonationActionButton>
     _floatingActionButtons = widget.floatingActionButtons;
     super.initState();
   }
-
 
   List<SpeedDialChild> getChildren() {
     print("getting children");
@@ -35,29 +34,30 @@ class _DonationActionButtonState extends State<DonationActionButton>
       widgets.add(_buildFloatingButtons(e));
     });
 
-   print("widgets length ${widgets.length}");
+    print("widgets length ${widgets.length}");
 
     return widgets;
   }
 
   SpeedDialChild _buildFloatingButtons(ActionIconsAndText elem) {
 //    print(value);
-  print(elem.onClick);
+    print(elem.onClick);
     return SpeedDialChild(
-      child: elem.icon,
+        child: elem.icon,
+        backgroundColor: CustomColours.greenNavy(),
 //        child: Row(
 //          children: <Widget>[
 //            elem.icon,
 ////            elem.text,
 //          ],
 //        ),
-      onTap: elem.onClick
-    );
+        onTap: elem.onClick);
   }
 
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
+      backgroundColor: CustomColours.greenNavy(),
       marginRight: 30.0,
       marginBottom: 30.0,
       animatedIcon: AnimatedIcons.menu_close,

@@ -31,10 +31,13 @@ class InfoBlock extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        Text(
-          value,
-          style: TextStyle(
-              fontSize: 25, color: color, fontWeight: FontWeight.w600),
+        FittedBox(
+          fit: BoxFit.contain,
+          child: Text(
+            value,
+            style: TextStyle(
+                fontSize: 25, color: color, fontWeight: FontWeight.w600),
+          ),
         ),
         Padding(padding: EdgeInsets.only(top: 5.0)),
         Text(label,

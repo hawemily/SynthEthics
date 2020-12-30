@@ -18,10 +18,9 @@ class ClothingTypes {
     final types = [
       "tops",
       "bottoms",
-      "skirts",
       "dresses",
       "outerwear",
-      "headgear"
+      "accessories"
     ];
     return types;
   }

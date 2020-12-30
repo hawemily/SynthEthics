@@ -31,6 +31,7 @@ exports.postClothingItem = async (req, res, db) => {
             lastWornDate: lastWorn,
             purchaseDate: dateOfpurchase,
             dominantColor: dominantColor,
+            donated: false,
         };
         const userRef = db.collection(db_collections_1.Collections.Users).doc(uid);
         console.log(`apparel cf" ${apparel.cF}`);

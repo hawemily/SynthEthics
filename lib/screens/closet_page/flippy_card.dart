@@ -45,10 +45,12 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
 
   @override
   Widget build(BuildContext context) {
-    double donateGain = this.currentClothingItem.data.cF *
-        (1 -
-            this.currentClothingItem.data.currentTimesWorn /
-                this.currentClothingItem.data.maxNoOfTimesToBeWorn);
+//    double donateGain = this.currentClothingItem.data.cF *
+//        (1 -
+//            this.currentClothingItem.data.currentTimesWorn /
+//                this.currentClothingItem.data.maxNoOfTimesToBeWorn);
+    final double DONATION_CONST = 0.1;
+    double donateGain = this.currentClothingItem.data.cF * DONATION_CONST;
 
     return FlipCard(
         key: cardKey,

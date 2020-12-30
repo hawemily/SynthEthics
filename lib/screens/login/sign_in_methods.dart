@@ -13,17 +13,16 @@ import 'package:synthetics/routes.dart';
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-void onGoogleSignIn(BuildContext context) async {
+void onGoogleSignIn(BuildContext context, Function progressToggle) async {
     CurrentUser currUser = CurrentUser.getInstance();
     currUser.setGoogleSignIn(_googleSignIn);
-    User user = await _handleSignIn();
+    User user = await _handleSignIn(progressToggle);
     currUser.setUser(user);
-    currUser.setBgImage(user.photoURL);
 
     Navigator.pushNamed(context, routeMapping[Screens.Home]);
 }
 
-Future<User> _handleSignIn() async {
+Future<User> _handleSignIn(Function progressToggle) async {
   User user;
   bool userSignedIn = await _googleSignIn.isSignedIn();
 
@@ -46,6 +45,7 @@ Future<User> _handleSignIn() async {
       idToken: googleAuth.idToken,
     );
 
+    progressToggle();
     print("signing in with Google! line 29");
     user = (await _auth.signInWithCredential(credential)).user;
     print('user uid: ${user.uid}');

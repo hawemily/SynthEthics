@@ -13,7 +13,7 @@ class OutfitContainer extends StatelessWidget {
   OutfitContainer({Key key, this.outfits}) : super(key: key);
 
   final List<OutfitListItem> outfits;
-  CurrentUser user = CurrentUser.getInstance();
+  final CurrentUser user = CurrentUser.getInstance();
 
   Future<void> updateAllItems(OutfitListItem oF) async {
     List<ClothingItemObject> clothing = oF.data.clothing;
@@ -30,7 +30,6 @@ class OutfitContainer extends StatelessWidget {
       i++;
     }
 
-
     await api_client
         .post("/updateOutfit",
             body: jsonEncode(<String, dynamic>{
@@ -45,7 +44,6 @@ class OutfitContainer extends StatelessWidget {
       print(e.statusCode);
       print(e.body);
     });
-
   }
 
   Widget buildOutfitCard(OutfitListItem oF) {
@@ -67,7 +65,6 @@ class OutfitContainer extends StatelessWidget {
                         child: FlatButton(
                             color: CustomColours.greenNavy(),
                             textColor: CustomColours.offWhite(),
-                            // splashColor: CustomColours.greenNavy(),
                             highlightColor: CustomColours.iconGreen(),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50)),
@@ -82,7 +79,6 @@ class OutfitContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Outfit: ${this.outfits}");
     return Container(
         margin: const EdgeInsets.all(15.0),
         child: new GridView.count(
@@ -90,10 +86,7 @@ class OutfitContainer extends StatelessWidget {
           childAspectRatio: 0.7,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          children: [
-            for (var item in this.outfits) buildOutfitCard(item)
-            // OutfitCard(outfitClothingList: item.data.clothing)
-          ],
+          children: [for (var item in this.outfits) buildOutfitCard(item)],
         ));
   }
 }
