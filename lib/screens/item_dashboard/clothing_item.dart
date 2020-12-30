@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
+import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/screens/item_dashboard/widgets/info_block.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
@@ -116,7 +117,7 @@ class _ClothingItemState extends State<ClothingItem> {
       print(e.statusCode);
       print(e.body);
     });
-    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Closet()));
   }
 
   @override
