@@ -72,183 +72,158 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> stackWidgets = [
-    Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: CustomColours.greenNavy(),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-            icon: Icon(
-              Icons.emoji_events,
-              size: _iconSize,
-              color: CustomColours.offWhite(),
-            ),
-            onPressed: () {
-              setState(() {
-                _openAchievements = true;
-              });
-            }),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.info,
+      Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: CustomColours.greenNavy(),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+              icon: Icon(
+                Icons.emoji_events,
+                size: _iconSize,
+                color: CustomColours.offWhite(),
+              ),
+              onPressed: () {
+                setState(() {
+                  _openAchievements = true;
+                });
+              }),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.info,
+                    size: _iconSize, color: CustomColours.offWhite()),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InformationPage()),
+                  );
+                }),
+            IconButton(
+              icon: Icon(Icons.settings,
                   size: _iconSize, color: CustomColours.offWhite()),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => InformationPage()),
-                );
-              }),
-          IconButton(
-            icon: Icon(Icons.settings,
-                size: _iconSize, color: CustomColours.offWhite()),
-            onPressed: () {
-              _scaffoldKey.currentState.openEndDrawer();
-            },
-          )
-          // HomeDropdownMenu()
-        ],
-      ),
-      endDrawer: HomeRightDrawer(),
-      body: Center(
-        child: Container(
-          child: Column(
+                _scaffoldKey.currentState.openEndDrawer();
+              },
+            )
+            // HomeDropdownMenu()
+          ],
+        ),
+        endDrawer: HomeRightDrawer(),
+        body: Center(
+          child: Container(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-          Expanded(
-          <<<<<<< HEAD
-          flex: 1,
-              child: Center(
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                            flex: 4,
-                            child: FittedBox(
-                            =======
-                            flex: 2,
-                            child: Stack(children: [
-                            Center(
-                            child: Container(
-                            color: CustomColours.offWhite(),
-                            width: 400,
-                            height: 180,
-                            child: Container(
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceEvenly,
-                                    children: [
-                                    Expanded(
-                                    flex: 4,
-                                    child: FittedBox(
-                                    >>>>>>> 1911a9b35aca000b6fbbcf272ab7d58069a193e0
+                Expanded(
+                  flex: 2,
+                  child: Stack(children: [
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                                flex: 4,
+                                child: FittedBox(
                                     fit: BoxFit.fill,
                                     child: CircleAvatar(
-                                    backgroundColor:
-                                    CustomColours.greenNavy(),
-                                    child: user == null ||
-                                        user.signInMethod ==
-                                            SignInMethod.EmailPassword ||
-                                        user.bgImage == null ||
-                                        user.bgImage == ""
-                                        ? Center(
-                                        child: Text(
-                                            user.initials == null
-                                                ? ""
-                                                : user.initials,
-                                            style: TextStyle(
-                                                color: Colors.white)))
-                                        : CircleAvatar(
-                                        radius: 18,
-                                        // problem with this is that the user is not instantiated and so it shows the initials
-                                        backgroundImage: NetworkImage(
-                                            user.bgImage))))),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "${carmaPoints.toString()} Carma Points",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: CustomColours.greenNavy()),
-                          ),
-                        )
-                      ],
-                    ),
+                                        backgroundColor:
+                                            CustomColours.greenNavy(),
+                                        child: user == null ||
+                                                user.signInMethod ==
+                                                    SignInMethod
+                                                        .EmailPassword ||
+                                                user.bgImage == null ||
+                                                user.bgImage == ""
+                                            ? Center(
+                                                child: Text(
+                                                    user.initials == null
+                                                        ? ""
+                                                        : user.initials,
+                                                    style: TextStyle(
+                                                        color: Colors.white)))
+                                            : CircleAvatar(
+                                                radius: 18,
+                                                // problem with this is that the user is not instantiated and so it shows the initials
+                                                backgroundImage: NetworkImage(
+                                                    user.bgImage))))),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                "${carmaPoints ==  null ? 0 : carmaPoints.toString()} Carma Points",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: CustomColours.greenNavy()),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ]),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CarmaStat(
+                        statColor: CustomColours.iconGreen(),
+                        statLabel: "Worn",
+                        statValue: worn,
+                      ),
+                      CarmaStat(
+                        statColor: CustomColours.negativeRed(),
+                        statLabel: "Bought",
+                        statValue: bought,
+                      ),
+                      CarmaStat(
+                        statColor: CustomColours.iconGreen(),
+                        statLabel: "Donated",
+                        statValue: donated,
+                      ),
+                    ],
                   ),
-                  <<<<<<< HEAD
-              ),
-              =======
-              ]),
-        ),
-
-        Expanded(
-          flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CarmaStat(
-                statColor: CustomColours.iconGreen(),
-                statLabel: "Worn",
-                statValue: worn,
-              ),
-              CarmaStat(
-                statColor: CustomColours.negativeRed(),
-                statLabel: "Bought",
-                statValue: bought,
-              ),
-              CarmaStat(
-                statColor: CustomColours.iconGreen(),
-                statLabel: "Donated",
-                statValue: donated,
-              ),
-            ],
+                ),
+                Expanded(flex: 6, child: CarmaRecordViewer()),
+              ],
+            ),
           ),
         ),
-        Expanded(
-            flex: 6,
-            child: CarmaRecordViewer()
-            >>>>>>> 1911a9b35aca000b6fbbcf272ab7d58069a193e0
-        ),
-        Expanded(flex: 3, child: CarmaRecordViewer()),
-        ],
-      ),
-    ),
-    ),
-    bottomNavigationBar: NavBar(selected: 0),
-    )
+        bottomNavigationBar: NavBar(selected: 0),
+      )
     ];
 
     stackWidgets.addAll([
-    AnimatedSwitcher(
-    duration: const Duration(milliseconds: 200),
-    child: (_openAchievements)
-    ? Container(
-    color: CustomColours.baseBlack().withOpacity(0.9),
-    )
-        : Container(),
-    transitionBuilder: (Widget child, Animation<double> animation) {
-    return ScaleTransition(child: child, scale: animation);
-    },
-    ),
-    AnimatedSwitcher(
-    duration: const Duration(milliseconds: 150),
-    child: (_openAchievements)
-    ? AchievementsPage(
-    onClose: () {
-    setState(() {
-    _openAchievements = false;
-    });
-    },
-    )
-        : Container(),
-    transitionBuilder: (Widget child, Animation<double> animation) {
-    return ScaleTransition(child: child, scale: animation);
-    },
-    )
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: (_openAchievements)
+            ? Container(
+                color: CustomColours.baseBlack().withOpacity(0.9),
+              )
+            : Container(),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return ScaleTransition(child: child, scale: animation);
+        },
+      ),
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 150),
+        child: (_openAchievements)
+            ? AchievementsPage(
+                onClose: () {
+                  setState(() {
+                    _openAchievements = false;
+                  });
+                },
+              )
+            : Container(),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return ScaleTransition(child: child, scale: animation);
+        },
+      )
     ]);
 
-    return Stack(children: stackWidgets
-    );
+    return Stack(children: stackWidgets);
   }
 }

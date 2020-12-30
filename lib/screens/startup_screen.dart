@@ -16,6 +16,7 @@ class StartupScreen extends StatelessWidget {
     if (result != null) {
       print("Result in startup screen is not null!");
       CurrentUser user = CurrentUser.getInstance();
+      print("user in splash screen: $result");
       user.setUser(result);
     }
     return new SplashScreen(
