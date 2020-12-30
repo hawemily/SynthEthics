@@ -206,7 +206,7 @@ class _ClothingItemState extends State<ClothingItem> {
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                            onPressed: () => donateItem()),
+                            onPressed: () => donateItem(),
                           ),
                         ],
                       )),
