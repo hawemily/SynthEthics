@@ -6,7 +6,9 @@ import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 class OutfitContainer extends StatefulWidget {
-  OutfitContainer({Key key, this.outfits, this.updateFunction, this.resetDressingRoom}) : super(key: key);
+  OutfitContainer(
+      {Key key, this.outfits, this.updateFunction, this.resetDressingRoom})
+      : super(key: key);
 
   final List<OutfitListItem> outfits;
   final Function updateFunction;
@@ -19,37 +21,62 @@ class OutfitContainer extends StatefulWidget {
 class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
 
+  void deleteOutfit(String id) {
+    print("Delete $id");
+  }
+
   Widget buildOutfitCard(OutfitListItem oF) {
-    return Column(children: [
-      Container(
-          width: 155,
-          height: 220,
-          color: CustomColours.offWhite(),
-          child: FlipCard(
-              front: OutfitCard(outfitClothingList: oF.data.clothing, resetDressingRoom: widget.resetDressingRoom,),
-              back: Card(
-                  elevation: 5,
-                  color: CustomColours.greenNavy(),
-                  shadowColor: CustomColours.baseBlack(),
-                  child: Center(
-                    child: SizedBox(
-                        width: 70,
-                        height: 70,
-                        child: FlatButton(
-                            color: CustomColours.greenNavy(),
-                            textColor: CustomColours.offWhite(),
-                            highlightColor: CustomColours.iconGreen(),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Text(
-                              "Wear",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            onPressed: () => widget.updateFunction(oF))),
-                  )),
-                  onFlip: widget.resetDressingRoom,
-                  )),
-    ]);
+    return FlipCard(
+      front: Container(
+        decoration: BoxDecoration(
+            border: Border(
+                bottom:
+                    BorderSide(width: 15.0, color: CustomColours.iconGreen()))),
+        child: OutfitCard(
+          outfitClothingList: oF.data.clothing,
+          resetDressingRoom: widget.resetDressingRoom,
+        ),
+      ),
+      back: Stack(
+        children: [
+          Card(
+              elevation: 5,
+              color: CustomColours.greenNavy(),
+              shadowColor: CustomColours.baseBlack(),
+              child: Center(
+                child: SizedBox(
+                    width: 75,
+                    height: 75,
+                    child: FlatButton(
+                        color: CustomColours.greenNavy(),
+                        textColor: CustomColours.offWhite(),
+                        highlightColor: CustomColours.iconGreen(),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)),
+                        child: Text(
+                          "Wear",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () => widget.updateFunction(oF))),
+              )),
+          Positioned(
+            top: 3,
+            right: 3,
+            child: IconButton(
+              padding: EdgeInsets.all(0),
+              icon: Icon(Icons.delete,
+                  color: CustomColours.offWhite(), size: 22.0),
+              onPressed: () {
+                deleteOutfit(oF.id);
+              },
+            ),
+          )
+        ],
+      ),
+      onFlip: widget.resetDressingRoom,
+      // ),
+    );
   }
 
   @override
@@ -58,10 +85,14 @@ class _OutfitContainerState extends State<OutfitContainer> {
         margin: const EdgeInsets.all(15.0),
         child: new GridView.count(
           crossAxisCount: 2,
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.75,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          children: [for (var item in this.widget.outfits) buildOutfitCard(item)],
+          children: [
+            for (var item in this.widget.outfits) buildOutfitCard(item)
+          ],
         ));
   }
 }
