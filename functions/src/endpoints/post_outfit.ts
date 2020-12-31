@@ -22,21 +22,13 @@ export const postOutfit = async (
 
         const outfit: Outfit = {
             name: name,
-            clothing: []
+            clothing: ids
         }
         
         const userRef = db.collection(Collections.Users).doc(uid);
-        const closetRef = userRef.collection(Collections.Closet);
-
-        for (var i = 0; i < ids.length; i++) {
-            const clothingItem = await closetRef.doc(ids[i]).get();
-            const jsonObj = {id: ids[i], data: clothingItem.data()};
-            outfit.clothing.push(jsonObj);
-         }
-
 
         const outfitRef = await userRef.collection(Collections.Outfit).add(outfit);
-        const result = { clothingID: outfitRef.id};
+        const result = { clothingIDs: outfitRef.id};
         res.json(result);
         res.send(200);
     } catch (error) {

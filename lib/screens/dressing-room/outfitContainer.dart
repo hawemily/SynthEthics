@@ -1,50 +1,23 @@
-import 'dart:convert';
-
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/responseObjects/outfitListItem.dart';
 import 'package:synthetics/screens/closet_page/outfit_card.dart';
-import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
-class OutfitContainer extends StatelessWidget {
-  OutfitContainer({Key key, this.outfits}) : super(key: key);
+class OutfitContainer extends StatefulWidget {
+  OutfitContainer({Key key, this.outfits, this.updateFunction, this.resetDressingRoom}) : super(key: key);
 
   final List<OutfitListItem> outfits;
+  final Function updateFunction;
+  final Function resetDressingRoom;
+
+  @override
+  _OutfitContainerState createState() => _OutfitContainerState();
+}
+
+class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
-
-  Future<void> updateAllItems(OutfitListItem oF) async {
-    List<ClothingItemObject> clothing = oF.data.clothing;
-
-    List<String> clothingIds = new List(clothing.length);
-    List<double> timesWorns = new List(clothing.length);
-    List<int> carmaGains = new List(clothing.length);
-
-    int i = 0;
-    for (ClothingItemObject c in clothing) {
-      clothingIds[i] = c.id;
-      timesWorns[i] = c.data.currentTimesWorn + 1;
-      carmaGains[i] = (c.data.cF / c.data.maxNoOfTimesToBeWorn).round();
-      i++;
-    }
-
-    await api_client
-        .post("/updateOutfit",
-            body: jsonEncode(<String, dynamic>{
-              'uid': user.getUID(),
-              'clothingIds': clothingIds,
-              'timesWorns': timesWorns,
-              'lastWorn': DateTime.now().toString(),
-              'carmaGains': carmaGains,
-              'outfitId': oF.id
-            }))
-        .then((e) {
-      print(e.statusCode);
-      print(e.body);
-    });
-  }
 
   Widget buildOutfitCard(OutfitListItem oF) {
     return Column(children: [
@@ -53,7 +26,7 @@ class OutfitContainer extends StatelessWidget {
           height: 220,
           color: CustomColours.offWhite(),
           child: FlipCard(
-              front: OutfitCard(outfitClothingList: oF.data.clothing),
+              front: OutfitCard(outfitClothingList: oF.data.clothing, resetDressingRoom: widget.resetDressingRoom,),
               back: Card(
                   elevation: 5,
                   color: CustomColours.greenNavy(),
@@ -72,8 +45,10 @@ class OutfitContainer extends StatelessWidget {
                               "Wear",
                               style: TextStyle(fontSize: 16),
                             ),
-                            onPressed: () => updateAllItems(oF))),
-                  )))),
+                            onPressed: () => widget.updateFunction(oF))),
+                  )),
+                  onFlip: widget.resetDressingRoom,
+                  )),
     ]);
   }
 
@@ -86,7 +61,7 @@ class OutfitContainer extends StatelessWidget {
           childAspectRatio: 0.7,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          children: [for (var item in this.outfits) buildOutfitCard(item)],
+          children: [for (var item in this.widget.outfits) buildOutfitCard(item)],
         ));
   }
 }

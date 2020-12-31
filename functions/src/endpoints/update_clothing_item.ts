@@ -40,7 +40,7 @@ export const updateClothingItem = async (
                 currentCarmaPoints -= carmaGain;
                 // Add/Update entry in user's carma records, for graph
                 addToCarmaRecord(userData as User, -carmaGain);
-            } else {
+            } else if (action == "INC") {
                 currentCarmaPoints += carmaGain;
                 // Add/Update entry in user's carma records, for graph
                 addToCarmaRecord(userData as User, carmaGain);

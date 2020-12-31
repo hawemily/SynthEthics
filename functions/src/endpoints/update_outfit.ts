@@ -15,35 +15,26 @@ export const updateOutfit = async (
             clothingIds,
             lastWorn,
             timesWorns,
-            carmaGains,
-            outfitId
+            carmaGains
         } = req.body;
 
         const userRef = db.collection(Collections.Users).doc(uid);
         const closetRef = userRef.collection(Collections.Closet);
-        const outfitRef = await userRef.collection(Collections.Outfit);
-        const outfitItem = await outfitRef.doc(outfitId).get();
         const user = await userRef.get();
 
         var totalGain = 0;
         for (var i = 0; i < clothingIds.length; i++) {
-
+            
              // updating fields in each clothing item
             const clothingItem = await closetRef.doc(clothingIds[i]).get();
+
+            console.log(clothingItem.data.name);
 
             if (clothingItem.exists) {
                 const itemData = clothingItem.data();
                 itemData!['lastWornDate'] = lastWorn;
                 itemData!['currentTimesWorn'] = timesWorns[i];
                 await closetRef.doc(clothingIds[i]).set(itemData!);
-            }
-
-            // updating fields in outfit
-            if (outfitItem.exists) {
-                const outfitData = outfitItem.data();
-                outfitData!['clothing'][i]['data']['lastWornDate'] = lastWorn;
-                outfitData!['clothing'][i]['data']['currentTimesWorn'] = timesWorns[i];
-                await outfitRef.doc(outfitId).set(outfitData!);
             }
 
             totalGain += carmaGains[i];
