@@ -178,4 +178,8 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
+  // app.post("/deleteOutfit", (req: Request, res:Response) => {
+  //   deleteOutfit(req, res, db);
+  //   return;
+  // });
 }
