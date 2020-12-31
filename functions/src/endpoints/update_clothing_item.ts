@@ -47,6 +47,7 @@ export const updateClothingItem = async (
             }
 
             userData!['carmaPoints'] = currentCarmaPoints;
+            userData!['itemsWorn'] = userData!['itemsWorn'] + 1;
             await userRef.set(userData!);
           }
 

@@ -23,6 +23,7 @@ export const updateOutfit = async (
         const user = await userRef.get();
 
         var totalGain = 0;
+        var totalWorn = 0;
         for (var i = 0; i < clothingIds.length; i++) {
             
              // updating fields in each clothing item
@@ -38,6 +39,7 @@ export const updateOutfit = async (
             }
 
             totalGain += carmaGains[i];
+            totalWorn++;
         }
 
 
@@ -47,6 +49,7 @@ export const updateOutfit = async (
             var currentCarmaPoints = userData!['carmaPoints'];
             currentCarmaPoints += totalGain;
             userData!['carmaPoints'] = currentCarmaPoints;
+            userData!['itemsWorn'] = userData!['itemsWorn'] + totalWorn;
             addToCarmaRecord(userData as User, totalGain)
             await userRef.set(userData!);
       }

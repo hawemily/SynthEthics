@@ -20,6 +20,8 @@ export const initUsers = async (
         firstName: "user",
         carmaPoints: 0,
         itemsDonated: 1,
+        itemsWorn: 5,
+        itemsBought: 1,
         achieved: [2],
         carmaRecord: {days: [{day: "MON", value:23}], months: [], years: []}
       }

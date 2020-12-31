@@ -60,6 +60,14 @@ export const postClothingItem = async (
     };
 
     const userRef = db.collection(Collections.Users).doc(uid);
+    const user = await userRef.get();
+
+    if (user.exists) {
+        const userData = user.data();
+        userData!['itemsBought'] = userData!['itemsBought'] + 1;
+        await userRef.set(userData!);
+    }
+
     console.log(`apparel cf" ${apparel.cF}`)
     console.log(`apparel brand" ${apparel.brand}`)
 
