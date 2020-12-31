@@ -1,5 +1,6 @@
 class AchievementLevelCalculator {
   static calculate(dynamic tiers, dynamic value) {
+    value = value.round();
     int currentLevel = 0;
     int previousAmount = 0;
     int targetAmount = 0;
