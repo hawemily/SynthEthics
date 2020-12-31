@@ -85,7 +85,8 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
   void returnTimesWorn() {
     getAClothingItem().then((clothingItem) {
       setState(() {
-        if (clothingItem != null && clothingItem.data != null &&
+        if (clothingItem != null &&
+            clothingItem.data != null &&
             clothingItem.data.currentTimesWorn !=
                 this.currentClothingItem.data.currentTimesWorn) {
           this.currentClothingItem = clothingItem;
@@ -139,19 +140,23 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
     if (widget.isDonated) {
       return Container(
           color: Colors.white70,
-          child: Center(child: Icon(Icons.store_mall_directory, color: CustomColours.accentGreen(),)));
+          child: Center(
+              child: Icon(
+            Icons.store_mall_directory,
+            color: CustomColours.accentGreen(),
+          )));
     }
     return null;
   }
 
-  Widget buildBaseStack(on_tap, {clear = false}) {
+  Widget buildBaseStack(on_tap) {
     if (widget.isRandom) _init();
     return Stack(children: [
       Card(
           color: CustomColours.offWhite(),
           margin: EdgeInsets.all(5.0),
           child: InkWell(
-              onTap: widget.isDonated ? () {}: on_tap,
+              onTap: widget.isDonated ? () {} : on_tap,
               child: Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Stack(
@@ -160,17 +165,13 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                     buildOverlay(),
                     Align(
                         alignment: Alignment.bottomCenter,
-                        child: clear
-                            ? Container()
-                            : EcoBar(
-                                current: this
-                                    .currentClothingItem
-                                    .data
-                                    .currentTimesWorn,
-                                max: this
-                                    .currentClothingItem
-                                    .data
-                                    .maxNoOfTimesToBeWorn)),
+                        child: EcoBar(
+                            current:
+                                this.currentClothingItem.data.currentTimesWorn,
+                            max: this
+                                .currentClothingItem
+                                .data
+                                .maxNoOfTimesToBeWorn)),
                   ].where(notNull).toList()))))
     ]);
   }

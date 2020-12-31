@@ -9,7 +9,8 @@ import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
 
 class OutfitCard extends ClothingCard {
-  const OutfitCard({Key key, this.outfitClothingList, this.resetDressingRoom}) : super(key: key);
+  const OutfitCard({Key key, this.outfitClothingList, this.resetDressingRoom})
+      : super(key: key);
 
   final Function resetDressingRoom;
   final List<ClothingItemObject> outfitClothingList;
@@ -19,7 +20,6 @@ class OutfitCard extends ClothingCard {
 }
 
 class _OutfitCardState extends ClothingCardState<OutfitCard> {
-  bool clear = false;
   int index = 0;
   ClothingItemObject currentClothingItem;
   Future<File> currClothingItemImage;
@@ -29,27 +29,6 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
     this.index = 0;
     this.currentClothingItem = widget.outfitClothingList[this.index];
     this.currClothingItemImage = getImage();
-  }
-
-  Widget getIcon() {
-    return GestureDetector(
-        onTap: () {
-          setState(() {
-            // this.clear = true;
-            this.clear = !this.clear;
-          });
-        },
-        child: Container(
-            width: 20.0,
-            height: 20.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-                color: CustomColours.accentCopper()),
-            child: () {
-              var icon = null;
-              icon = Icons.remove;
-              return Icon(icon, color: CustomColours.offWhite(), size: 10.0);
-            }()));
   }
 
   List<Widget> getLeftRightControls() {
@@ -95,20 +74,16 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
 
   @override
   Widget buildImage() {
-    return clear
-        ? Align(
-            alignment: Alignment.center,
-            child: Icon(Icons.block, color: CustomColours.accentCopper()))
-        : FutureBuilder<File>(
-            future: this.currClothingItemImage,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Image.file(snapshot.data);
-              } else if (snapshot.data == null) {
-                return Text("No image from file");
-              }
-              return LinearProgressIndicator();
-            });
+    return FutureBuilder<File>(
+        future: this.currClothingItemImage,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Image.file(snapshot.data);
+          } else if (snapshot.data == null) {
+            return Text("No image from file");
+          }
+          return LinearProgressIndicator();
+        });
   }
 
   void getTimesWornDressingRoom() {
@@ -120,18 +95,16 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ClothingItem(clothingItem: this.currentClothingItem, getTimesWorn: getTimesWornDressingRoom,)));
+            builder: (context) => ClothingItem(
+                  clothingItem: this.currentClothingItem,
+                  getTimesWorn: getTimesWornDressingRoom,
+                )));
   }
 
   @override
   Widget build(BuildContext context) {
-    Stack stack = this.buildBaseStack(this.tapAction, clear: this.clear);
-    stack.children.add(Positioned(top: 0.0, right: 0.0, child: getIcon()));
-
-    // if (!clear) {
+    Stack stack = this.buildBaseStack(this.tapAction);
     stack.children.addAll(getLeftRightControls());
-    // }
     return stack;
   }
 }
