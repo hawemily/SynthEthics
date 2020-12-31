@@ -50,10 +50,8 @@ class _SelectCardState extends ClothingCardState<SelectCard> {
   }
 
   Widget buildMarkForDonationStack() {
-    double donateGain = this.currentClothingItem.data.cF *
-        (1 -
-            this.currentClothingItem.data.currentTimesWorn /
-                this.currentClothingItem.data.maxNoOfTimesToBeWorn);
+    final double DONATION_CONST = 0.1;
+    double donateGain = this.currentClothingItem.data.cF * DONATION_CONST;
 
     return Stack(children: [
       Card(

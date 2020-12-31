@@ -59,8 +59,13 @@ class ClosetContainer extends StatelessWidget {
                           : SelectCard(action,
                               clothingItem: item, markForDonation: true);
                     case (ClosetMode.UnDonate):
-                      return SelectCard(action,
-                          clothingItem: item, markForDonation: true);
+                      return item.data.donated
+                          ? ClothingCard(
+                              clothingItem: item,
+                              isDonated: true,
+                            )
+                          : SelectCard(action,
+                              clothingItem: item, markForDonation: true);
                     case (ClosetMode.Donated):
                       return item.data.donated
                           ? ClothingCard(

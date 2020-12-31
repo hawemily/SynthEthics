@@ -496,7 +496,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               setState(() {
                 _tabController.index = _mode == ClosetMode.UnDonate
                     ? widget.categories.indexOf("To Be Donated")
-                    : index;
+                    : _mode == ClosetMode.Donate ? widget.categories.indexOf("Suggested Donations"): index;
               });
             }),
       ),
