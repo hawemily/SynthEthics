@@ -76,7 +76,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
 
     _tabController =
-        TabController(vsync: this, initialIndex: 1, length: _tabs.length);
+        TabController(vsync: this, initialIndex: 1, length: widget.selectingOutfit? (_tabs.length - 2): _tabs.length);
   }
 
   @override
@@ -430,6 +430,8 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         });
   }
 
+  bool _notNull(Object o) => o != null;
+
   @override
   Widget build(BuildContext context) {
     var actions = <Widget>[];
@@ -486,7 +488,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             style: TextStyle(color: Colors.black)),
         actions: actions,
         bottom: TabBar(
-            tabs: _tabs,
+            tabs: widget.selectingOutfit ? _tabs.sublist(0, _tabs.length - 2): _tabs,
             controller: _tabController,
             isScrollable: true,
             unselectedLabelColor: Colors.black.withOpacity(0.4),
@@ -506,13 +508,23 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         children: _tabs.map((Tab tab) {
           final String label = tab.text;
           if (label == "To Be Donated") {
-            return generateDonationPage();
-          } else if (label == "Suggested Donations") {
-            return generateSuggestionPage();
+            if (!widget.selectingOutfit) {
+              return generateDonationPage();
+            } else {
+              return null;
+            }
+          } else if (label == "Suggested Donations" ) {
+
+            if (!widget.selectingOutfit) {
+              return generateSuggestionPage();
+            } else {
+              return null;
+            }
+
           } else {
             return generateCloset(tab.text);
           }
-        }).toList(),
+        }).where(_notNull).toList(),
       ),
       bottomNavigationBar: NavBar(selected: 1),
     );
