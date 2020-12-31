@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/responseObjects/outfitListItem.dart';
 import 'package:synthetics/screens/closet_page/outfit_card.dart';
+import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
@@ -21,8 +24,21 @@ class OutfitContainer extends StatefulWidget {
 class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
 
-  void deleteOutfit(String id) {
+  Future<void> deleteOutfit(String id) async {
     print("Delete $id");
+    await api_client
+        .post("/deleteOutfit",
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'oid': id,
+            }))
+        .then((e) {
+      print(e.statusCode);
+      print(e.body);
+    });
+    setState(() {
+      widget.resetDressingRoom();
+    });
   }
 
   Widget buildOutfitCard(OutfitListItem oF) {
