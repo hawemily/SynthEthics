@@ -111,6 +111,11 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
             context,
             ModalRoute.withName(routeMapping[Screens.Home])
         );
+
+        // Ensure that the home page is rebuilt in the event that relevant data
+        // has been changed.
+        Navigator.pop(context);
+        Navigator.pushNamed(context, routeMapping[Screens.Home]);
       }
 
     } catch (e) {
