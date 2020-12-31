@@ -29,6 +29,7 @@ import { getAClothingItem } from "./endpoints/get_a_clothing_item";
 import { getItemsSentForDonation } from "./endpoints/get_items_sent_for_donation";
 import { sendItemsForDonation } from "./endpoints/post_items_sent_for_donation";
 import { unmarkItemsAccidentallyDonated } from "./endpoints/post_items_accidentally_marked_as_donated";
+import { getTotalNumberOfDonatedItems } from "./endpoints/get_total_donated_items";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -112,6 +113,10 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
+  app.get("/getNumberOfDonatedItems/:uid", (req:Request, res: Response) => {
+    getTotalNumberOfDonatedItems(req, res, db);
+    return;
+  })
 
 
   // ===========================================================================
