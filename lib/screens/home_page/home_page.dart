@@ -40,7 +40,24 @@ class HomePageState extends State<HomePage> {
     print("STARTING PAGE");
     user = CurrentUser.getInstance();
     getUserRecords();
+    getNumberOfDonatedItems();
     super.initState();
+  }
+
+  void getNumberOfDonatedItems() async {
+    String uid = user.getUID();
+    if (uid != null) {
+      final resp = await api_client.get("/getNumberOfDonatedItems/" + uid);
+
+      if (resp.statusCode == 200) {
+        final body = jsonDecode(resp.body);
+        setState(() {
+          donated = body["donatedItems"];
+        });
+      } else {
+        print("Failed to fetch total num of donated items, line 58, home_page.dart");
+      }
+    }
   }
 
   void getUserRecords() async {
