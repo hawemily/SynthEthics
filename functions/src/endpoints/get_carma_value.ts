@@ -19,7 +19,7 @@ const Weights: { [key: string]: number } = {
   Skirts: 1.5,
   Dresses: 2.0,
   Outerwear: 3.0,
-  Headgear: 0.8,
+  Accessories: 0.8,
 };
 
 export const getCarmaValue = async (req: Request, res: Response) => {

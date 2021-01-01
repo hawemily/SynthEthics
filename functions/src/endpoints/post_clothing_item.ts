@@ -3,8 +3,8 @@ import { clothingItem, ClothingType } from "../models/clothing_item_schema";
 import { calculateCarma } from "./get_carma_value";
 import {Collections} from "../helper_components/db_collections";
 
-const max = 30;
-const min = 5;
+const max = 40;
+const min = 25;
 const c = Math.random() * (max - min) + min;
 
 const calcTimesToBeWorn = (cf: number) => {
