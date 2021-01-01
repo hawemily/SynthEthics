@@ -15,7 +15,8 @@ class InformationPage extends StatelessWidget {
               style: TextStyle(color: Colors.white)),
           backgroundColor: CustomColours.greenNavy(),
         ),
-        body: Column(
+        body: 
+            ListView(
           children: [
             SizedBox(
                 height: (MediaQuery.of(context).size.height) * 0.8,
@@ -24,7 +25,7 @@ class InformationPage extends StatelessWidget {
                   children: <Widget>[
                     Container(
                         color: Colors.white,
-                        child: Column(
+                        child: ListView(
                           children: [
                             Padding(padding: EdgeInsets.only(top: 16.0)),
                             Padding(
@@ -50,13 +51,13 @@ class InformationPage extends StatelessWidget {
                         )),
                     Container(
                       color: Colors.white,
-                      child: Column(
+                      child: ListView(
                         children: [
                           Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Column(children: [
-                              Text("How to Scan?",
+                              Text("How to Scan an Item?",
                                   style: TextStyle(fontSize: 28),
                                   textAlign: TextAlign.center),
                               Padding(
@@ -78,7 +79,7 @@ class InformationPage extends StatelessWidget {
                     ),
                     Container(
                       color: Colors.white,
-                      child: Column(
+                      child: ListView(
                         children: [
                           Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
@@ -106,7 +107,7 @@ class InformationPage extends StatelessWidget {
                     ),
                     Container(
                       color: Colors.white,
-                      child: Column(
+                      child: ListView(
                         children: [
                           Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
@@ -134,7 +135,7 @@ class InformationPage extends StatelessWidget {
                     ),
                     Container(
                       color: Colors.white,
-                      child: Column(
+                      child: ListView(
                         children: [
                           Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
@@ -149,7 +150,7 @@ class InformationPage extends StatelessWidget {
                                     height: 100.0,
                                   )),
                               Text(
-                                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                  "Measure your SynthEthics progress by checking your achievements. Try nd get all the medals!",
                                   style: TextStyle(fontSize: 18),
                                   textAlign: TextAlign.center),
                             ]),
@@ -161,6 +162,7 @@ class InformationPage extends StatelessWidget {
                 )),
             Padding(padding: EdgeInsets.only(top: 20)),
             Container(
+              alignment: Alignment.center,
               child: SmoothPageIndicator(
                 controller: controller,
                 count: 5,
@@ -168,7 +170,6 @@ class InformationPage extends StatelessWidget {
                   dotColor: Colors.white,
                   activeDotColor: CustomColours.iconGreen(),
                   activeStrokeWidth: 7,
-                  // activeDotScale: .7,
                   radius: 8,
                   spacing: 15,
                 ),
