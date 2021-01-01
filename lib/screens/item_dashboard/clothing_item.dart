@@ -47,25 +47,24 @@ class _ClothingItemState extends State<ClothingItem> {
     this.timesWorn = this.clothingID.data.currentTimesWorn.round();
     this.lastWorn = clothingID.data.lastWornDate;
     this.progress = this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
-    this.karma = this.timesWorn *
-        ((this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
-            .round());
+    this.karma = (this.timesWorn *
+        (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
+            ).round();
   }
 
   void updateProgress(String action) async {
-    int amount =
-        (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
-            .round();
+    var amount =
+        (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn);
 
     setState(() {
       if (action == 'INC') {
         this.timesWorn++;
-        this.karma += amount;
+        this.karma += amount.round();
         this.lastWorn = DateTime.now().toString();
       } else {
         if (this.timesWorn > 0) {
           this.timesWorn--;
-          this.karma -= amount;
+          this.karma -= amount.round();
         }
       }
       this.progress =
