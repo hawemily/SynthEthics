@@ -23,6 +23,15 @@ class OutfitContainer extends StatefulWidget {
 
 class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
+  List<GlobalKey<FlipCardState>> keys = [];
+
+  @override
+  void initState() {
+    // super.initState();
+    // for (var item in widget.outfits) {
+    //   keys.add(GlobalKey<FlipCardState>());
+    // }
+  }
 
   Future<void> deleteOutfit(String id) async {
     print("Delete $id");
@@ -48,9 +57,11 @@ class _OutfitContainerState extends State<OutfitContainer> {
     });
   }
 
-  Widget buildOutfitCard(OutfitListItem oF) {
-    GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
-
+  Widget buildOutfitCard(OutfitListItem oF, int idx) {
+    if (idx >= keys.length) {
+      keys.add(GlobalKey<FlipCardState>());
+    }
+    var cardKey = keys[idx];
     return FlipCard(
       key: cardKey,
       front: Stack(
@@ -95,10 +106,10 @@ class _OutfitContainerState extends State<OutfitContainer> {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w600),
                         ),
-                        onPressed: () => {
-                              wearOutfit(oF),
-                              cardKey.currentState.toggleCard(),
-                            })),
+                        onPressed: () {
+                          wearOutfit(oF);
+                          cardKey.currentState.toggleCard();
+                        })),
               )),
           Positioned(
             top: 3,
@@ -109,12 +120,13 @@ class _OutfitContainerState extends State<OutfitContainer> {
                   color: CustomColours.offWhite(), size: 22.0),
               onPressed: () {
                 deleteOutfit(oF.id);
+                cardKey.currentState.toggleCard();
               },
             ),
           )
         ],
       ),
-      onFlip: widget.resetDressingRoom,
+      // onFlip: widget.resetDressingRoom,
       // ),
     );
   }
@@ -131,7 +143,8 @@ class _OutfitContainerState extends State<OutfitContainer> {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           children: [
-            for (var item in this.widget.outfits) buildOutfitCard(item)
+            for (int i = 0; i < this.widget.outfits.length; i++)
+              buildOutfitCard(widget.outfits[i], i)
           ],
         ));
   }
