@@ -118,7 +118,39 @@ class _RandomOutfitState extends State<RandomOutfit> {
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Generate Outfit'),
       ),
-      body: ListView(
+      body: (this.randomItems.length == 0) ? 
+        AlertDialog(
+                title: Text(
+                  "Oh no!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'lib/assets/closet.png',
+                      width: 80,
+                      height: 80,
+                    ),
+                    Padding(padding: EdgeInsets.only(bottom: 10)),
+                    Text(
+                      "Your closet is empty! Our random outfit generator can't find items to match!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          height: 1.75,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                ))
+          
+      :
+       ListView(
         children: [
           clothingcardbuild(),
           Padding(padding: EdgeInsets.all(20)),
