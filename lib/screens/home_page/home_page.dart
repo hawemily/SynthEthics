@@ -174,22 +174,24 @@ class HomePageState extends State<HomePage> {
                                 )),
                             Expanded(
                               flex: 1,
-                              child: Container(
-                                padding: EdgeInsets.only(top: 10),
-                                child: RichText(
-                                  text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "${carmaPoints ==  null ? 0 : carmaPoints.toString()} ",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18),
-                                        ),
-                                        WidgetSpan(
-                                          child: Icon(Icons.eco, size: 20, color: CustomColours.iconGreen(),)
-                                        ),
-                                      ]
-                                  )
+                              child: FittedBox(
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "${carmaPoints ==  null ? 0 : carmaPoints.toString()} ",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18),
+                                          ),
+                                          WidgetSpan(
+                                            child: Icon(Icons.eco, size: 20, color: CustomColours.iconGreen(),)
+                                          ),
+                                        ]
+                                    )
+                                  ),
                                 ),
                               )
                             )
