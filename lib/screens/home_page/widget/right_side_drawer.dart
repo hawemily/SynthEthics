@@ -67,20 +67,6 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                 },
               ),
               _HomeRightDrawerItem(
-                icon: Icons.accessibility,
-                text: "Accessibility",
-                onTap: () {
-                  print("Accessibility");
-                },
-              ),
-              _HomeRightDrawerItem(
-                icon: Icons.mobile_screen_share,
-                text: "Data Transfer",
-                onTap: () {
-                  print("Transfer Data");
-                },
-              ),
-              _HomeRightDrawerItem(
                 icon: Icons.exit_to_app,
                 text: "Logout",
                 onTap: () {
