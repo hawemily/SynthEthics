@@ -136,7 +136,7 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Stack(children: [
                     Center(
                       child: Container(
@@ -146,37 +146,52 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Expanded(
                                 flex: 4,
-                                child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: CircleAvatar(
-                                        backgroundColor:
-                                            CustomColours.greenNavy(),
-                                        child: user == null ||
-                                                user.signInMethod ==
-                                                    SignInMethod
-                                                        .EmailPassword ||
-                                                user.bgImage == null ||
-                                                user.bgImage == ""
-                                            ? Center(
-                                                child: Text(
-                                                    user.initials == null
-                                                        ? ""
-                                                        : user.initials.toUpperCase(),
-                                                    style: TextStyle(
-                                                        color: Colors.white)))
-                                            : CircleAvatar(
-                                                radius: 18,
-                                                // problem with this is that the user is not instantiated and so it shows the initials
-                                                backgroundImage: NetworkImage(
-                                                    user.bgImage))))),
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: CircleAvatar(
+                                          backgroundColor:
+                                              CustomColours.greenNavy(),
+                                          child: user == null ||
+                                                  user.signInMethod ==
+                                                      SignInMethod
+                                                          .EmailPassword ||
+                                                  user.bgImage == null ||
+                                                  user.bgImage == ""
+                                              ? Center(
+                                                  child: Text(
+                                                      user.initials == null
+                                                          ? ""
+                                                          : user.initials.toUpperCase(),
+                                                      style: TextStyle(
+                                                          color: Colors.white)))
+                                              : CircleAvatar(
+                                                  radius: 18,
+                                                  // problem with this is that the user is not instantiated and so it shows the initials
+                                                  backgroundImage: NetworkImage(
+                                                      user.bgImage)))),
+                                )),
                             Expanded(
                               flex: 1,
-                              child: Text(
-                                "${carmaPoints ==  null ? 0 : carmaPoints.toString()} Carma Points",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CustomColours.greenNavy()),
-                              ),
+                              child: Container(
+                                padding: EdgeInsets.only(top: 10),
+                                child: RichText(
+                                  text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "${carmaPoints ==  null ? 0 : carmaPoints.toString()} ",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18),
+                                        ),
+                                        WidgetSpan(
+                                          child: Icon(Icons.eco, size: 20, color: CustomColours.iconGreen(),)
+                                        ),
+                                      ]
+                                  )
+                                ),
+                              )
                             )
                           ],
                         ),
@@ -207,7 +222,7 @@ class HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Expanded(flex: 5, child: CarmaRecordViewer()),
+                Expanded(flex: 8, child: CarmaRecordViewer()),
               ],
             ),
           ),
