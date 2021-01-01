@@ -52,15 +52,26 @@ class _OutfitContainerState extends State<OutfitContainer> {
   Widget buildOutfitCard(OutfitListItem oF) {
     return FlipCard(
       key: cardKey,
-      front: Container(
-        decoration: BoxDecoration(
-            border: Border(
-                bottom:
-                    BorderSide(width: 15.0, color: CustomColours.iconGreen()))),
-        child: OutfitCard(
-          outfitClothingList: oF.data.clothing,
-          resetDressingRoom: widget.resetDressingRoom,
-        ),
+      front: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 15.0, color: CustomColours.greenNavy()))),
+            child: OutfitCard(
+              outfitClothingList: oF.data.clothing,
+              resetDressingRoom: widget.resetDressingRoom,
+            ),
+          ),
+          Positioned(
+            bottom: -10,
+            left: 0.0,
+            right: 0.0,
+            child: Icon(Icons.more_horiz_outlined,
+                color: CustomColours.offWhite(), size: 35.0),
+          ),
+        ],
       ),
       back: Stack(
         children: [
