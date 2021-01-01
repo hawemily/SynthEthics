@@ -136,7 +136,7 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Stack(children: [
                     Center(
                       child: Container(
@@ -161,7 +161,7 @@ class HomePageState extends State<HomePage> {
                                                 child: Text(
                                                     user.initials == null
                                                         ? ""
-                                                        : user.initials,
+                                                        : user.initials.toUpperCase(),
                                                     style: TextStyle(
                                                         color: Colors.white)))
                                             : CircleAvatar(
@@ -207,7 +207,7 @@ class HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Expanded(flex: 6, child: CarmaRecordViewer()),
+                Expanded(flex: 5, child: CarmaRecordViewer()),
               ],
             ),
           ),

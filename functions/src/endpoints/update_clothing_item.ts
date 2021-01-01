@@ -38,16 +38,17 @@ export const updateClothingItem = async (
             var currentCarmaPoints = userData!['carmaPoints'];
             if (action != "INC" && currentCarmaPoints!= 0) {
                 currentCarmaPoints -= carmaGain;
+                userData!['itemsWorn'] = userData!['itemsWorn'] - 1;
                 // Add/Update entry in user's carma records, for graph
                 addToCarmaRecord(userData as User, -carmaGain);
             } else if (action == "INC") {
                 currentCarmaPoints += carmaGain;
+                userData!['itemsWorn'] = userData!['itemsWorn'] + 1;
                 // Add/Update entry in user's carma records, for graph
                 addToCarmaRecord(userData as User, carmaGain);
             }
 
             userData!['carmaPoints'] = currentCarmaPoints;
-            userData!['itemsWorn'] = userData!['itemsWorn'] + 1;
             await userRef.set(userData!);
           }
 
