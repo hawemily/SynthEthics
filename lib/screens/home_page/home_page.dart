@@ -30,7 +30,7 @@ class HomePageState extends State<HomePage> {
 
   int carmaPoints = 0;
   int donated = 0;
-  int worn = 0;
+  int wears = 0;
   int bought = 0;
 
   String uid;
@@ -73,7 +73,7 @@ class HomePageState extends State<HomePage> {
           carmaPoints = body["carmaPoints"].round();
           donated = body["itemsDonated"];
           bought = body["itemsBought"];
-          worn = body["itemsWorn"];
+          wears = body["itemsWorn"];
         });
         currUser.setUsername(body["firstName"], body["lastName"]);
         print("user.bgImage: ${user.bgImage}");
@@ -208,8 +208,8 @@ class HomePageState extends State<HomePage> {
                     children: [
                       CarmaStat(
                         statColor: CustomColours.iconGreen(),
-                        statLabel: "Worn",
-                        statValue: worn,
+                        statLabel: "Wears",
+                        statValue: wears,
                       ),
                       CarmaStat(
                         statColor: CustomColours.negativeRed(),
