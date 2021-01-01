@@ -48,8 +48,9 @@ class _ClothingItemState extends State<ClothingItem> {
     this.lastWorn = clothingID.data.lastWornDate;
     this.progress = this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
     this.karma = (this.timesWorn *
-        (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn)
-            ).round();
+            (this.clothingID.data.cF /
+                this.clothingID.data.maxNoOfTimesToBeWorn))
+        .round();
   }
 
   void updateProgress(String action) async {
@@ -238,12 +239,11 @@ class _ClothingItemState extends State<ClothingItem> {
                       )),
                 ])),
             Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 20, bottom: 20),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    Padding(padding: EdgeInsets.only(top: 10)),
                     Container(
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
@@ -339,7 +339,6 @@ class _ClothingItemState extends State<ClothingItem> {
                         ],
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(top: 20),)
                   ],
                 ),
               ),
