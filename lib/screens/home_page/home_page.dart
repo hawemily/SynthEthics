@@ -40,7 +40,7 @@ class HomePageState extends State<HomePage> {
     print("STARTING PAGE");
     user = CurrentUser.getInstance();
     getUserRecords();
-    getNumberOfDonatedItems();
+    // getNumberOfDonatedItems();
     super.initState();
   }
 
@@ -68,8 +68,12 @@ class HomePageState extends State<HomePage> {
 
       if (resp.statusCode == 200) {
         final body = jsonDecode(resp.body);
+        print("body:" + body.toString());
         setState(() {
-          carmaPoints = body["carmaPoints"];
+          carmaPoints = body["carmaPoints"].round();
+          donated = body["itemsDonated"];
+          bought = body["itemsBought"];
+          worn = body["itemsWorn"];
         });
         currUser.setUsername(body["firstName"], body["lastName"]);
         print("user.bgImage: ${user.bgImage}");

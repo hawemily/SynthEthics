@@ -22,6 +22,8 @@ export const addNewUser = async (req:Request, res:Response, db:FirebaseFirestore
             firstName: firstName,
             carmaPoints: 0,
             itemsDonated: 0,
+            itemsBought: 0,
+            itemsWorn: 0,
             achieved: [],
             carmaRecord: {days: [], months: [], years: []}
         };

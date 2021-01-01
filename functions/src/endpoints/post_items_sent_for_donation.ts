@@ -7,7 +7,8 @@ export const sendItemsForDonation = async (req:Request, res:Response, db: Fireba
         const userRef = db.collection(Collections.Users).doc(uid);
         const toDonateRef = userRef.collection(Collections.ToDonate);
 
-        var totalCarmaAddedFromDonatedItems = (await userRef.get()).data()!["cF"];
+        var totalCarmaAddedFromDonatedItems = (await userRef.get()).data()!["carmaPoints"];
+        var currentItemsDonated = (await userRef.get()).data()!["itemsDonated"];
 
         const DONATION_CONST = 0.1;
 
@@ -21,7 +22,8 @@ export const sendItemsForDonation = async (req:Request, res:Response, db: Fireba
         }
 
         await userRef.update({
-            carmaPoints: totalCarmaAddedFromDonatedItems
+            carmaPoints: totalCarmaAddedFromDonatedItems,
+            itemsDonated: currentItemsDonated + ids.length
         });
 
         res.send(200);

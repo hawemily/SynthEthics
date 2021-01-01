@@ -4,6 +4,8 @@ export interface User {
   firstName: string;
   carmaPoints: number;
   itemsDonated: number;
+  itemsWorn: number;
+  itemsBought: number;
   achieved: number[];
   carmaRecord: {
     "days": {

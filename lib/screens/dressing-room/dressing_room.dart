@@ -4,6 +4,7 @@ import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 import 'package:synthetics/responseObjects/getClosetResponse.dart';
 import 'package:synthetics/responseObjects/getOutfitResponse.dart';
+import 'package:synthetics/responseObjects/outfitListItem.dart';
 import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/screens/dressing-room/randomOutfit.dart';
 import 'package:synthetics/services/api_client.dart';
@@ -19,6 +20,7 @@ class DressingRoom extends StatefulWidget {
 class _DressingRoomState extends State<DressingRoom> {
   Future<GetOutfitResponse> outfits;
   CurrentUser user = CurrentUser.getInstance();
+
   //tentative: gets all clothing items from closet
   Future<GetClosetResponse> clothingItems;
   Map<String, List<ClothingItemObject>> randomClothing = new Map();
@@ -28,6 +30,38 @@ class _DressingRoomState extends State<DressingRoom> {
     super.initState();
     clothingItems = getClothes();
     outfits = this.getOutfits();
+  }
+
+  Future<void> updateAllItems(OutfitListItem oF) async {
+    List<ClothingItemObject> clothing = oF.data.clothing;
+
+    List<String> clothingIds = new List(clothing.length);
+    List<double> timesWorns = new List(clothing.length);
+    List<int> carmaGains = new List(clothing.length);
+
+    int i = 0;
+    for (ClothingItemObject c in clothing) {
+      clothingIds[i] = c.id;
+      timesWorns[i] = c.data.currentTimesWorn + 1;
+      carmaGains[i] = (c.data.cF / c.data.maxNoOfTimesToBeWorn).round();
+      i++;
+    }
+
+    await api_client
+        .post("/updateOutfit",
+            body: jsonEncode(<String, dynamic>{
+              'uid': user.getUID(),
+              'clothingIds': clothingIds,
+              'timesWorns': timesWorns,
+              'lastWorn': DateTime.now().toString(),
+              'carmaGains': carmaGains
+            }))
+        .then((e) {
+      print(e.statusCode);
+      print(e.body);
+    });
+
+    resetDressingRoom();
   }
 
   // Get all clothes from closet
@@ -53,10 +87,18 @@ class _DressingRoomState extends State<DressingRoom> {
     if (response.statusCode == 200) {
       final resBody = jsonDecode(response.body);
       final outfits = GetOutfitResponse.fromJson(resBody);
+      print("printing getOutfits");
+      print(resBody);
       return outfits;
     } else {
       throw Exception("Failed to load closet");
     }
+  }
+
+  void resetDressingRoom() {
+    setState(() {
+      outfits = this.getOutfits();
+    });
   }
 
   Widget generateOutfits() {
@@ -66,6 +108,8 @@ class _DressingRoomState extends State<DressingRoom> {
           if (snapshot.hasData) {
             return OutfitContainer(
               outfits: snapshot.data.outfits,
+              updateFunction: updateAllItems,
+              resetDressingRoom: resetDressingRoom,
             );
           } else if (snapshot.hasError) {
             return Text(

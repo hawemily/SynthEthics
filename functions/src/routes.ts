@@ -30,6 +30,7 @@ import { getItemsSentForDonation } from "./endpoints/get_items_sent_for_donation
 import { sendItemsForDonation } from "./endpoints/post_items_sent_for_donation";
 import { unmarkItemsAccidentallyDonated } from "./endpoints/post_items_accidentally_marked_as_donated";
 import { getTotalNumberOfDonatedItems } from "./endpoints/get_total_donated_items";
+import { deleteOutfit } from "./endpoints/delete_outfit";
 
 
 export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
@@ -183,4 +184,8 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   });
 
+  app.post("/deleteOutfit", (req: Request, res:Response) => {
+    deleteOutfit(req, res, db);
+    return;
+  });
 }
