@@ -63,7 +63,7 @@ class _ClothingItemState extends State<ClothingItem> {
       } else {
         if (this.timesWorn > 0) {
           this.timesWorn--;
-          this.karma -= amount.round();
+          this.karma -= amount;
         }
       }
       this.progress =
