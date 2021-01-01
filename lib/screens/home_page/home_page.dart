@@ -161,7 +161,7 @@ class HomePageState extends State<HomePage> {
                                                 child: Text(
                                                     user.initials == null
                                                         ? ""
-                                                        : user.initials,
+                                                        : user.initials.toUpperCase(),
                                                     style: TextStyle(
                                                         color: Colors.white)))
                                             : CircleAvatar(
