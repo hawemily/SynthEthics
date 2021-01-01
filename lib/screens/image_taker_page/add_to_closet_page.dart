@@ -183,7 +183,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                                 func: _saveToCloset,
                                 active: _saveActive(),
                               )
-                            : CircularProgressIndicator()
+                            : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(CustomColours.accentGreen()),)
                         )
                       ],
                     ),
@@ -354,7 +354,9 @@ class _ATCButtons extends StatelessWidget {
       return Container(
           child: FlatButton(
             onPressed: this.func,
-            child: Text(this.text),
+            child: Text(
+              this.text,
+              style: TextStyle(color:  CustomColours.accentGreen()),),
           )
       );
     } else {

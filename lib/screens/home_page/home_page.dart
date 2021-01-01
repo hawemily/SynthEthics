@@ -183,8 +183,10 @@ class HomePageState extends State<HomePage> {
                                           TextSpan(
                                             text: "${carmaPoints ==  null ? 0 : carmaPoints.toString()} ",
                                             style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18),
+                                              color: CustomColours.greenNavy(),
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                           WidgetSpan(
                                             child: Icon(Icons.eco, size: 20, color: CustomColours.iconGreen(),)

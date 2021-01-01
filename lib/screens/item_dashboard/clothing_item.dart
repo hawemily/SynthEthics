@@ -340,6 +340,7 @@ class _ClothingItemState extends State<ClothingItem> {
                         ],
                       ),
                     ),
+                    Padding(padding: EdgeInsets.only(top: 20),)
                   ],
                 ),
               ),
