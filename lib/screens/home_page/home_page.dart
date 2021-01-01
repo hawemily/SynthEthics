@@ -146,32 +146,29 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Expanded(
                                 flex: 4,
-                                child: Container(
-                                  margin: EdgeInsets.only(bottom: 8, top: 8),
-                                  child: FittedBox(
-                                      fit: BoxFit.fill,
-                                      child: CircleAvatar(
-                                          backgroundColor:
-                                              CustomColours.negativeRed(),
-                                          child: user == null ||
-                                                  user.signInMethod ==
-                                                      SignInMethod
-                                                          .EmailPassword ||
-                                                  user.bgImage == null ||
-                                                  user.bgImage == ""
-                                              ? Center(
-                                                  child: Text(
-                                                      user.initials == null
-                                                          ? ""
-                                                          : user.initials,
-                                                      style: TextStyle(
-                                                          color: Colors.white)))
-                                              : CircleAvatar(
-                                                  radius: 18,
-                                                  // problem with this is that the user is not instantiated and so it shows the initials
-                                                  backgroundImage: NetworkImage(
-                                                      user.bgImage)))),
-                                )),
+                                child: FittedBox(
+                                    fit: BoxFit.fill,
+                                    child: CircleAvatar(
+                                        backgroundColor:
+                                            CustomColours.greenNavy(),
+                                        child: user == null ||
+                                                user.signInMethod ==
+                                                    SignInMethod
+                                                        .EmailPassword ||
+                                                user.bgImage == null ||
+                                                user.bgImage == ""
+                                            ? Center(
+                                                child: Text(
+                                                    user.initials == null
+                                                        ? ""
+                                                        : user.initials.toUpperCase(),
+                                                    style: TextStyle(
+                                                        color: Colors.white)))
+                                            : CircleAvatar(
+                                                radius: 18,
+                                                // problem with this is that the user is not instantiated and so it shows the initials
+                                                backgroundImage: NetworkImage(
+                                                    user.bgImage))))),
                             Expanded(
                               flex: 1,
                               child: Text(
