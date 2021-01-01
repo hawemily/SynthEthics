@@ -41,6 +41,13 @@ class _OutfitContainerState extends State<OutfitContainer> {
     });
   }
 
+  void wearOutfit(OutfitListItem oF) {
+    setState(() {
+      widget.updateFunction(oF);
+      widget.resetDressingRoom();
+    });
+  }
+
   Widget buildOutfitCard(OutfitListItem oF) {
     return FlipCard(
       front: Container(
@@ -74,7 +81,7 @@ class _OutfitContainerState extends State<OutfitContainer> {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w600),
                         ),
-                        onPressed: () => widget.updateFunction(oF))),
+                        onPressed: () => wearOutfit(oF))),
               )),
           Positioned(
             top: 3,

@@ -96,7 +96,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
         context,
         MaterialPageRoute(
             builder: (context) => ClothingItem(
-                  clothingItem: this.currentClothingItem,
+                  clothingItem: widget.outfitClothingList[this.index],
                   getTimesWorn: getTimesWornDressingRoom,
                 )));
   }
