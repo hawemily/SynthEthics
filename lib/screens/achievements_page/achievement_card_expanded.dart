@@ -87,7 +87,7 @@ class _ExpandedAchievementCardState extends State<ExpandedAchievementCard> {
           "Achieved!" : "Not yet achieved",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 40,
+            fontSize: 30,
             color: (widget.achievement.achieved) ? CustomColours.iconGreen() :
                 CustomColours.negativeRed()
           )
