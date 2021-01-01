@@ -23,6 +23,7 @@ class OutfitContainer extends StatefulWidget {
 
 class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
+  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
   Future<void> deleteOutfit(String id) async {
     print("Delete $id");
@@ -50,6 +51,7 @@ class _OutfitContainerState extends State<OutfitContainer> {
 
   Widget buildOutfitCard(OutfitListItem oF) {
     return FlipCard(
+      key: cardKey,
       front: Container(
         decoration: BoxDecoration(
             border: Border(
@@ -81,7 +83,10 @@ class _OutfitContainerState extends State<OutfitContainer> {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w600),
                         ),
-                        onPressed: () => wearOutfit(oF))),
+                        onPressed: () => {
+                              wearOutfit(oF),
+                              cardKey.currentState.toggleCard(),
+                            })),
               )),
           Positioned(
             top: 3,
