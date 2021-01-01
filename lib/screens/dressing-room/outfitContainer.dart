@@ -23,7 +23,6 @@ class OutfitContainer extends StatefulWidget {
 
 class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
-  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
   Future<void> deleteOutfit(String id) async {
     print("Delete $id");
@@ -50,6 +49,8 @@ class _OutfitContainerState extends State<OutfitContainer> {
   }
 
   Widget buildOutfitCard(OutfitListItem oF) {
+    GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
+
     return FlipCard(
       key: cardKey,
       front: Stack(
