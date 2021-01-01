@@ -136,7 +136,7 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Stack(children: [
                     Center(
                       child: Container(
@@ -146,29 +146,32 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Expanded(
                                 flex: 4,
-                                child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: CircleAvatar(
-                                        backgroundColor:
-                                            CustomColours.greenNavy(),
-                                        child: user == null ||
-                                                user.signInMethod ==
-                                                    SignInMethod
-                                                        .EmailPassword ||
-                                                user.bgImage == null ||
-                                                user.bgImage == ""
-                                            ? Center(
-                                                child: Text(
-                                                    user.initials == null
-                                                        ? ""
-                                                        : user.initials,
-                                                    style: TextStyle(
-                                                        color: Colors.white)))
-                                            : CircleAvatar(
-                                                radius: 18,
-                                                // problem with this is that the user is not instantiated and so it shows the initials
-                                                backgroundImage: NetworkImage(
-                                                    user.bgImage))))),
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 8, top: 8),
+                                  child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: CircleAvatar(
+                                          backgroundColor:
+                                              CustomColours.negativeRed(),
+                                          child: user == null ||
+                                                  user.signInMethod ==
+                                                      SignInMethod
+                                                          .EmailPassword ||
+                                                  user.bgImage == null ||
+                                                  user.bgImage == ""
+                                              ? Center(
+                                                  child: Text(
+                                                      user.initials == null
+                                                          ? ""
+                                                          : user.initials,
+                                                      style: TextStyle(
+                                                          color: Colors.white)))
+                                              : CircleAvatar(
+                                                  radius: 18,
+                                                  // problem with this is that the user is not instantiated and so it shows the initials
+                                                  backgroundImage: NetworkImage(
+                                                      user.bgImage)))),
+                                )),
                             Expanded(
                               flex: 1,
                               child: Text(
@@ -207,7 +210,7 @@ class HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Expanded(flex: 6, child: CarmaRecordViewer()),
+                Expanded(flex: 5, child: CarmaRecordViewer()),
               ],
             ),
           ),
