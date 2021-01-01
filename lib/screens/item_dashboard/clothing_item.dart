@@ -28,7 +28,7 @@ class _ClothingItemState extends State<ClothingItem> {
   CurrentUser user = CurrentUser.getInstance();
   var progress;
   int timesWorn;
-  int karma;
+  double karma;
   File image;
   String lastWorn;
 
@@ -48,9 +48,7 @@ class _ClothingItemState extends State<ClothingItem> {
     this.lastWorn = clothingID.data.lastWornDate;
     this.progress = this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
     this.karma = (this.timesWorn *
-            (this.clothingID.data.cF /
-                this.clothingID.data.maxNoOfTimesToBeWorn))
-        .round();
+        (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn));
   }
 
   void updateProgress(String action) async {
@@ -60,7 +58,7 @@ class _ClothingItemState extends State<ClothingItem> {
     setState(() {
       if (action == 'INC') {
         this.timesWorn++;
-        this.karma += amount.round();
+        this.karma += amount;
         this.lastWorn = DateTime.now().toString();
       } else {
         if (this.timesWorn > 0) {
@@ -301,7 +299,7 @@ class _ClothingItemState extends State<ClothingItem> {
                           InfoBlock(
                             color: CustomColours.negativeRed(),
                             value:
-                                "${this.karma} / ${this.clothingID.data.cF.round()}",
+                                "${this.karma.round()} / ${this.clothingID.data.cF.round()}",
                             label: "Carma Pts",
                           ),
                         ],
