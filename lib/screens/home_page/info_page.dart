@@ -204,7 +204,7 @@ class InformationPage extends StatelessWidget {
                                     height: 300.0,
                                   )),
                               Text(
-                                  "\nYou can also use our random outfit generator to get random outfits from your closet.",
+                                  "\nYou can also use our random outfit generator to save outfits you like in your closet.",
                                   style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.justify),
                               Padding(
@@ -216,7 +216,7 @@ class InformationPage extends StatelessWidget {
                                     height: 300.0,
                                   )),
                               Text(
-                                  "\nClick on green bar at the bottom of outfit card to wear or delete an outfit.",
+                                  "\nClick on the more icon on the green bar below outfit card to wear or delete an outfit.",
                                   style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.justify),
                             ]),
