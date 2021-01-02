@@ -115,7 +115,7 @@ class _DressingRoomState extends State<DressingRoom> {
             return Text(
                 "Unable to load clothes from closet! Please contact admin for support");
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         });
   }
 
