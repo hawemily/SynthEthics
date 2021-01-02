@@ -49,6 +49,14 @@ class _OutfitContainerState extends State<OutfitContainer> {
     });
   }
 
+  double getTotalCarmaGain(OutfitListItem oF) {
+    double total = 0;
+    oF.data.clothing.forEach((item) {
+      total += (item.data.cF / item.data.maxNoOfTimesToBeWorn).round();
+    });
+    return total;
+  }
+
   Widget buildOutfitCard(OutfitListItem oF, int idx) {
     if (idx >= keys.length) {
       keys.add(GlobalKey<FlipCardState>());
@@ -85,25 +93,44 @@ class _OutfitContainerState extends State<OutfitContainer> {
               color: CustomColours.greenNavy(),
               shadowColor: CustomColours.baseBlack(),
               child: Center(
-                child: SizedBox(
-                    width: 75,
-                    height: 75,
-                    child: FlatButton(
-                        color: CustomColours.greenNavy(),
-                        textColor: CustomColours.offWhite(),
-                        highlightColor: CustomColours.iconGreen(),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Text(
-                          "Wear",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                        ),
-                        onPressed: () {
-                          wearOutfit(oF);
-                          cardKey.currentState.toggleCard();
-                        })),
-              )),
+                  child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    Padding(padding: EdgeInsets.all(30)),
+                    SizedBox(
+                        width: 75,
+                        height: 75,
+                        child: FlatButton(
+                            color: CustomColours.greenNavy(),
+                            textColor: CustomColours.offWhite(),
+                            highlightColor: CustomColours.iconGreen(),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            child: Text(
+                              "Wear",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w600),
+                            ),
+                            onPressed: () {
+                              wearOutfit(oF);
+                              cardKey.currentState.toggleCard();
+                            })),
+                    Expanded(
+                        flex: 5,
+                        child: Padding(
+                            padding: EdgeInsets.all(3.0),
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Icon(Icons.eco,
+                                    color: CustomColours.accentGreen())))),
+                    Expanded(
+                        flex: 5,
+                        child: Text('+ ' + getTotalCarmaGain(oF).toString(),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: CustomColours.accentGreen())))
+                  ]))),
           Positioned(
             top: 3,
             right: 3,
