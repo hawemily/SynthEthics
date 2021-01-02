@@ -66,7 +66,8 @@ class _DressingRoomState extends State<DressingRoom> {
 
   // Get all clothes from closet
   Future<GetClosetResponse> getClothes() async {
-    final response = await api_client.get("/closet/allClothes/" + user.getUID());
+    final response =
+        await api_client.get("/closet/allClothes/" + user.getUID());
     if (response.statusCode == 200) {
       final resBody = jsonDecode(response.body);
       final closet = GetClosetResponse.fromJson(resBody);
@@ -159,26 +160,32 @@ class _DressingRoomState extends State<DressingRoom> {
                   });
                 });
               },
-              child: Icon(Icons.add),
+              child: Icon(
+                Icons.add,
+                size: 33,
+              ),
             ),
             FloatingActionButton(
-              backgroundColor: CustomColours.greenNavy(),
-              heroTag: null,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            RandomOutfit(this.randomClothing))).then((value) {
-                  if (value != "none") {
-                    setState(() {
-                    outfits = this.getOutfits();
+                backgroundColor: CustomColours.greenNavy(),
+                heroTag: null,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              RandomOutfit(this.randomClothing))).then((value) {
+                    if (value != "none") {
+                      setState(() {
+                        outfits = this.getOutfits();
+                      });
+                    }
                   });
-                  }
-                });
-              },
-              child: Icon(Icons.create_outlined),
-            ),
+                },
+                child: Image.asset(
+                  'lib/assets/random.png',
+                  width: 33,
+                  height: 33.0,
+                )),
           ],
         ),
       ),
