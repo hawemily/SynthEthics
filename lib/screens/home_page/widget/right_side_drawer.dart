@@ -42,6 +42,46 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
     });
   }
 
+  void _showConfirmDeletionDialog(BuildContext context) {
+    Widget confirmButton = FlatButton(
+        child: Text(
+          "OK",
+          style: TextStyle(color: CustomColours.greenNavy(), fontWeight: FontWeight.bold),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          _deleteUser();
+          _signOut();
+        });
+
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel", style: TextStyle(color:CustomColours.negativeRed(), fontWeight: FontWeight.bold)),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("We'd love to keep you!"),
+      content: Text(
+        "Are you sure you want to delete your account? All your data will be lost when this happens.",
+        textAlign: TextAlign.justify,
+      ),
+      actions: [
+        confirmButton,
+        cancelButton
+      ],
+    );
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return alert;
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,7 +89,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
       child: Drawer(
           child: Container(
         color: CustomColours.greenNavy(),
-        padding: EdgeInsets.only(top: 100),
+        padding: EdgeInsets.only(top: 100, bottom: 20),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -91,8 +131,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                     icon: Icons.delete_forever,
                     text: "Delete Account",
                     onTap: () {
-                      _deleteUser();
-                      _signOut();
+                      _showConfirmDeletionDialog(context);
                     },
                   )),
             ),
