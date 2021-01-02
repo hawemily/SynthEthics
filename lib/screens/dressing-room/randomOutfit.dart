@@ -25,6 +25,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
   Random random = new Random();
   Random r2 = new Random();
   ColourSchemeChecker colourChecker = ColourSchemeChecker();
+  bool insufficientCloset = false;
 
   final List<Set<String>> outfitTypes = [
     {"Tops", "Bottoms", "Outerwear"},
@@ -38,8 +39,52 @@ class _RandomOutfitState extends State<RandomOutfit> {
   }
 
   Set<ClothingItemObject> generateRandom() {
-    int randomOutfitType = random.nextInt(outfitTypes.length);
+    int randomOutfitType;
     var clothingItems = widget.clothingItems;
+    
+
+    if (clothingItems['Tops'] == null && clothingItems['Dresses'] == null) {
+      setInsufficientCloset();
+    } else if (clothingItems['Tops'] == null) {
+      if (clothingItems['Outerwear'] == null) {
+        setInsufficientCloset();
+      }
+      randomOutfitType = 1;
+    } else if (clothingItems['Dresses'] == null) {
+      if (clothingItems['Bottoms'] == null) {
+        setInsufficientCloset();
+      }
+      randomOutfitType = 0;
+    } else {
+      randomOutfitType = random.nextInt(outfitTypes.length);
+    }
+
+    return generateRandomOutfit(randomOutfitType, clothingItems);
+
+    // outfitTypes[randomOutfitType].forEach((type) {
+    //   var items = clothingItems[type];
+    //   if (items != null) {
+    //     ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
+    //     newItems.add(selectedItem);
+    //     colors.add(OutfitColor.values[selectedItem.data.dominantColor]);
+    //   }
+    // });
+
+    // if (colourChecker.isValid(colors)) {
+    //   return newItems;
+    // } else {
+    //   return generateRandom();
+    // }
+  }
+
+  Set<ClothingItemObject> setInsufficientCloset() {
+    setState(() {
+          this.insufficientCloset = true;
+        });
+    return null;
+  }
+
+  Set<ClothingItemObject> generateRandomOutfit(int randomOutfitType, Map<String, List<ClothingItemObject>> clothingItems) {
     Set<ClothingItemObject> newItems = Set();
     Set<OutfitColor> colors = Set();
 
@@ -48,7 +93,6 @@ class _RandomOutfitState extends State<RandomOutfit> {
       if (items != null) {
         ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
         newItems.add(selectedItem);
-        print(OutfitColor.values[selectedItem.data.dominantColor]);
         colors.add(OutfitColor.values[selectedItem.data.dominantColor]);
       }
     });
@@ -118,77 +162,75 @@ class _RandomOutfitState extends State<RandomOutfit> {
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Generate Outfit'),
       ),
-      body: (this.randomItems.length == 0) ? 
-        AlertDialog(
-                title: Text(
-                  "Oh no!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 22),
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
+      body: (insufficientCloset || this.randomItems.length < 2)
+          ? AlertDialog(
+              title: Text(
+                "Oh no!",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'lib/assets/closet.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 10)),
+                  Text(
+                    "Your closet does not have enough items! Our random outfit generator can't find items to make an outfit!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        height: 1.75,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ))
+          : ListView(
+              children: [
+                clothingcardbuild(),
+                Padding(padding: EdgeInsets.all(20)),
+                ButtonBar(
+                  alignment: MainAxisAlignment.spaceEvenly,
+                  buttonHeight: 20,
+                  buttonMinWidth: 60,
                   children: [
-                    Image.asset(
-                      'lib/assets/closet.png',
-                      width: 80,
-                      height: 80,
+                    IconButton(
+                      color: CustomColours.greenNavy(),
+                      icon: Icon(Icons.close),
+                      tooltip: 'Close',
+                      onPressed: () => Navigator.pop(context),
                     ),
-                    Padding(padding: EdgeInsets.only(bottom: 10)),
-                    Text(
-                      "Your closet is empty! Our random outfit generator can't find items to match!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          height: 1.75,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600),
+                    IconButton(
+                        icon: Icon(Icons.refresh),
+                        color: CustomColours.greenNavy(),
+                        tooltip: 'Refresh',
+                        onPressed: () {
+                          setState(() {
+                            this.randomItems.clear();
+                            this.randomItems = this.generateRandom();
+                            print("Random items regenerated");
+                            randomItems.forEach((element) {
+                              print(element.data.name);
+                            });
+                          });
+                        }),
+                    IconButton(
+                      color: CustomColours.greenNavy(),
+                      icon: Icon(Icons.check),
+                      tooltip: 'Save',
+                      onPressed: () => saveOutfit(),
                     ),
                   ],
-                ),
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                ))
-          
-      :
-       ListView(
-        children: [
-          clothingcardbuild(),
-          Padding(padding: EdgeInsets.all(20)),
-          ButtonBar(
-            alignment: MainAxisAlignment.spaceEvenly,
-            buttonHeight: 20,
-            buttonMinWidth: 60,
-            children: [
-              IconButton(
-                color: CustomColours.greenNavy(),
-                icon: Icon(Icons.close),
-                tooltip: 'Close',
-                onPressed: () => Navigator.pop(context),
-              ),
-              IconButton(
-                  icon: Icon(Icons.refresh),
-                  color: CustomColours.greenNavy(),
-                  tooltip: 'Refresh',
-                  onPressed: () {
-                    setState(() {
-                      this.randomItems.clear();
-                      this.randomItems = this.generateRandom();
-                      print("Random items regenerated");
-                      randomItems.forEach((element) {
-                        print(element.data.name);
-                      });
-                    });
-                  }),
-              IconButton(
-                color: CustomColours.greenNavy(),
-                icon: Icon(Icons.check),
-                tooltip: 'Save',
-                onPressed: () => saveOutfit(),
-              ),
-            ],
-          )
-        ],
-      ),
+                )
+              ],
+            ),
       bottomNavigationBar: NavBar(selected: 3),
     );
   }
