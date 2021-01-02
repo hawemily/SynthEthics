@@ -170,9 +170,11 @@ class _DressingRoomState extends State<DressingRoom> {
                     MaterialPageRoute(
                         builder: (context) =>
                             RandomOutfit(this.randomClothing))).then((value) {
-                  setState(() {
+                  if (value != "none") {
+                    setState(() {
                     outfits = this.getOutfits();
                   });
+                  }
                 });
               },
               child: Icon(Icons.create_outlined),

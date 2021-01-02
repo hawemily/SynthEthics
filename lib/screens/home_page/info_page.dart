@@ -98,17 +98,18 @@ class InformationPage extends StatelessWidget {
                               Text("How to Add to Closet?",
                                   style: TextStyle(fontSize: 28),
                                   textAlign: TextAlign.center),
+                              
+                              Text("After scanning an item and making sure all details are correct, simply press the ADD TO CLOSET button. This will add the clothing item to the closet and you can access it there at any point.",
+                                  style: TextStyle(fontSize: 18),
+                                  textAlign: TextAlign.center),
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 16.0, bottom: 16.0),
                                   child: Image.asset(
-                                    'lib/assets/closet.png',
+                                    'lib/assets/item_dashboard.gif',
                                     width: double.maxFinite,
-                                    height: 100.0,
+                                    height: 300.0,
                                   )),
-                              Text("After scanning an item and making sure all details are correct, simply press the ADD TO CLOSET button. This will add the clothing item to the closet and you can access it there at any point.",
-                                  style: TextStyle(fontSize: 18),
-                                  textAlign: TextAlign.center),
                               Text("\nIf you've worn a clothing item and would like to track its usage (and earn some carma points for it), click on the picture of the item in the closet and tap the WEAR button to indicate that you've worn it an additional time. This should be shown in the circular progress bar around the picture of the item!",
                                   style: TextStyle(fontSize: 18),
                                   textAlign: TextAlign.center),
@@ -132,14 +133,33 @@ class InformationPage extends StatelessWidget {
                                   padding:
                                       EdgeInsets.only(top: 16.0, bottom: 16.0),
                                   child: Image.asset(
-                                    'lib/assets/heart.png',
+                                    'lib/assets/donate_dashboard.gif',
                                     width: double.maxFinite,
-                                    height: 100.0,
+                                    height: 300.0,
                                   )),
                               Text("You can donate an item by clicking DONATE from the item's dashboard. This will redirect you to a TO BE DONATED tab in the closet where you can select other items of clothes you'd like to donate.",
                                   style: TextStyle(fontSize: 18),
                                   textAlign: TextAlign.center),
-                              Text("\nWe will also prompt you to donate items of clothing that you've worn sufficiently or one you have not worn in a while. Once selecting all items to be donated, we will redirect you to the donations map, which will show you the 5 nearest locations where you can donate your clothes.",
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 16.0, bottom: 16.0),
+                                  child: Image.asset(
+                                    'lib/assets/donate_suggestions.gif',
+                                    width: double.maxFinite,
+                                    height: 300.0,
+                                  )),
+                              Text("\nWe will also prompt you to donate items of clothing that you've worn sufficiently or one you have not worn in a while.",
+                                  style: TextStyle(fontSize: 18),
+                                  textAlign: TextAlign.center),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 16.0, bottom: 16.0),
+                                  child: Image.asset(
+                                    'lib/assets/donate_centres.gif',
+                                    width: double.maxFinite,
+                                    height: 300.0,
+                                  )),
+                              Text("\nOnce selecting all items to be donated, we will redirect you to the donations map, which will show you the 5 nearest locations where you can donate your clothes.",
                                   style: TextStyle(fontSize: 18),
                                   textAlign: TextAlign.center),
                             ]),
@@ -158,24 +178,16 @@ class InformationPage extends StatelessWidget {
                               Text("How do I use the dressing room?",
                                   style: TextStyle(fontSize: 28),
                                   textAlign: TextAlign.center),
-                              Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 16.0, bottom: 16.0),
-                                  child: Image.asset(
-                                    'lib/assets/heart.png',
-                                    width: double.maxFinite,
-                                    height: 100.0,
-                                  )),
-                              Text("Add OUTFITS that you wear often so you can easily keep track of them.",
+                              Text("Add OUTFITS that you wear often so you can easily keep track of them!",
                                   style: TextStyle(fontSize: 18),
                                   textAlign: TextAlign.center),
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 16.0, bottom: 16.0),
                                   child: Image.asset(
-                                    'lib/assets/heart.png',
+                                    'lib/assets/outfit_generation.gif',
                                     width: double.maxFinite,
-                                    height: 100.0,
+                                    height: 300.0,
                                   )),
                               Text("\nYou can also use our RANDOM OUTFIT GENERATOR to get random outfits from your closet!",
                                   style: TextStyle(fontSize: 18),
@@ -184,9 +196,9 @@ class InformationPage extends StatelessWidget {
                                   padding:
                                       EdgeInsets.only(top: 16.0, bottom: 16.0),
                                   child: Image.asset(
-                                    'lib/assets/heart.png',
+                                    'lib/assets/wear_outfit.gif',
                                     width: double.maxFinite,
-                                    height: 100.0,
+                                    height: 300.0,
                                   )),
                               Text("\nTapping WEAR on an outfit updates the WEAR counts of every item in the outfit!",
                                   style: TextStyle(fontSize: 18),
@@ -208,9 +220,9 @@ class InformationPage extends StatelessWidget {
                                   style: TextStyle(fontSize: 28),
                                   textAlign: TextAlign.center),
                               Padding(padding: EdgeInsets.only(top: 16.0, bottom: 16.0), child: Image.asset(
-                                    'lib/assets/trophy.png',
+                                    'lib/assets/achievements.gif',
                                     width: double.maxFinite,
-                                    height: 100.0,
+                                    height: 300.0,
                                   )),
                               Text(
                                   "Achievements can be viewed via the icon at the top left of the home page, they are records of your progrssion, and an indication of the sustainable choices you've made!",

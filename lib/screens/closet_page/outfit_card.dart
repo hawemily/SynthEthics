@@ -27,9 +27,11 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
   @override
   void initState() {
     this.index = 0;
+    this.returnTimesWorn();
     this.currentClothingItem = widget.outfitClothingList[this.index];
     this.currClothingItemImage = getImage();
   }
+  
 
   List<Widget> getLeftRightControls() {
     return <Widget>[

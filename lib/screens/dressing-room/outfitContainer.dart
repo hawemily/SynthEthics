@@ -72,6 +72,7 @@ class _OutfitContainerState extends State<OutfitContainer> {
                     bottom: BorderSide(
                         width: 15.0, color: CustomColours.greenNavy()))),
             child: OutfitCard(
+              key: UniqueKey(),
               outfitClothingList: oF.data.clothing,
               resetDressingRoom: widget.resetDressingRoom,
             ),
