@@ -23,7 +23,7 @@ class RecordDatesPadder {
     List<CarmaSeries> dateSeries = [
       CarmaSeries(
           dateLabel: years[0][resolution].toString(),
-          carma: years[0]["value"]
+          carma: years[0]["value"].round()
       )
     ];
 
@@ -40,7 +40,7 @@ class RecordDatesPadder {
       } else {
         dateSeries.add(CarmaSeries(
             dateLabel: years[i][resolution].toString(),
-            carma: years[i]["value"]
+            carma: years[i]["value"].round()
         ));
         i++;
       }
@@ -56,7 +56,7 @@ class RecordDatesPadder {
     List<CarmaSeries> dateSeries = [
       CarmaSeries(
         dateLabel: dateNames[dates[0][resolution]],
-        carma: dates[0]["value"]
+        carma: dates[0]["value"].round()
       )
     ];
 
@@ -73,7 +73,7 @@ class RecordDatesPadder {
       } else {
         dateSeries.add(CarmaSeries(
           dateLabel: dateNames[dates[i][resolution]],
-          carma: dates[i]["value"]
+          carma: dates[i]["value"].round()
         ));
         i++;
       }

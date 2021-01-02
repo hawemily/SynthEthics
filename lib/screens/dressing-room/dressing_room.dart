@@ -124,6 +124,7 @@ class _DressingRoomState extends State<DressingRoom> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColours.greenNavy(),
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Dressing Room'),
       ),
