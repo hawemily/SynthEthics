@@ -25,14 +25,6 @@ class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
   List<GlobalKey<FlipCardState>> keys = [];
 
-  @override
-  void initState() {
-    // super.initState();
-    // for (var item in widget.outfits) {
-    //   keys.add(GlobalKey<FlipCardState>());
-    // }
-  }
-
   Future<void> deleteOutfit(String id) async {
     print("Delete $id");
     await api_client
