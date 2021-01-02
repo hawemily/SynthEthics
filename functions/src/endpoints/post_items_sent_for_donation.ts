@@ -37,7 +37,8 @@ export const sendItemsForDonation = async (req:Request, res:Response, db: Fireba
         await userRef.update({
             carmaPoints: currentCarmaPoints + totalCarmaAddedFromDonatedItems,
             itemsDonated: currentItemsDonated + ids.length,
-            achieved: newAchieved
+            achieved: newAchieved,
+            carmaRecord: userData!["carmaRecord"]
         });
 
         res.send(200);
