@@ -7,8 +7,9 @@ export const sendItemsForDonation = async (req:Request, res:Response, db: Fireba
         const userRef = db.collection(Collections.Users).doc(uid);
         const toDonateRef = userRef.collection(Collections.ToDonate);
 
-        var totalCarmaAddedFromDonatedItems = (await userRef.get()).data()!["carmaPoints"];
-        var currentItemsDonated = (await userRef.get()).data()!["itemsDonated"];
+        var userData = (await userRef.get()).data();
+        var totalCarmaAddedFromDonatedItems = userData!["carmaPoints"];
+        var currentItemsDonated = userData!["itemsDonated"];
 
         const DONATION_CONST = 0.1;
 
@@ -21,9 +22,16 @@ export const sendItemsForDonation = async (req:Request, res:Response, db: Fireba
             });
         }
 
+        // Toggle "A Good Start" achievement if appropriate
+        var newAchieved = userData!["achieved"];
+        if (!newAchieved.includes(2)) {
+            newAchieved.push(2);
+        }
+
         await userRef.update({
             carmaPoints: totalCarmaAddedFromDonatedItems,
-            itemsDonated: currentItemsDonated + ids.length
+            itemsDonated: currentItemsDonated + ids.length,
+            achieved: newAchieved
         });
 
         res.send(200);

@@ -30,7 +30,7 @@ class HomePageState extends State<HomePage> {
 
   int carmaPoints = 0;
   int donated = 0;
-  int worn = 0;
+  int wears = 0;
   int bought = 0;
 
   String uid;
@@ -73,7 +73,7 @@ class HomePageState extends State<HomePage> {
           carmaPoints = body["carmaPoints"] == null ? 0 : body["carmaPoints"].round();
           donated = body["itemsDonated"];
           bought = body["itemsBought"];
-          worn = body["itemsWorn"];
+          wears = body["itemsWorn"];
         });
         currUser.setUsername(body["firstName"], body["lastName"]);
         print("user.bgImage: ${user.bgImage}");
@@ -136,7 +136,7 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: Stack(children: [
                     Center(
                       child: Container(
@@ -146,37 +146,56 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Expanded(
                                 flex: 4,
-                                child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: CircleAvatar(
-                                        backgroundColor:
-                                            CustomColours.greenNavy(),
-                                        child: user == null ||
-                                                user.signInMethod ==
-                                                    SignInMethod
-                                                        .EmailPassword ||
-                                                user.bgImage == null ||
-                                                user.bgImage == ""
-                                            ? Center(
-                                                child: Text(
-                                                    user.initials == null
-                                                        ? ""
-                                                        : user.initials,
-                                                    style: TextStyle(
-                                                        color: Colors.white)))
-                                            : CircleAvatar(
-                                                radius: 18,
-                                                // problem with this is that the user is not instantiated and so it shows the initials
-                                                backgroundImage: NetworkImage(
-                                                    user.bgImage))))),
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: CircleAvatar(
+                                          backgroundColor:
+                                              CustomColours.greenNavy(),
+                                          child: user == null ||
+                                                  user.signInMethod ==
+                                                      SignInMethod
+                                                          .EmailPassword ||
+                                                  user.bgImage == null ||
+                                                  user.bgImage == ""
+                                              ? Center(
+                                                  child: Text(
+                                                      user.initials == null
+                                                          ? ""
+                                                          : user.initials.toUpperCase(),
+                                                      style: TextStyle(
+                                                          color: Colors.white)))
+                                              : CircleAvatar(
+                                                  radius: 18,
+                                                  // problem with this is that the user is not instantiated and so it shows the initials
+                                                  backgroundImage: NetworkImage(
+                                                      user.bgImage)))),
+                                )),
                             Expanded(
                               flex: 1,
-                              child: Text(
-                                "${carmaPoints ==  null ? 0 : carmaPoints.toString()} Carma Points",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CustomColours.greenNavy()),
-                              ),
+                              child: FittedBox(
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "${carmaPoints ==  null ? 0 : carmaPoints.toString()} ",
+                                            style: TextStyle(
+                                              color: CustomColours.greenNavy(),
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          WidgetSpan(
+                                            child: Icon(Icons.eco, size: 20, color: CustomColours.iconGreen(),)
+                                          ),
+                                        ]
+                                    )
+                                  ),
+                                ),
+                              )
                             )
                           ],
                         ),
@@ -191,8 +210,8 @@ class HomePageState extends State<HomePage> {
                     children: [
                       CarmaStat(
                         statColor: CustomColours.iconGreen(),
-                        statLabel: "Worn",
-                        statValue: worn,
+                        statLabel: "Wears",
+                        statValue: wears,
                       ),
                       CarmaStat(
                         statColor: CustomColours.negativeRed(),
@@ -207,7 +226,7 @@ class HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Expanded(flex: 6, child: CarmaRecordViewer()),
+                Expanded(flex: 8, child: CarmaRecordViewer()),
               ],
             ),
           ),

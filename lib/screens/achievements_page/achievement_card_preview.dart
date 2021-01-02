@@ -33,14 +33,14 @@ class _PreviewAchievementCardState extends State<PreviewAchievementCard> {
           borderRadius: BorderRadius.circular(5)
       ),
       child: Container(
-        padding: EdgeInsets.all(1),
+        padding: EdgeInsets.all(0),
         child: Row(
           children: [
             Expanded(
               flex: 1,
               child: GestureDetector(
                 child: Card(
-                  color: CustomColours.negativeRed(),
+                  color: CustomColours.greenNavy(),
                   child: Container(
                       padding: EdgeInsets.all(10),
                       child: (widget.achievement.type == AchievementType.Unlock)

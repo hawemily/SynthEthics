@@ -33,14 +33,6 @@ export const initAchievementTypes = async (
         achievementDescription: "Donate your first item of clothing",
         achievementType: AchievementType.Binary,
       },
-      // {
-      //   achievementId: 3,
-      //   achievementName: "Hats Off to You",
-      //   achievementDescription: "Wear Hats a certain amount of time",
-      //   AchievementType: AchievementType.ClothingTiered,
-      //   achievementTiers: [2, 5, 10, 20, 50],
-      //   achievementAttribute: "Headgear"
-      // }
     ];
 
     const result =  await achievementsRef.add(achievements[0]);

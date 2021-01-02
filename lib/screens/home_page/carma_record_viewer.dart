@@ -71,7 +71,7 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
                 ),
               ),
               Expanded(
-                flex: 7,
+                flex: 6,
                 child: TabBarView(
                   children: [
                     CarmaResolutionView(

@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:synthetics/components/eco_bar.dart';
 import 'package:synthetics/screens/item_dashboard/clothing_item.dart';
 import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
-import 'package:synthetics/services/image_taker/image_manager.dart';
 
 class OutfitCard extends ClothingCard {
   const OutfitCard({Key key, this.outfitClothingList, this.resetDressingRoom})
@@ -27,6 +25,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
   @override
   void initState() {
     this.index = 0;
+    this.returnTimesWorn();
     this.currentClothingItem = widget.outfitClothingList[this.index];
     this.currClothingItemImage = getImage();
   }
@@ -80,7 +79,9 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
           if (snapshot.hasData) {
             return Image.file(snapshot.data);
           } else if (snapshot.data == null) {
-            return Text("No image from file");
+            // return Text("No image from file");
+            print("No image from file");
+            return Text("");
           }
           return LinearProgressIndicator();
         });
@@ -96,7 +97,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
         context,
         MaterialPageRoute(
             builder: (context) => ClothingItem(
-                  clothingItem: this.currentClothingItem,
+                  clothingItem: widget.outfitClothingList[this.index],
                   getTimesWorn: getTimesWornDressingRoom,
                 )));
   }

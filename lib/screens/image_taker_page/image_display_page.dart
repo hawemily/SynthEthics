@@ -315,8 +315,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                           (states) => CustomColours.iconGreen()),
                       padding: MaterialStateProperty.resolveWith((states) =>
                           EdgeInsets.only(
-                              top: 15, bottom: 15, left: 20, right: 20))),
-                  child: Text("Add to Closet",
+                              top: 15, bottom: 15, left: 30, right: 30))),
+                  child: Text("Next",
                       style: TextStyle(color: Colors.white)),
                   onPressed: (() {
                     Navigator.push(

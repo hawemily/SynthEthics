@@ -3,7 +3,7 @@ import 'package:synthetics/components/carma_chart/carma_series.dart';
 class RecordDatesPadder {
   static final List<String> daysOrder = ["SUN","MON","TUE","WED",
                                          "THU","FRI","SAT"];
-  static final List<String> monthsOrder = ["JN","FB","MR","AP",
+  static final List<String> monthsOrder = ["JA","FB","MR","AP",
                                            "MY","JN","JY","AG",
                                            "SP","OT","NV","DC"];
 

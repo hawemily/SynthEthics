@@ -33,9 +33,8 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
 
   void _deleteUser() {
     api_client.post("/deleteUser",
-        body: jsonEncode(
-            <String, dynamic>{'uid': currUser.getUID()}));
-    auth.currentUser.delete().then((e){
+        body: jsonEncode(<String, dynamic>{'uid': currUser.getUID()}));
+    auth.currentUser.delete().then((e) {
       print("delete successful from firebase auth frontend!");
     }).catchError((e) {
       print("ERROR WHEN DELETING USER");
@@ -76,20 +75,6 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                 Navigator.popUntil(
                     context, ModalRoute.withName(routeMapping[Screens.Home]));
                 Navigator.pushNamed(context, routeMapping[Screens.ColourRoom]);
-              },
-            ),
-            _HomeRightDrawerItem(
-              icon: Icons.accessibility,
-              text: "Accessibility",
-              onTap: () {
-                print("Accessibility");
-              },
-            ),
-            _HomeRightDrawerItem(
-              icon: Icons.mobile_screen_share,
-              text: "Data Transfer",
-              onTap: () {
-                print("Transfer Data");
               },
             ),
             _HomeRightDrawerItem(

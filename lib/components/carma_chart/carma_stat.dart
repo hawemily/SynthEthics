@@ -24,7 +24,8 @@ class _CarmaStatState extends State<CarmaStat> {
               Text(
                 widget.statValue.toString(),
                 style: TextStyle(
-                    color: widget.statColor
+                    color: widget.statColor,
+                    fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
