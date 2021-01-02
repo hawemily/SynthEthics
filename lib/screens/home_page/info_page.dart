@@ -178,6 +178,14 @@ class InformationPage extends StatelessWidget {
                               Text("How do I use the dressing room?",
                                   style: TextStyle(fontSize: 28),
                                   textAlign: TextAlign.center),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 16.0, bottom: 16.0),
+                                  child: Image.asset(
+                                    'lib/assets/add_outfit.gif',
+                                    width: double.maxFinite,
+                                    height: 300.0,
+                                  )),
                               Text("Add OUTFITS that you wear often so you can easily keep track of them!",
                                   style: TextStyle(fontSize: 18),
                                   textAlign: TextAlign.center),
@@ -185,7 +193,7 @@ class InformationPage extends StatelessWidget {
                                   padding:
                                       EdgeInsets.only(top: 16.0, bottom: 16.0),
                                   child: Image.asset(
-                                    'lib/assets/outfit_generation.gif',
+                                    'lib/assets/random_generator.gif',
                                     width: double.maxFinite,
                                     height: 300.0,
                                   )),
