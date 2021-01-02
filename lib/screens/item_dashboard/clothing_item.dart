@@ -144,6 +144,33 @@ class _ClothingItemState extends State<ClothingItem> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Closet()));
   }
 
+  void showConfirmationDialog(BuildContext context) {
+    Widget confirmButton = FlatButton(
+        child: Text(
+          "OK",
+          style: TextStyle(fontSize: 18, color: CustomColours.greenNavy()),
+        ),
+        onPressed: () => donateItem());
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Are you sure you want to donate item?"),
+      content: Text(
+        "This action is not reversible. This item will no longer be in your closet and all outfits with this item will be removed from dressing room.",
+        textAlign: TextAlign.justify,
+      ),
+      actions: [
+        confirmButton,
+      ],
+    );
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -231,7 +258,7 @@ class _ClothingItemState extends State<ClothingItem> {
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                            onPressed: () => donateItem(),
+                            onPressed: () => showConfirmationDialog(context),
                           ),
                         ],
                       )),

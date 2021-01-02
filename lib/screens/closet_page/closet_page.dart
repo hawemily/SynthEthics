@@ -75,8 +75,10 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     print(categories);
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
 
-    _tabController =
-        TabController(vsync: this, initialIndex: 1, length: widget.selectingOutfit? (_tabs.length - 2): _tabs.length);
+    _tabController = TabController(
+        vsync: this,
+        initialIndex: 1,
+        length: widget.selectingOutfit ? (_tabs.length - 2) : _tabs.length);
   }
 
   @override
@@ -306,6 +308,36 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         });
   }
 
+  void showConfirmationSuggestionsDialog(BuildContext context) {
+    Widget confirmButton = FlatButton(
+        child: Text(
+          "OK",
+          style: TextStyle(color: CustomColours.greenNavy()),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          donateSelected().then((e) => setMode(ClosetMode.Normal));
+        });
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Are you sure you want to donate these?"),
+      content: Text(
+        "This action is not reversible. All items that have been marked for donation will no longer be in your closet and all outfits with these items will be removed from dressing room.",
+        textAlign: TextAlign.justify,
+      ),
+      actions: [
+        confirmButton,
+      ],
+    );
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+
   void outfitSelected() async {
     setState(() {
       _savingInProgress = true;
@@ -445,7 +477,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                       TextStyle(fontSize: 16, color: CustomColours.offWhite())),
               onPressed: _mode == ClosetMode.Donate
                   ? () {
-                      donateSelected().then((e) => setMode(ClosetMode.Normal));
+                      showConfirmationSuggestionsDialog(context);
                     }
                   : () {
                       showConfirmDonationsDialog(context);
@@ -489,7 +521,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             style: TextStyle(color: Colors.white)),
         actions: actions,
         bottom: TabBar(
-            tabs: widget.selectingOutfit ? _tabs.sublist(0, _tabs.length - 2): _tabs,
+            tabs: widget.selectingOutfit
+                ? _tabs.sublist(0, _tabs.length - 2)
+                : _tabs,
             controller: _tabController,
             isScrollable: true,
             unselectedLabelColor: Colors.white.withOpacity(0.6),
@@ -499,33 +533,36 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               setState(() {
                 _tabController.index = _mode == ClosetMode.UnDonate
                     ? widget.categories.indexOf("To Be Donated")
-                    : _mode == ClosetMode.Donate ? widget.categories.indexOf("Suggested Donations"): index;
+                    : _mode == ClosetMode.Donate
+                        ? widget.categories.indexOf("Suggested Donations")
+                        : index;
               });
             }),
       ),
       // call future builder here
       body: TabBarView(
         controller: _tabController,
-        children: _tabs.map((Tab tab) {
-          final String label = tab.text;
-          if (label == "To Be Donated") {
-            if (!widget.selectingOutfit) {
-              return generateDonationPage();
-            } else {
-              return null;
-            }
-          } else if (label == "Suggested Donations" ) {
-
-            if (!widget.selectingOutfit) {
-              return generateSuggestionPage();
-            } else {
-              return null;
-            }
-
-          } else {
-            return generateCloset(tab.text);
-          }
-        }).where(_notNull).toList(),
+        children: _tabs
+            .map((Tab tab) {
+              final String label = tab.text;
+              if (label == "To Be Donated") {
+                if (!widget.selectingOutfit) {
+                  return generateDonationPage();
+                } else {
+                  return null;
+                }
+              } else if (label == "Suggested Donations") {
+                if (!widget.selectingOutfit) {
+                  return generateSuggestionPage();
+                } else {
+                  return null;
+                }
+              } else {
+                return generateCloset(tab.text);
+              }
+            })
+            .where(_notNull)
+            .toList(),
       ),
       bottomNavigationBar: NavBar(selected: 1),
     );
