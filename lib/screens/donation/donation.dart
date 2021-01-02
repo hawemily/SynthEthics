@@ -79,6 +79,7 @@ class _DonationPageState extends State<DonationPage> {
       appBar: AppBar(
         title: Text('Donation centres near you',
             style: TextStyle(color: Colors.white)),
+        automaticallyImplyLeading: false,
         backgroundColor: CustomColours.greenNavy(),
         iconTheme: IconThemeData(color: Colors.white),
       ),
