@@ -179,7 +179,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
                   ),
                   Padding(padding: EdgeInsets.only(bottom: 10)),
                   Text(
-                    "Your closet does not have enough items! Our random outfit generator can't find enough items to make an outfit!",
+                    "Our random outfit generator can't find enough items to make an outfit!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         height: 1.75,
