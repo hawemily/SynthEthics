@@ -2,13 +2,14 @@ import {Request, Response} from "express";
 import { Collections } from "../helper_components/db_collections";
 
 export const deleteUser = async (req: Request, res: Response, db: FirebaseFirestore.Firestore) => {
-    const uid = req.params.uid;
+    const {uid} = req.body;
+    console.log("deleting user!");
 
     const userRef = db.collection(Collections.Users).doc(uid);
-    const subCollections: String[] = [Collections.Closet, Collections.ToDonate]
+    const subCollections: String[] = [Collections.Closet, Collections.ToDonate, Collections.Outfit]
 
     subCollections.forEach((col) => {
-        const path = "/" + Collections.Users + "/" + uid + col;
+        const path = "/" + Collections.Users + "/" + uid + "/" + col;
         deleteSubCollection(db, path, 100);
     })
 
@@ -22,14 +23,14 @@ async function deleteSubCollection(db: FirebaseFirestore.Firestore, collectionPa
 
     return new Promise((resolve, reject) => {
         deleteQueryBatch(db, query, resolve).catch(reject);
-    })
+    });
 }
 
 async function deleteQueryBatch(db: FirebaseFirestore.Firestore, query: any, resolve: any) {
     const snapshot = await query.get();
     
     const batchSize = snapshot.size;
-    if(batchSize == 0) {
+    if(batchSize === 0) {
         resolve();
         return;
     }

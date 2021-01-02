@@ -116,7 +116,7 @@ class _DressingRoomState extends State<DressingRoom> {
             return Text(
                 "Unable to load clothes from closet! Please contact admin for support");
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         });
   }
 
@@ -125,6 +125,7 @@ class _DressingRoomState extends State<DressingRoom> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColours.greenNavy(),
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Dressing Room'),
       ),

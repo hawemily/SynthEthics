@@ -475,8 +475,9 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white70,
-        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: CustomColours.greenNavy(),
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
             _mode == ClosetMode.Donate
                 ? 'Select Donations'
@@ -485,15 +486,15 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                     : _mode == ClosetMode.Donated
                         ? 'Mark Donated'
                         : 'Closet',
-            style: TextStyle(color: Colors.black)),
+            style: TextStyle(color: Colors.white)),
         actions: actions,
         bottom: TabBar(
             tabs: widget.selectingOutfit ? _tabs.sublist(0, _tabs.length - 2): _tabs,
             controller: _tabController,
             isScrollable: true,
-            unselectedLabelColor: Colors.black.withOpacity(0.4),
-            labelColor: Colors.black,
-            indicatorColor: Colors.black54,
+            unselectedLabelColor: Colors.white.withOpacity(0.6),
+            labelColor: Colors.white,
+            indicatorColor: Colors.white,
             onTap: (index) {
               setState(() {
                 _tabController.index = _mode == ClosetMode.UnDonate

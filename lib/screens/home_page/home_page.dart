@@ -70,7 +70,7 @@ class HomePageState extends State<HomePage> {
         final body = jsonDecode(resp.body);
         print("body:" + body.toString());
         setState(() {
-          carmaPoints = body["carmaPoints"].round();
+          carmaPoints = body["carmaPoints"] == null ? 0 : body["carmaPoints"].round();
           donated = body["itemsDonated"];
           bought = body["itemsBought"];
           wears = body["itemsWorn"];

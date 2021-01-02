@@ -93,11 +93,6 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     return;
   })
 
-  app.get("/deleteUser/:uid", (req: Request, res: Response) => {
-    deleteUser(req, res, db);
-    return;
-  })
-
   app.get("/dummy", (req: Request, res: Response) => {
     console.log("called dummy");
     res.status(200).json({ data: "dsfdf" });
@@ -188,4 +183,9 @@ export const routes = (app: Router, db: FirebaseFirestore.Firestore) => {
     deleteOutfit(req, res, db);
     return;
   });
+
+  app.post("/deleteUser", (req: Request, res: Response) => {
+    deleteUser(req, res, db);
+    return;
+  })
 }
