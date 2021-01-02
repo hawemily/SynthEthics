@@ -22,20 +22,41 @@ export const getAllOutfits = async (
     dataIds.push(doc.id);
   });
 
+  const userToDonateRef = userRef.collection(Collections.ToDonate);
+  const itemsDonatedQuery = await userToDonateRef.get();
+
+  let donatedItems = new Set();
+  itemsDonatedQuery.forEach((doc) => {
+    donatedItems.add(doc.id);
+  })
+
+  console.log("printing items in donated items set");
+  console.log(donatedItems);
+
   for (var i = 0; i < dataArray.length; i++) {
+    let check: boolean = true;
     const data = dataArray[i];
     const clothing = data["clothing"];
 
     const clothingData = [];
     for (var j = 0; j < clothing.length; j++) {
       const clothingItem = await closetRef.doc(clothing[j]).get();
+      if (donatedItems.has(clothing[j])) {
+        check = false;
+      }
       const jsonObj = { data: clothingItem.data(), id: clothing[j] };
       clothingData.push(jsonObj);
     }
 
-    data!["clothing"] = clothingData;
-    outfits.push({ id: dataIds[i], data: data });
+    if (check) {
+      data!["clothing"] = clothingData;
+      outfits.push({ id: dataIds[i], data: data });
+    }
+    
   }
+
+  console.log("printing outfits");
+  console.log(outfits);
 
   res.status(200).json({ outfits: outfits });
 };
