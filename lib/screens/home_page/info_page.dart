@@ -27,7 +27,7 @@ class InformationPage extends StatelessWidget {
                         child: ListView(
                           children: [
                             Padding(
-                              padding: EdgeInsets.all(25.0),
+                              padding: EdgeInsets.all(30),
                               child: Column(children: [
                                 Text("What are Carma Points?",
                                     style: TextStyle(fontSize: 28),
@@ -39,26 +39,19 @@ class InformationPage extends StatelessWidget {
                                         radius: 50,
                                         backgroundImage:
                                             AssetImage('lib/assets/leaf.jpg'))),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                          "Carma Points help you track your progress and manage your clothing carbon footprint.",
-                                          style: TextStyle(fontSize: 20),
-                                          textAlign: TextAlign.center),
-                                      Text(
-                                        "\nYou can get carma points by wearing any clothing item in your closet, wearing outfits or donating items.",
-                                        style: TextStyle(fontSize: 20),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      Text(
-                                        "\nOur aim is to use these points to make users aware of their carbon footprint and fast fashion decisions!",
-                                        style: TextStyle(fontSize: 20),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
+                                Text(
+                                    "Carma Points help you track your progress and manage your clothing carbon footprint.",
+                                    style: TextStyle(fontSize: 20),
+                                    textAlign: TextAlign.center),
+                                Text(
+                                  "\nYou can get carma points by wearing any clothing item in your closet, wearing outfits or donating items.",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  "\nOur aim is to use these points to make users aware of their carbon footprint and fast fashion decisions!",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center,
                                 ),
                               ]),
                             )
@@ -69,33 +62,29 @@ class InformationPage extends StatelessWidget {
                       child: ListView(
                         children: [
                           Padding(
-                            padding: EdgeInsets.all(25.0),
+                            padding: EdgeInsets.all(30),
                             child: Column(children: [
                               Text("Add to Closet",
                                   style: TextStyle(fontSize: 28),
                                   textAlign: TextAlign.center),
+                              Padding(padding: EdgeInsets.only(top: 10)),
+                              Text(
+                                  "To add item to closet, simply click on + icon and scan (or upload) a picture of the clothing label.",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
                               Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Column(children: [
-                                  Text(
-                                      "To add item to closet, simply click on + icon and scan (or upload) a picture of the clothing label.",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 15, bottom: 15),
-                                    child: Image.asset(
-                                      'lib/assets/add_to_closet.gif',
-                                      width: double.maxFinite,
-                                      height: 300.0,
-                                    ),
-                                  ),
-                                  Text(
-                                      "Upload picture and fill out all necessary information of clothing item and hit 'Save'. Your item is now in closet to be viewed at any point.",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center),
-                                ]),
+                                padding:
+                                    const EdgeInsets.only(top: 15, bottom: 15),
+                                child: Image.asset(
+                                  'lib/assets/add_to_closet.gif',
+                                  width: double.maxFinite,
+                                  height: 300.0,
+                                ),
                               ),
+                              Text(
+                                  "Upload picture and fill out all necessary information of clothing item and hit 'Save'. Your item is now in closet to be viewed at any point.",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
                             ]),
                           ),
                         ],
@@ -105,24 +94,31 @@ class InformationPage extends StatelessWidget {
                       color: Colors.white,
                       child: ListView(
                         children: [
-                          Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
-                            padding: EdgeInsets.all(20.0),
+                            padding: EdgeInsets.all(30),
                             child: Column(children: [
-                              Text("Wear Item",
+                              Text("Track Clothing Item",
                                   style: TextStyle(fontSize: 28),
+                                  textAlign: TextAlign.center),
+                              Text(
+                                  "\nClicking on item will direct you to its dashboard. Here you can view information such as material etc.",
+                                  style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.center),
                               Padding(
                                   padding:
-                                      EdgeInsets.only(top: 16.0, bottom: 16.0),
+                                      EdgeInsets.only(top: 15.0, bottom: 15.0),
                                   child: Image.asset(
                                     'lib/assets/item_dashboard.gif',
                                     width: double.maxFinite,
                                     height: 300.0,
                                   )),
                               Text(
-                                  "\nClicking on item will direct you to its dashboard. Here you can view info about item, and wear it to gain Carma Points!",
-                                  style: TextStyle(fontSize: 18),
+                                  "\nMost importantly, you can track your Carma progress by seeing how many times to wear that item to fulfil your Carma debt.",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center),
+                              Text(
+                                  "\nClick on 'Wear' to gain Carma points. You can also 'Undo' this action.",
+                                  style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.center),
                             ]),
                           ),
@@ -133,24 +129,28 @@ class InformationPage extends StatelessWidget {
                       color: Colors.white,
                       child: ListView(
                         children: [
-                          Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(30),
                             child: Column(children: [
-                              Text("How to Donate?",
+                              Text("Donate Clothing Items",
                                   style: TextStyle(fontSize: 28),
+                                  textAlign: TextAlign.center),
+                              Padding(padding: EdgeInsets.only(top: 10)),
+                              Text(
+                                  "You can select an item to be donated by clicking 'Donate' from the item's dashboard. This will add item to the TO BE DONATED tab in the closet.",
+                                  style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.center),
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 16.0, bottom: 16.0),
                                   child: Image.asset(
-                                    'lib/assets/donate_dashboard.gif',
+                                    'lib/assets/donate_Item_dashboard.gif',
                                     width: double.maxFinite,
                                     height: 300.0,
                                   )),
                               Text(
-                                  "You can donate an item by clicking DONATE from the item's dashboard. This add item to the TO BE DONATED tab in the closet where you can select other items of clothes you'd like to donate.",
-                                  style: TextStyle(fontSize: 18),
+                                  "You can also bulk select an items to be donated from Suggested Donations in closet.",
+                                  style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.center),
                               Padding(
                                   padding:
@@ -161,8 +161,8 @@ class InformationPage extends StatelessWidget {
                                     height: 300.0,
                                   )),
                               Text(
-                                  "\nWe will also prompt you to donate items of clothing that you've worn sufficiently or one you have not worn in a while.",
-                                  style: TextStyle(fontSize: 18),
+                                  "From 'To be Donated' you can mark items as donated once you have finally donated these items",
+                                  style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.center),
                               Padding(
                                   padding:
@@ -173,8 +173,8 @@ class InformationPage extends StatelessWidget {
                                     height: 300.0,
                                   )),
                               Text(
-                                  "\nOnce selecting all items to be donated, we will redirect you to the donations map, which will show you the 5 nearest locations where you can donate your clothes.",
-                                  style: TextStyle(fontSize: 18),
+                                  "\nUpon clicking the righmost icon in bottom nav bar, you will be redirected to a map, which will show you donation centres near you.",
+                                  style: TextStyle(fontSize: 20),
                                   textAlign: TextAlign.center),
                             ]),
                           ),
@@ -185,11 +185,10 @@ class InformationPage extends StatelessWidget {
                       color: Colors.white,
                       child: ListView(
                         children: [
-                          Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(30),
                             child: Column(children: [
-                              Text("How do I use the dressing room?",
+                              Text("Track Outfits in Dressing Room",
                                   style: TextStyle(fontSize: 28),
                                   textAlign: TextAlign.center),
                               Padding(
@@ -237,9 +236,8 @@ class InformationPage extends StatelessWidget {
                       color: Colors.white,
                       child: ListView(
                         children: [
-                          Padding(padding: EdgeInsets.only(top: 16.0)),
                           Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(30),
                             child: Column(children: [
                               Text("How to track Your Achievements?",
                                   style: TextStyle(fontSize: 28),
