@@ -44,23 +44,17 @@ class _RandomOutfitState extends State<RandomOutfit> {
     
 
     if (clothingItems['Tops'] == null && clothingItems['Dresses'] == null) {
-      setState(() {
-          this.insufficientCloset = true;
-        });
+      this.insufficientCloset = true;
       return null;
     } else if (clothingItems['Tops'] == null) {
       if (clothingItems['Outerwear'] == null) {
-        setState(() {
-          this.insufficientCloset = true;
-        });
+        this.insufficientCloset = true;
         return null;
       }
       randomOutfitType = 1;
     } else if (clothingItems['Dresses'] == null) {
       if (clothingItems['Bottoms'] == null) {
-        setState(() {
-          this.insufficientCloset = true;
-        });
+        this.insufficientCloset = true;
         return null;
       }
       randomOutfitType = 0;
