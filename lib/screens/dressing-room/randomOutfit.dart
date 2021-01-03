@@ -44,15 +44,24 @@ class _RandomOutfitState extends State<RandomOutfit> {
     
 
     if (clothingItems['Tops'] == null && clothingItems['Dresses'] == null) {
-      setInsufficientCloset();
+      setState(() {
+          this.insufficientCloset = true;
+        });
+      return null;
     } else if (clothingItems['Tops'] == null) {
       if (clothingItems['Outerwear'] == null) {
-        setInsufficientCloset();
+        setState(() {
+          this.insufficientCloset = true;
+        });
+        return null;
       }
       randomOutfitType = 1;
     } else if (clothingItems['Dresses'] == null) {
       if (clothingItems['Bottoms'] == null) {
-        setInsufficientCloset();
+        setState(() {
+          this.insufficientCloset = true;
+        });
+        return null;
       }
       randomOutfitType = 0;
     } else {
@@ -60,29 +69,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
     }
 
     return generateRandomOutfit(randomOutfitType, clothingItems);
-
-    // outfitTypes[randomOutfitType].forEach((type) {
-    //   var items = clothingItems[type];
-    //   if (items != null) {
-    //     ClothingItemObject selectedItem = items[r2.nextInt(items.length)];
-    //     newItems.add(selectedItem);
-    //     colors.add(OutfitColor.values[selectedItem.data.dominantColor]);
-    //   }
-    // });
-
-    // if (colourChecker.isValid(colors)) {
-    //   return newItems;
-    // } else {
-    //   return generateRandom();
-    // }
   }
 
-  Set<ClothingItemObject> setInsufficientCloset() {
-    setState(() {
-          this.insufficientCloset = true;
-        });
-    return null;
-  }
 
   Set<ClothingItemObject> generateRandomOutfit(int randomOutfitType, Map<String, List<ClothingItemObject>> clothingItems) {
     Set<ClothingItemObject> newItems = Set();
