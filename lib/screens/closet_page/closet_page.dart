@@ -322,7 +322,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     AlertDialog alert = AlertDialog(
       title: Text("Are you sure you want to donate these?"),
       content: Text(
-        "This action is not reversible. All items that have been marked for donation will no longer be in your closet and all outfits with these items will be removed from dressing room.",
+        "All items that have been marked for donation will no longer be in your closet and all outfits with these items will be removed from dressing room.",
         textAlign: TextAlign.justify,
       ),
       actions: [

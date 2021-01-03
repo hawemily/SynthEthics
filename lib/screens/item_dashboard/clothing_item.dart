@@ -155,7 +155,7 @@ class _ClothingItemState extends State<ClothingItem> {
     AlertDialog alert = AlertDialog(
       title: Text("Are you sure you want to donate item?"),
       content: Text(
-        "This action is not reversible. This item will no longer be in your closet and all outfits with this item will be removed from dressing room.",
+        "This item will no longer be in your closet and all outfits with this item will be removed from dressing room.",
         textAlign: TextAlign.justify,
       ),
       actions: [
