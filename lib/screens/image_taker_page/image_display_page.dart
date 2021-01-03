@@ -253,18 +253,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
         loading: (!_completedLoadingData || _loadingCarma),
         valid: _validData,
       ),
-      // ClothingLabelDropdown(
-      //     data: _countryNames,
-      //     selected: _countryIndex,
-      //     label: 'Country of Origin',
-      //     onChange: (value) {
-      //       setState(() {
-      //         _countryIndex = value;
-      //         _placeOfOrigin = _countryNames[value];
-      //         _setValidData();
-      //         _updatedCarma = true;
-      //       });
-      //     }),
       AutoTextField(
         data: _countryNames,
         defaultText: _placeOfOrigin,

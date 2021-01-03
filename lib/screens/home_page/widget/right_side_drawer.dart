@@ -89,7 +89,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
       child: Drawer(
           child: Container(
         color: CustomColours.greenNavy(),
-        padding: EdgeInsets.only(top: 100, bottom: 20),
+        padding: EdgeInsets.only(top: 200, bottom: 5),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -97,15 +97,17 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                 child: Center(
                     child: Icon(
               Icons.eco,
-              size: 50,
-              color: CustomColours.offWhite(),
+              size: 80,
+              color: CustomColours.iconGreen(),
             ))),
             Container(
                 padding: EdgeInsets.only(bottom: 50),
                 child: Center(
                     child: Text(
                   "Synthethics",
-                  style: TextStyle(color: CustomColours.offWhite()),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: CustomColours.offWhite()),
                 ))),
             _HomeRightDrawerItem(
               // TODO: Remove this and implement functionalities to scanner
@@ -133,6 +135,8 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                     onTap: () {
                       _showConfirmDeletionDialog(context);
                     },
+                    color: CustomColours.offWhite(),
+                    backgroundColor: CustomColours.negativeRed(),
                   )),
             ),
           ],
@@ -146,8 +150,17 @@ class _HomeRightDrawerItem extends StatefulWidget {
   final IconData icon;
   final String text;
   final Function onTap;
+  final Color color;
+  final Color backgroundColor;
 
-  _HomeRightDrawerItem({this.icon, this.text, this.onTap});
+  _HomeRightDrawerItem({this.icon,
+    this.text,
+    this.onTap,
+    Color color,
+    Color backgroundColor,
+  })
+    : color = color ?? CustomColours.greenNavy(),
+      backgroundColor = backgroundColor ?? CustomColours.offWhite();
 
   @override
   __HomeRightDrawerItemState createState() => __HomeRightDrawerItemState();
@@ -158,19 +171,19 @@ class __HomeRightDrawerItemState extends State<_HomeRightDrawerItem> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: CustomColours.offWhite()),
+        border: Border.all(color: widget.backgroundColor),
         borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: CustomColours.offWhite(),
+        color: widget.backgroundColor,
       ),
       margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
       child: ListTile(
         leading: Icon(
           widget.icon,
           size: 30.0,
-          color: CustomColours.greenNavy(),
+          color: widget.color,
         ),
         title: Text(widget.text,
-            style: TextStyle(color: CustomColours.greenNavy())),
+            style: TextStyle(color: widget.color)),
         onTap: widget.onTap,
       ),
     );

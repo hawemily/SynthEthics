@@ -15,24 +15,24 @@ class ClothingMaterials {
 
   static Future<List<String>> _getClothingTypes() async {
     final materials = [
-      "Recycled Polyester",
-      "Organic Cotton",
-      "Synthetic Leather",
-      "Lyocell",
-      "Cotton",
-      "Linen",
-      "Bamboo",
-      "Spandex",
-      "Polyester",
-      "Viscose",
-      "Polypropylene",
-      "Silk",
-      "Hemp",
-      "Nylon",
       "Acrylic",
-      "Wool",
+      "Bamboo",
+      "Cotton",
+      "Hemp",
       "Jute",
       "Leather"
+      "Linen",
+      "Lyocell",
+      "Nylon",
+      "Organic Cotton",
+      "Polyester",
+      "Polypropylene",
+      "Recycled Polyester",
+      "Silk",
+      "Spandex",
+      "Synthetic Leather",
+      "Viscose",
+      "Wool",
     ];
     return materials;
   }

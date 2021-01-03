@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/requestObjects/donated_item_metadata.dart';
 import 'package:synthetics/requestObjects/items_to_donate_request.dart';
 import 'package:synthetics/responseObjects/clothingTypeObject.dart';
+import 'package:synthetics/routes.dart';
 import 'package:synthetics/screens/closet_page/closet_container.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/closet_page/closet_suggestion_page.dart';
@@ -369,8 +370,12 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         outfitItems.clear();
         _mode = ClosetMode.Normal;
       });
+      Navigator.pop(context);
+
+      // Refreshing Dressing Room
+      Navigator.pop(context);
+      Navigator.pushNamed(context, routeMapping[Screens.DressingRoom]);
     });
-    Navigator.pop(context);
   }
 
   Widget generateCloset(String type) {
@@ -442,7 +447,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               List<ClothingItemObject> listClothingItems = i.clothingItems;
               listClothingItems.forEach((element) {
                 DateTime lastWorn = DateTime.parse(element.data.lastWornDate);
-                if (lastWorn.difference(DateTime.now()).inDays < 30) {
+                if (lastWorn.difference(DateTime.now()).inDays > 30) {
                   allSuggestions.add(element);
                 }
               });

@@ -55,35 +55,40 @@ class _ClothingItemState extends State<ClothingItem> {
     var amount =
         (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn);
 
+    bool validAction = false;
     setState(() {
       if (action == 'INC') {
         this.timesWorn++;
         this.karma += amount;
         this.lastWorn = DateTime.now().toString();
+        validAction = true;
       } else {
         if (this.timesWorn > 0) {
           this.timesWorn--;
           this.karma -= amount;
+          validAction = true;
         }
       }
       this.progress =
           this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
     });
 
-    await api_client
-        .post("/closet/updateItem",
-            body: jsonEncode(<String, dynamic>{
-              'uid': user.getUID(),
-              'clothingId': this.clothingID.id,
-              'timesWorn': this.timesWorn,
-              'lastWorn': DateTime.now().toString(),
-              'carmaGain': amount,
-              'action': action
-            }))
-        .then((e) {
-      print(e.statusCode);
-      print(e.body);
-    });
+    if (validAction) {
+      await api_client
+          .post("/closet/updateItem",
+          body: jsonEncode(<String, dynamic>{
+            'uid': user.getUID(),
+            'clothingId': this.clothingID.id,
+            'timesWorn': this.timesWorn,
+            'lastWorn': DateTime.now().toString(),
+            'carmaGain': amount,
+            'action': action
+          }))
+          .then((e) {
+        print(e.statusCode);
+        print(e.body);
+      });
+    }
 
     if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
         this.timesWorn != 0) {
