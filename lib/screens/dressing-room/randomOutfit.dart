@@ -10,6 +10,8 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
+import '../../routes.dart';
+
 class RandomOutfit extends StatefulWidget {
   const RandomOutfit(this.clothingItems, {Key key}) : super(key: key);
 
@@ -113,6 +115,10 @@ class _RandomOutfitState extends State<RandomOutfit> {
       print(e.body);
     });
     Navigator.pop(context);
+
+    // Reload dressing room/outfit page once this is done
+    Navigator.pop(context);
+    Navigator.pushNamed(context, routeMapping[Screens.DressingRoom]);
   }
 
   Widget clothingcardbuild() {
