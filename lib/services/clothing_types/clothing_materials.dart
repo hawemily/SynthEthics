@@ -20,7 +20,7 @@ class ClothingMaterials {
       "Cotton",
       "Hemp",
       "Jute",
-      "Leather"
+      "Leather",
       "Linen",
       "Lyocell",
       "Nylon",
@@ -45,5 +45,30 @@ class ClothingMaterials {
       }
     }
     return -1;
+  }
+
+  String materialMapping(String material) {
+    Map<String, String> materialMap = {
+      "Acrylic": "acrylic",
+      "Bamboo": "bamboo",
+      "Cotton": "cotton",
+      "Hemp": "hemp",
+      "Jute": "jute",
+      "Leather": "leather",
+      "Linen": "linen",
+      "Lyocell": "lyocell",
+      "Nylon": "nylon",
+      "Organic Cotton": "cotton_organic",
+      "Polyester": "polyester",
+      "Polypropylene": "polypropylene",
+      "Recycled Polyester": "polyester_recycled",
+      "Silk": "silk",
+      "Spandex": "spandex",
+      "Synthetic Leather": "leather_synthetic",
+      "Viscose": "viscose",
+      "Wool": "wool",
+    };
+
+    return materialMap[material];
   }
 }

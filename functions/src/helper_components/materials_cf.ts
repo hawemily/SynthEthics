@@ -2,7 +2,7 @@ const BaseMaterialCF = 10.0;
 
 const MaterialCFRatio: { [key: string]: number } = {
   // place all values for materials here in a dictonary
-  
+
   // conventional materials
   lyocell: 0.5,
   cotton: 1.0,
@@ -34,6 +34,7 @@ const MaterialCFRatio: { [key: string]: number } = {
 
 export const getMaterialCF = (material: string, variant?: string) => {
   let key = material;
+  console.log("material " + material);
   if (variant) {
     key = key + "_" + variant;
   }

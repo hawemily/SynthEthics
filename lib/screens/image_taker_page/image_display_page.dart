@@ -182,7 +182,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
           },
           body: jsonEncode(<String, dynamic>{
             'category': _clothingType, // Convert to match backend
-            'materials': [_clothingMaterial],
+            'materials': [ClothingMaterials.getInstance().materialMapping(_clothingMaterial)],
             'currLocation': _positionData,
             'origin': _placeOfOrigin
           }),

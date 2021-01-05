@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/routes.dart';
 import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 import 'package:synthetics/services/api_client.dart';
+import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/colour_fetcher/colour_fetcher.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/image_taker/image_manager.dart';
@@ -85,7 +86,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
             'uid': user.getUID(),
             'name': _clothingName,
             'brand': _clothingBrand,
-            'materials': [widget.clothingMaterial.toLowerCase()],
+            'materials': [ClothingMaterials.getInstance().materialMapping(widget.clothingMaterial)],
             'clothingType': widget.clothingType,
             'currLocation': widget.location,
             'origin': widget.placeOfOrigin,

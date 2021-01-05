@@ -11,6 +11,9 @@ import {
 const DEFAULT_LAT = 51.5074;
 const DEFAULT_LONG = 0.1278;
 const CO2_PER_TONNE_KM_SHIP = 0.012;
+const TOTAL_CF_FACTOR = 5;
+const TOTAL_CF_OFFSET = 500;
+
 var csvReadIn = false;
 
 const Weights: { [key: string]: number } = {
@@ -64,21 +67,18 @@ export const calculateCarma = async (
     calculateMaterialsCarma(materials) +
     calculateManufacturingCarma(origin) +
     transportCarma;
-  
-    console.log(`category: ${category}`);
+
+  console.log(`category: ${category}`);
   console.log(`preweighted: ${Math.round(preWeighted * Weights[category])}`);
 
-  return Math.round(preWeighted * Weights[category]);
+  return TOTAL_CF_OFFSET + TOTAL_CF_FACTOR * Math.round(preWeighted * Weights[category]);
 };
 
-const calculateMaterialsCarma = (materials: any) => {
-  // assume materials is a list of name-variant-percentage, with material to %
+const calculateMaterialsCarma = (materials: string[]) => {
   let total = 0;
 
   materials.forEach((each: any) => {
-    total +=
-      getMaterialCF(each.name, each.variant) *
-      (each.percentage || 100 / materials.length);
+    total += getMaterialCF(each, "");
   });
 
   console.log(`totalMaterials = ${total}`);
