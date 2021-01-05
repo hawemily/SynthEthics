@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "457040921305-9p53ooqbjqc9vii7s1k9tmrhvupaobfe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cafooca.synthetics",
+            "certificate_hash": "585adc3b5a7e102958cb5fa6105429cb1f92c8db"
+          }
+        },
+        {
+          "client_id": "457040921305-uc9l0hhtnv1qfbl2d4oj43e1ddeak395.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cafooca.synthetics",
+            "certificate_hash": "45eb2db2a9fec1f66f6f867a280b933ec87a200e"
+          }
+        },
+        {
           "client_id": "457040921305-krks13pk17a0fijg9k319uv2fp2na0q5.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -32,10 +48,10 @@
               "client_type": 3
             },
             {
-              "client_id": "457040921305-korutj3qeuht2ab4c965j2di8icn2i5s.apps.googleusercontent.com",
+              "client_id": "457040921305-flj8i1o4osi742l6n62dfeummggbs3di.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.segp.cfcalc"
+                "bundle_id": "com.cafooca.synthetics"
               }
             }
           ]
