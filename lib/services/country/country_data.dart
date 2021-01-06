@@ -4,6 +4,9 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+
+/// Helper service for getting list of country names, to ensure frontend uses
+/// the same list of country names as the backend
 class CountryData {
   Future<List<Map<String, dynamic>>> countryData;
   static CountryData _instance;

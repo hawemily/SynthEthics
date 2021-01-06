@@ -8,6 +8,8 @@ import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/record_dates_padder/record_dates_padder.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
+
+/// Widget for constructing user Carma record graphs
 class CarmaRecordViewer extends StatefulWidget {
   @override
   _CarmaRecordViewerState createState() => _CarmaRecordViewerState();
@@ -27,6 +29,12 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
     super.initState();
   }
 
+  /// Fetch user Carma records from the backend. Backend guarantees that the
+  /// records are up to data within the usable time frame.
+  ///
+  /// Daily records within the past week (7 days)
+  /// Monthly records within the past year (12 months)
+  /// Yearly recrods within the past 5 years
   void getCarmaRecords() async {
     String uid = CurrentUser.getInstance().getUID();
     if (uid != null) {
@@ -90,6 +98,9 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
   }
 }
 
+
+/// Widget for tab for controlling viewed carma record resolution
+/// (Day, Month, Year)
 class CarmaResolutionTab extends StatefulWidget {
   final String label;
 

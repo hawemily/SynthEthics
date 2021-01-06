@@ -27,6 +27,9 @@ class VisionTextLabelSource implements LabelSource {
   }
 }
 
+
+/// RegEx label parser for searching for an item's place of origin and material
+/// on a given label
 class RegexLabelParser implements LabelParser {
 
   final Map<String, RegExp> propertyRegExps = {

@@ -3,9 +3,10 @@ import 'dart:io';
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 
-// Image Taker, called by the NavBar when adding items to the closet
-// Currently goes to image display page, in the future it should go to a
-// Confirmation page where an item instance is created
+
+/// Image Taker, called by the NavBar when adding items to the closet
+/// Currently goes to image display page, in the future it should go to a
+/// Confirmation page where an item instance is created
 class ImageTaker {
   static void settingModalBottomSheet(BuildContext context, Function callBack) {
     showModalBottomSheet(
