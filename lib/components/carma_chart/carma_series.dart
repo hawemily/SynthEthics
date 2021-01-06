@@ -1,4 +1,3 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/foundation.dart';
 
 class CarmaSeries {
@@ -12,7 +11,6 @@ class CarmaSeries {
 
   @override
   String toString() {
-    // TODO: implement toString
     return "{Date : $dateLabel , Carma : $carma}";
   }
 }

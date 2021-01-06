@@ -1,5 +1,7 @@
 
-// Class for maintaining string operations that are not native to dart
+///
+/// Class for maintaining string operations that are not native to dart
+///
 class StringOperator {
 
   static String capitalise(String string) {

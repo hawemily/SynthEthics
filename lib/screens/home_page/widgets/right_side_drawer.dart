@@ -7,8 +7,13 @@ import 'package:synthetics/screens/login/sign_in_method_enum.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
+
+///
+/// Widget for populating the right side drawer on the home page, place for
+/// storing additional functionality that are not accessed directly from the
+/// navbar or the top bar on the home page
+///
 class HomeRightDrawer extends StatefulWidget {
   @override
   _HomeRightDrawerState createState() => _HomeRightDrawerState();
@@ -18,6 +23,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
   CurrentUser currUser = CurrentUser.getInstance();
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  /// Sign current user out of the application
   void _signOut() {
     if (currUser.signInMethod == SignInMethod.Google) {
       print("signing out from google!");
@@ -31,6 +37,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
         });
   }
 
+  /// Delete All user backend data
   void _deleteUser() {
     api_client.post("/deleteUser",
         body: jsonEncode(<String, dynamic>{'uid': currUser.getUID()}));
@@ -146,6 +153,9 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
   }
 }
 
+
+/// Local widget for representing a drawer item, provides uniformity without
+/// limiting user usability
 class _HomeRightDrawerItem extends StatefulWidget {
   final IconData icon;
   final String text;

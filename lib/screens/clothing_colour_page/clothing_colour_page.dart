@@ -1,17 +1,19 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:image/image.dart' as ImageOps;
 
+
+///
+/// Page previously created for image dominant colour display, left in the
+/// system for users to use.
+///
 class ClothingColourPage extends StatefulWidget {
   @override
   _ClothingColourPageState createState() => _ClothingColourPageState();
@@ -32,13 +34,6 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
   }
 
   Future<void> fetchDominantColours(File fileImage) async {
-    // final Future<http.Response> response = http.post(
-    //     "https://api.ximilar.com/dom_colors/product/v2/dominantcolor",
-    //     body: {"_base64" : image});
-
-    // response.then((value) {
-    //   print(value.body);
-    // });
 
     ImageOps.Image customImage = ImageOps.decodeImage(fileImage.readAsBytesSync());
     customImage = _cropToCenter(customImage, 0.8);
@@ -47,7 +42,6 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
     ui.FrameInfo frameInfo = await codec.getNextFrame();
 
     final PaletteGenerator paletteGenerator =
-      // await PaletteGenerator.fromImageProvider(FileImage(fileImage));
       await PaletteGenerator.fromImage(frameInfo.image);
 
     List<Widget> colourDisplays = [];

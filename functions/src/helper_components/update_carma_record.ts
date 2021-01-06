@@ -37,7 +37,7 @@ function cleanFieldAccordingTo(record: any,
 
 
 export const cleanCarmaRecord = (user: User) => {
-  const currentDay: moment.Moment = moment();
+  const currentDay: moment.Moment = moment().startOf('day');
   const currentMonth: moment.Moment = moment(currentDay.format("YYYY-MM-01"));
   const currentYear: moment.Moment = moment(currentDay.format("YYYY-01-01"));
   const carmaRecord = user['carmaRecord'];
@@ -48,7 +48,7 @@ export const cleanCarmaRecord = (user: User) => {
 }
 
 export const addToCarmaRecord = (user: User, carmaAmount: number) => {
-    const currentDay: moment.Moment = moment();
+    const currentDay: moment.Moment = moment().startOf('day');
     const currentMonth: moment.Moment = moment(currentDay.format("YYYY-MM-01"));
     const currentYear: moment.Moment = moment(currentDay.format("YYYY-01-01"));
     const carmaRecord = user['carmaRecord'];
