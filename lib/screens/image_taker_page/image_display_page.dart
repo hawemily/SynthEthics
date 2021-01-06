@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:synthetics/screens/image_taker_page/add_to_closet_page.dart';
-import 'package:synthetics/screens/image_taker_page/textfield/autocomplete_textfield.dart';
+import 'package:synthetics/screens/image_taker_page/widgets/autocomplete_textfield.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/clothing_types/clothing_materials.dart';
 import 'package:synthetics/services/clothing_types/clothing_types.dart';
@@ -21,8 +20,11 @@ import 'package:synthetics/theme/custom_colours.dart';
 import 'clothing_label_dropdown.dart';
 import 'carma_detail_display.dart';
 
-// Image display page for image taken from the scanner. To be replaced in the
-// future with constructing a item profile to be added to the closet.
+
+///
+/// Page for displaying user label, detected text and clothing category.
+/// Responsible for displaying item's calculated Carma value to the user.
+///
 class ImageDisplayPage extends StatefulWidget {
   final File image;
 
@@ -65,6 +67,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     super.initState();
   }
 
+  /// Fetch clothing types from service
   void _getClothingData() async {
     ClothingMaterials.getInstance().types.then((value) {
       setState(() {
@@ -82,6 +85,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     });
   }
 
+  /// Fetch current user position
   void _getUserPosition() async {
     Position position = await Geolocator.getLastKnownPosition();
     if (position == null) {
@@ -95,6 +99,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     });
   }
 
+  /// Detected text in user submitted photograph, ideally a clothing label
+  /// Attempt to obtain the item's place of origin and material
   void _detectText() async {
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
@@ -105,10 +111,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     var labelProperties = labelParser.parseLabel();
     var origin = labelProperties["origin"];
     var material = labelProperties["material"];
-
-    // TODO: Remove testing variables
-    // final origin = "MADE IN MYANMAR";
-    // final material = "%POLYESTER";
 
     setState(() {
       _placeOfOrigin = StringOperator.capitaliseClear(_cleanOriginText(origin));
@@ -125,6 +127,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     textRecognizer.close();
   }
 
+  /// Determine whether required data has been correctly fetched
   void _setValidData() {
     _validData = (_clothingMaterial != ""
         && _placeOfOrigin != ""
@@ -132,6 +135,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     );
   }
 
+  /// Validate country data list and ensure the detected county (even blank) is
+  /// placed within the list and displayed
   void _validateCountryData() {
     List<String> countryNames = _countryData.map((e) {
       return e['country'] as String;
@@ -152,6 +157,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     });
   }
 
+  /// Validate material data list and ensure the detected material (even blank)
+  /// is placed within the list and displayed
   void _validateMaterialData() {
     int materialIndex =
           ClothingMaterials.getInstance().containsMaterial(_materialTypes,
@@ -170,6 +177,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     });
   }
 
+  /// Calculate item Carma points from current information
   void _getCarmaPoints() async {
     _loadingCarma = true;
     if (_validData) {
@@ -204,6 +212,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     }
   }
 
+  /// Cleans detected text and returns only key information ====================
   String _cleanOriginText(String originMatch) {
     if (originMatch == null || originMatch == "") return originMatch;
     return originMatch.split(' ').last;
@@ -214,7 +223,9 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
     return materialMatch.split('%').last.trim();
   }
+  /// ==========================================================================
 
+  /// Determine if conditions permit an API call to calculate item Carma points
   bool _canCalculateCarma() {
     return _updatedCarma
         && _completedLoadingData
@@ -222,9 +233,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
         && !_loadingCarma;
   }
 
+  /// Build widgets for screen for displaying label data display page
   Widget _buildDetectedText() {
-    print("Building");
-
     List<Widget> detectedTextBlocks = [
       Container(
         height: 150,
@@ -245,7 +255,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       _getCarmaPoints();
     }
 
-    print("Country index " + _countryIndex.toString());
     detectedTextBlocks.addAll([
       CarmaPointDetails(
         points: _carmaPoints,
