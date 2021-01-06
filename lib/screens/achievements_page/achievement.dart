@@ -1,3 +1,6 @@
+// Achievement data class used to pass fetched achievement
+// data between Flutter widgets
+
 class Achievement {
   final int id;
 

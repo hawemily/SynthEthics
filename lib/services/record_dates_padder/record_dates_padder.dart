@@ -17,9 +17,12 @@ class RecordDatesPadder {
     return padDateResolution(months, "month", monthsOrder);
   }
 
+  // Fill in any empty years, size of years > 0
   static padYears(List<dynamic> years) {
     String resolution = "year";
 
+    // Insert the most recent year
+    // Carma data is floating point, so need to round first
     List<CarmaSeries> dateSeries = [
       CarmaSeries(
           dateLabel: years[0][resolution].toString(),
@@ -27,6 +30,8 @@ class RecordDatesPadder {
       )
     ];
 
+    // Go backwards and if a year is missing then
+    // add a 0 entry for the year
     int currentDate = years[0][resolution];
     int i = 1;
     while(dateSeries.length != 5) {
