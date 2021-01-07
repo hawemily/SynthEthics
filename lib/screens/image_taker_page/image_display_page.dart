@@ -103,7 +103,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   /// Attempt to obtain the item's place of origin and material
   void _detectText() async {
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    final TextRecognizer textRecognizer = FirebaseVision.instance.cloudTextRecognizer();
     final VisionText visionText = await textRecognizer.processImage(visionImage);
 
     // Parse using regex parser with VisionText as label source
@@ -113,8 +113,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     var material = labelProperties["material"];
 
     setState(() {
-      _placeOfOrigin = StringOperator.capitaliseClear(_cleanOriginText(origin));
-      _clothingMaterial = _cleanMaterialText(material);
+      _placeOfOrigin = StringOperator.capitaliseClear(origin);
+      _clothingMaterial = material;
       _completedLoadingPage = true;
     });
 
@@ -212,17 +212,6 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     }
   }
 
-  /// Cleans detected text and returns only key information ====================
-  String _cleanOriginText(String originMatch) {
-    if (originMatch == null || originMatch == "") return originMatch;
-    return originMatch.split(' ').last;
-  }
-
-  String _cleanMaterialText(String materialMatch) {
-    if (materialMatch == null || materialMatch == "") return materialMatch;
-
-    return materialMatch.split('%').last.trim();
-  }
   /// ==========================================================================
 
   /// Determine if conditions permit an API call to calculate item Carma points
