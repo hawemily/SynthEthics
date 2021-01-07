@@ -33,7 +33,7 @@ class VisionTextLabelSource implements LabelSource {
 class RegexLabelParser implements LabelParser {
 
   final Map<String, RegExp> propertyRegExps = {
-    "origin" : RegExp(r"MADE IN\s?\n?\s?(\w+(\s\w+)*)"),
+    "origin" : RegExp(r"MADE IN\s?\n?\s?(\w+[^\n]*)"),
     "material" : RegExp(
         r"%\s?((ORGANIC COTTON|SYNTHETIC LEATHER|RECYCLED POLYESTER)|((\w+\s)?(ACRYLIC|BAMBOO|COTTON|HEMP|JUTE|LEATHER|LINEN|LYOCELL|NYLON|POLYESTER|POLYPROPYLENE|SILK|SPANDEX|VISCOSE|WOOL)))")
   };
@@ -68,11 +68,24 @@ class RegexLabelParser implements LabelParser {
           .firstMatch(text.toUpperCase());
       if (propertyMatch != null) {
         if (property == "origin") {
-          data[property] = propertyMatch.group(1);
+          data[property] = _AbbrevMapping(propertyMatch.group(1));
         } else if (property == "material") {
           data[property] = propertyMatch.group(propertyMatch.groupCount);
         }
       }
+    }
+  }
+
+  String _AbbrevMapping(String countryName) {
+    switch (countryName) {
+      case "UK":
+      case "THE UK":
+        return "UNITED KINGDOM";
+      case "U.S.A.":
+      case "USA":
+        return "UNITED STATES";
+      default:
+        return countryName;
     }
   }
 }
