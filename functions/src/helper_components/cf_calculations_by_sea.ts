@@ -45,6 +45,12 @@ export const initCSVs = async () => {
   return "successfully loaded csvs";
 };
 
+/**
+ * finds the sea distance between curr location and origin
+ * @param currLoc - curr location of the user
+ * @param origin - country of origin
+ */
+
 export const findSeaDistance = (currLoc: string, origin: string) => {
   console.log(`origin: ${origin}`);
   console.log(`currLoc: ${currLoc}`);
@@ -57,6 +63,11 @@ export const findSeaDistance = (currLoc: string, origin: string) => {
   }
   return 0;
 };
+
+/**
+ * converts country name to its corresponding country code
+ * @param countryName - name of the country
+ */
 
 export const findCountryCode = (countryName: string) => {
   if (countryName === "") {

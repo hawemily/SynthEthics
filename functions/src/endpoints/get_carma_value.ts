@@ -43,6 +43,13 @@ export const getCarmaValue = async (req: Request, res: Response) => {
   res.json(result);
 };
 
+/**
+ * calculates the total carma points associated to a clothing item
+ * @param materials : materials used to manufacture item
+ * @param currLocation : lat long cdts of curr location
+ * @param org : place of manufacture
+ * @param category : category of clothing
+ */
 export const calculateCarma = async (
   materials: string[],
   currLocation: LatLng,
@@ -74,7 +81,7 @@ export const calculateCarma = async (
   return TOTAL_CF_OFFSET + TOTAL_CF_FACTOR * Math.round(preWeighted * Weights[category]);
 };
 
-const calculateMaterialsCarma = (materials: string[]) => {
+export const calculateMaterialsCarma = (materials: string[]) => {
   let total = 0;
 
   materials.forEach((each: any) => {
@@ -90,7 +97,12 @@ const calculateManufacturingCarma = (origin: any) => {
   return 0;
 };
 
-const calculateTransportCarma = async (
+/**
+ * calculates the total carbon footprint of transporting * an item from place of manufacture to user's location * in terms of carma points
+ * @param cdts - latitude and longitude of location
+ * @param origin - place of manufacture of clothing item as string
+ */
+export const calculateTransportCarma = async (
   cdts: LatLng,
   origin: any
 ): Promise<number> => {
