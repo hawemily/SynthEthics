@@ -11,12 +11,12 @@ import {
 const DEFAULT_LAT = 51.5074;
 const DEFAULT_LONG = 0.1278;
 const CO2_PER_TONNE_KM_SHIP = 0.012;
-const TOTAL_CF_FACTOR = 5;
-const TOTAL_CF_OFFSET = 500;
+export const TOTAL_CF_FACTOR = 5;
+export const TOTAL_CF_OFFSET = 500;
 
 var csvReadIn = false;
 
-const Weights: { [key: string]: number } = {
+export const Weights: { [key: string]: number } = {
   Tops: 1.0,
   Bottoms: 1.5,
   Skirts: 1.5,
@@ -93,7 +93,7 @@ export const calculateMaterialsCarma = (materials: string[]) => {
   return total;
 };
 
-const calculateManufacturingCarma = (origin: any) => {
+export const calculateManufacturingCarma = (origin: any) => {
   return 0;
 };
 
