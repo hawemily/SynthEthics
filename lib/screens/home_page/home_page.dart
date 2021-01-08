@@ -5,17 +5,21 @@ import 'package:synthetics/components/carma_chart/carma_stat.dart';
 import 'package:synthetics/components/navbar/navbar.dart';
 import 'package:synthetics/screens/achievements_page/achievements_page.dart';
 import 'package:synthetics/screens/home_page/carma_record_viewer.dart';
-import 'package:synthetics/screens/home_page/widget/right_side_drawer.dart';
+import 'package:synthetics/screens/home_page/widgets/right_side_drawer.dart';
 import 'package:synthetics/screens/login/sign_in_method_enum.dart';
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
-import 'package:synthetics/services/initialiser/initialiser.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'info_page.dart';
 
-// Home page, currently standing in for the user home page
+
+/// Page as initial entry point past login to the application. Shows user
+/// progression with the application, including Carma records, items bought,
+/// donated and total wears.
+///
+/// Contains access to information and achievements pages
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
@@ -37,10 +41,8 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    print("STARTING PAGE");
     user = CurrentUser.getInstance();
     getUserRecords();
-    // getNumberOfDonatedItems();
     super.initState();
   }
 
@@ -60,6 +62,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  /// Gets user Carma records for graph
   void getUserRecords() async {
     CurrentUser currUser = CurrentUser.getInstance();
     String uid = currUser.getUID();
@@ -87,9 +90,6 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-//  ImageProvider<Image> _fetchImage() {
-//
-//  }
   @override
   Widget build(BuildContext context) {
     List<Widget> stackWidgets = [

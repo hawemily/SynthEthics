@@ -16,6 +16,10 @@ import 'package:synthetics/theme/custom_colours.dart';
 import 'clothing_label_dropdown.dart';
 
 
+/// Page for user customisation of the item of clothing before adding the item
+/// to the user's closet. Including adding a photo for icon, name and brand.
+///
+/// Item colour category classification occurs here.
 class AddToClosetPage extends StatefulWidget {
   final String placeOfOrigin;
   final String clothingMaterial;
@@ -49,6 +53,8 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
   bool _savingInProgress = false;
   bool _hasMappedColour = false;
 
+  /// Determine if save is currently occuring, this is to allow for prevention
+  /// of redirection until save is complete
   bool _saveActive() {
     return (_clothingImage != null
         && _clothingName != ""
@@ -56,25 +62,11 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
         && _hasMappedColour);
   }
 
+  /// Save item to closet
   void _saveToCloset() async {
     setState(() {
       _savingInProgress = true;
     });
-
-    print('Save to closet');
-    print(DateTime.now().toString());
-
-    print({
-          'name': _clothingName,
-          'brand': _clothingBrand,
-          'materials': [widget.clothingMaterial.toLowerCase()],
-          'clothingType': widget.clothingType,
-          'currLocation': widget.location,
-          'origin': widget.placeOfOrigin,
-          'lastWorn': DateTime.now().toString(),
-          'dateOfPurchase': DateTime.now().toString(),
-          'mappedColour': OutfitColor.values.indexOf(_mappedColour),
-        }.toString());
 
     try {
       final response = await api_client.post(
@@ -96,18 +88,12 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
           })
       );
 
-      print("response $response");
       if (response.statusCode == 200) {
-        print("response body ${response.body}");
-        print("response Decode ${jsonDecode(response.body)}");
         final clothingId = jsonDecode(response.body)['clothingID'];
-        print("clothingID $clothingId");
-        File newImage = await ImageManager.getInstance()
-            .savePictureToDevice(_clothingImage, clothingId);
-        print(newImage == null);
-        if (newImage != null) {
-          print(newImage.path);
-        }
+        await ImageManager.getInstance().savePictureToDevice(_clothingImage,
+                                                             clothingId);
+
+        // Perform a clear stac and push back to the home page
         Navigator.popUntil(
             context,
             ModalRoute.withName(routeMapping[Screens.Home])
@@ -118,13 +104,9 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
         Navigator.pop(context);
         Navigator.pushNamed(context, routeMapping[Screens.Home]);
       }
-
     } catch (e) {
       print("in add to closet page: $e");
     }
-
-    // TODO: Replace with closet page once the constructor is fixed
-    // Navigator.pushNamed(context, routeMapping[Screens.Empty]);
   }
 
   @override
@@ -211,13 +193,11 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
                       setState(() {
                         _clothingName = text;
                       });
-                      print("clothingName: $_clothingName");
                     }),
                     _WritableCard(label: "Brand", func: (text) {
                       setState(() {
                         _clothingBrand = text;
                       });
-                      print("clothingBrand: $_clothingBrand");
                     }),
                     _ReadOnlyCards(
                         text: "Material: ${widget.clothingMaterial}"),
@@ -251,6 +231,8 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
     );
   }
 
+  /// Callback function to pass to image_taker such that the taken image is
+  /// passed back here
   void _imageGetterCallback(Future<File> futureFile) {
     futureFile.then((image) {
       if (image != null) {
@@ -267,6 +249,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
 }
 
 
+/// Local widget used for cards with writeable contents
 class _WritableCard extends StatefulWidget {
   final label;
   final func;
@@ -315,6 +298,7 @@ class _WritableCardState extends State<_WritableCard> {
 }
 
 
+/// Local widget used for cards with readonly content
 class _ReadOnlyCards extends StatelessWidget {
   final text;
   _ReadOnlyCards({this.text});
@@ -343,6 +327,8 @@ class _ReadOnlyCards extends StatelessWidget {
   }
 }
 
+
+/// Local widget for navigation buttons at the top of the page
 class _ATCButtons extends StatelessWidget {
   final Function func;
   final String text;

@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
+///
+/// Custom dropdown menu widget for use in this application, facilitates the
+/// selection of elements from a given list.
+///
 class ClothingLabelDropdown extends StatefulWidget {
-  final data;
-  final selected;
-  final label;
+  final List data;
+  final dynamic selected;
+  final String label;
   final Function onChange;
 
   final padding;

@@ -1,7 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
+
+///
+/// Class contains operations required for the classification of clothing items,
+/// or rather, their dominant colours into a colour category
+///
 class ColorClassifier {
   final int MAX_PIXEL = 255;
 
@@ -57,6 +60,26 @@ class ColorClassifier {
   }
 }
 
-enum OutfitColor { Black, White, Grey, Red, Yellow, Green, Cyan, Blue, Magenta, Brown, Orange, Pink }
 
-enum AccentColor { Red, Blue, Purple }
+/// Colour categories ==========================================================
+enum OutfitColor {
+  Black,
+  White,
+  Grey,
+  Red,
+  Yellow,
+  Green,
+  Cyan,
+  Blue,
+  Magenta,
+  Brown,
+  Orange,
+  Pink
+}
+
+enum AccentColor {
+  Red,
+  Blue,
+  Purple
+}
+/// ============================================================================

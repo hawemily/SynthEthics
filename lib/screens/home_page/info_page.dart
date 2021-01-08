@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+
+///
+/// Page for application information, includes brief guides to instruct the user
+/// how to use the application's functionalities
+///
 class InformationPage extends StatelessWidget {
   final controller = PageController(
       // initialPage: 1,

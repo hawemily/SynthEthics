@@ -2,13 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:synthetics/screens/image_taker_page/image_display_page.dart';
-import 'package:synthetics/screens/closet_page/closet_page.dart';
 import 'package:synthetics/services/image_taker/image_taker.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
 import '../../routes.dart';
 
-// NavBar class, to be placed on pages as 'bottomNavigationBar'
+
+///
+/// Widget containing navigation buttons for the five main modules/pages.
+/// Controls the direct routing between these pages and direct access to
+/// scanner, since scanner is not a 'routed' page.
+///
 class NavBar extends StatefulWidget {
   final selected;
 
@@ -91,8 +95,8 @@ class _NavBarState extends State<NavBar> {
         });
   }
 
-  // Callback function used by image taker modal to go to image display page for
-  // OCR
+  /// Callback function used by image taker modal to go to image display page
+  /// for OCR
   void imageGetterCallback(Future<File> futureFile) {
     futureFile.then((value) {
       if (value != null) {

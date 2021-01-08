@@ -2,6 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
+
+///
+/// Custom widget for displaying a Carma value. Used in scanner image display to
+/// display item's calculated Carma value, or an error message if it fails to
+/// calculate a Carma value for the given item of clothing.
+///
 class CarmaPointDetails extends StatefulWidget {
   final int points;
   final bool hasStarted;
