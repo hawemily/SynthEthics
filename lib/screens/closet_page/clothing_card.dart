@@ -65,6 +65,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                 getTimesWorn: returnTimesWorn)));
   }
 
+  // refreshes the status of the clothing item to ensure changes made in another widget is reflected in the closet.
   Future<ClothingItemObject> getAClothingItem() async {
     if (this.currentClothingItem == null) return null;
     final response = await api_client.get("/closet/allClothes/" +

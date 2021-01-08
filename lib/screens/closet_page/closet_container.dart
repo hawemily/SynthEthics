@@ -32,6 +32,7 @@ class ClosetContainer extends StatelessWidget {
   final Function isFlipped;
   final bool stagnant;
 
+  // return the appropriate ClothingCard widget or one of its child widgets according to the current ClosetMode.
   @override
   Widget build(BuildContext context) {
     print("Current Closet mode: ${this.mode}");

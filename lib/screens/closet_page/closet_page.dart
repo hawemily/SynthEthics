@@ -63,16 +63,16 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // ensure the closet is in Select mode when navigating to Closet in the midst of an extraordinary procedure.
     if (widget.selectingOutfit) {
       _mode = ClosetMode.Select;
     }
-    //TODO: call api to init categories from backend using collecitons
-    // categories = getCategories();
+
+    // loads clothing categories, and fetch all clothing items and donated items;
     List<String> categories = widget.categories;
     confirmedDonations = this.getDonatedItems();
     clothingItems = this.getClothes();
 
-//    confirmedDonations = ;
     print(categories);
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
 

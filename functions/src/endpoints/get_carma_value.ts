@@ -81,6 +81,11 @@ export const calculateCarma = async (
   return TOTAL_CF_OFFSET + TOTAL_CF_FACTOR * Math.round(preWeighted * Weights[category]);
 };
 
+/**
+ * calculates the total carbon footprint of a particular material
+ * @param materials - list of materials
+ * @description only supports one material for the time being.
+ */
 export const calculateMaterialsCarma = (materials: string[]) => {
   let total = 0;
 

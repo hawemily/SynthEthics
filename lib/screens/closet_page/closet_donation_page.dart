@@ -20,13 +20,13 @@ class ClosetDonationPage extends StatelessWidget {
       this.action,
       this.isInDonationList});
 
+  // triggers transition into ClosetMode.Donated or ClosetMode.UnDonate
   Widget getActionButtons() {
     List<ActionIconsAndText> normalActionButtons = [
       ActionIconsAndText(
           icon: Icon(Icons.store_mall_directory),
           text: Text("Confirm Donated"),
           onClick: () {
-            // TODO: move to a new mode where users can only select clothing in the 'to be donated' tab to indicate that they have already donated the clothing.
             setMode(ClosetMode.Donated);
           }),
       ActionIconsAndText(
