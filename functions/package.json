@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
     "start": "npm run build && firebase emulators:start",
+    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "logs": "firebase functions:log",
     "deploy": "npm run build && firebase deploy --only functions"
   },
@@ -29,11 +31,17 @@
     "moment": "^2.29.1"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.14",
     "@types/express": "^4.17.2",
     "@types/jsonwebtoken": "^8.3.5",
+    "@types/mocha": "^8.2.0",
     "@types/node": "^12.12.6",
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0",
+    "ts-node": "^9.1.1",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.9.7"
   },
   "author": "Emily",
   "license": "ISC"
