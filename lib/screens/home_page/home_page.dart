@@ -43,6 +43,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     user = CurrentUser.getInstance();
     getUserRecords();
+    getNumberOfDonatedItems();
     super.initState();
   }
 
@@ -74,7 +75,6 @@ class HomePageState extends State<HomePage> {
         print("body:" + body.toString());
         setState(() {
           carmaPoints = body["carmaPoints"] == null ? 0 : body["carmaPoints"].round();
-          donated = body["itemsDonated"];
           bought = body["itemsBought"];
           wears = body["itemsWorn"];
         });

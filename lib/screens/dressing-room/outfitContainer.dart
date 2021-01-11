@@ -49,12 +49,12 @@ class _OutfitContainerState extends State<OutfitContainer> {
     });
   }
 
-  double getTotalCarmaGain(OutfitListItem oF) {
+  int getTotalCarmaGain(OutfitListItem oF) {
     double total = 0;
     oF.data.clothing.forEach((item) {
       total += (item.data.cF / item.data.maxNoOfTimesToBeWorn).round();
     });
-    return total;
+    return total.round();
   }
 
   Widget buildOutfitCard(OutfitListItem oF, int idx) {

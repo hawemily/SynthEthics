@@ -181,10 +181,10 @@ class _RandomOutfitState extends State<RandomOutfit> {
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ))
           : ListView(
+              shrinkWrap: true,
               children: [
                 clothingcardbuild(),
-                Padding(padding: EdgeInsets.all(20)),
-                ButtonBar(
+                Padding(padding: EdgeInsets.all(20), child: ButtonBar(
                   alignment: MainAxisAlignment.spaceEvenly,
                   buttonHeight: 20,
                   buttonMinWidth: 60,
@@ -216,7 +216,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
                       onPressed: () => saveOutfit(),
                     ),
                   ],
-                )
+                )),
+
               ],
             ),
       bottomNavigationBar: NavBar(selected: 3),

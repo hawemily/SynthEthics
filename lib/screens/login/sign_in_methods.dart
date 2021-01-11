@@ -29,7 +29,7 @@ Future<User> _handleSignIn(Function progressToggle) async {
   if (userSignedIn) {
       print("usersignedin!");
     user = _auth.currentUser;
-//    _googleSignIn.signOut();
+    _googleSignIn.signOut();
       print('user uid: ${user.uid}');
   } else {
     print("signing in with Google!");

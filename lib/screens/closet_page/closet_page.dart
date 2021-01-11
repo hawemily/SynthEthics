@@ -78,7 +78,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
     _tabController = TabController(
         vsync: this,
-        initialIndex: 1,
+        initialIndex: 0,
         length: widget.selectingOutfit ? (_tabs.length - 2) : _tabs.length);
   }
 
@@ -447,7 +447,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               List<ClothingItemObject> listClothingItems = i.clothingItems;
               listClothingItems.forEach((element) {
                 DateTime lastWorn = DateTime.parse(element.data.lastWornDate);
-                if (lastWorn.difference(DateTime.now()).inDays > 30) {
+                if (lastWorn.difference(DateTime.now()).abs().inDays > 10) {
                   allSuggestions.add(element);
                 }
               });
