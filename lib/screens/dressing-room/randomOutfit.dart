@@ -32,6 +32,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
   final List<Set<String>> outfitTypes = [
     {"Tops", "Bottoms", "Outerwear"},
     {"Dresses", "Outerwear"},
+    {"Tops", "Bottoms"}
   ];
 
   @override
@@ -48,25 +49,16 @@ class _RandomOutfitState extends State<RandomOutfit> {
     if (clothingItems['Tops'] == null && clothingItems['Dresses'] == null) {
       this.insufficientCloset = true;
       return null;
-    } else if (clothingItems['Tops'] == null) {
-      if (clothingItems['Outerwear'] == null) {
-        this.insufficientCloset = true;
-        return null;
-      }
-      randomOutfitType = 1;
-    } else if (clothingItems['Dresses'] == null) {
-      if (clothingItems['Bottoms'] == null) {
-        this.insufficientCloset = true;
-        return null;
-      }
-      randomOutfitType = 0;
     } else {
-      if (clothingItems['Bottoms'] == null) {
+      if (clothingItems['Outerwear'] == null) {
+        randomOutfitType = 2;
+      } else if (clothingItems['Bottoms'] == null) {
         randomOutfitType = 1;
       } else {
         randomOutfitType = random.nextInt(outfitTypes.length);
       }
     }
+    
 
     return generateRandomOutfit(randomOutfitType, clothingItems);
   }
