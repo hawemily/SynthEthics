@@ -61,7 +61,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
       }
       randomOutfitType = 0;
     } else {
-      randomOutfitType = random.nextInt(outfitTypes.length);
+      if (clothingItems['Bottoms'] == null) {
+        randomOutfitType = 1;
+      } else {
+        randomOutfitType = random.nextInt(outfitTypes.length);
+      }
     }
 
     return generateRandomOutfit(randomOutfitType, clothingItems);
