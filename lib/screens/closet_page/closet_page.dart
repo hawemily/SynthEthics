@@ -513,7 +513,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColours.greenNavy(),
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: widget.selectingOutfit,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
             _mode == ClosetMode.Donate

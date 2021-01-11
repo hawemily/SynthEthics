@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'SynthEthic',
+      debugShowCheckedModeBanner: false,
       theme: appTheme(),
       initialRoute: '/start',
       routes: routes,
