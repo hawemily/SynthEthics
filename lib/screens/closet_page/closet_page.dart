@@ -569,7 +569,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             .where(_notNull)
             .toList(),
       ),
-      bottomNavigationBar: NavBar(selected: 1),
+      bottomNavigationBar: NavBar( selected: widget.selectingOutfit ? 3 : 1),
     );
 //        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }
