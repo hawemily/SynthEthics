@@ -12,6 +12,8 @@ import 'package:synthetics/services/image_taker/image_manager.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/services/string_operator/string_operator.dart';
 
+/// Class for item dashboard to display stats for each clothing item
+/// Allows wear and donate functionality
 class ClothingItem extends StatefulWidget {
   ClothingItem({Key key, this.clothingItem, this.getTimesWorn})
       : super(key: key);
@@ -28,7 +30,7 @@ class _ClothingItemState extends State<ClothingItem> {
   CurrentUser user = CurrentUser.getInstance();
   var progress;
   int timesWorn;
-  double karma;
+  double carma;
   File image;
   String lastWorn;
 
@@ -47,10 +49,11 @@ class _ClothingItemState extends State<ClothingItem> {
     this.timesWorn = this.clothingID.data.currentTimesWorn.round();
     this.lastWorn = clothingID.data.lastWornDate;
     this.progress = this.timesWorn / this.clothingID.data.maxNoOfTimesToBeWorn;
-    this.karma = (this.timesWorn *
+    this.carma = (this.timesWorn *
         (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn));
   }
 
+  /// Function to update progress bar depending on how many times item is worn
   void updateProgress(String action) async {
     var amount =
         (this.clothingID.data.cF / this.clothingID.data.maxNoOfTimesToBeWorn);
@@ -59,13 +62,13 @@ class _ClothingItemState extends State<ClothingItem> {
     setState(() {
       if (action == 'INC') {
         this.timesWorn++;
-        this.karma += amount;
+        this.carma += amount;
         this.lastWorn = DateTime.now().toString();
         validAction = true;
       } else {
         if (this.timesWorn > 0) {
           this.timesWorn--;
-          this.karma -= amount;
+          this.carma -= amount;
           validAction = true;
         }
       }
@@ -85,6 +88,8 @@ class _ClothingItemState extends State<ClothingItem> {
           }));
     }
 
+    /// Users are alerted that have fulfiled their quuto of wearing the item.
+    /// Their 'carma debt' is paid.
     if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
         this.timesWorn != 0) {
       showDialog(
@@ -129,6 +134,8 @@ class _ClothingItemState extends State<ClothingItem> {
     return DateFormat('dd MMM yy').format(datetime);
   }
 
+  /// Calls backend post function to move the item from user's 'Closet' doc to
+  /// 'To be Donated' doc to mark it for donation.
   void donateItem() {
     api_client.post("/markForDonation",
         body: jsonEncode(<String, dynamic>{
@@ -320,7 +327,7 @@ class _ClothingItemState extends State<ClothingItem> {
                           InfoBlock(
                             color: CustomColours.negativeRed(),
                             value:
-                                "${this.karma.round()} / ${this.clothingID.data.cF.round()}",
+                                "${this.carma.round()} / ${this.clothingID.data.cF.round()}",
                             label: "Carma Pts",
                           ),
                         ],
