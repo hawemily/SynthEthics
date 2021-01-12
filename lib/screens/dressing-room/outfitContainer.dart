@@ -8,6 +8,8 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
+/// Class to display Outfit cards in grid view and carry out wear
+/// and delete functionality of outfits
 class OutfitContainer extends StatefulWidget {
   OutfitContainer(
       {Key key, this.outfits, this.updateFunction, this.resetDressingRoom})
@@ -25,6 +27,7 @@ class _OutfitContainerState extends State<OutfitContainer> {
   final CurrentUser user = CurrentUser.getInstance();
   List<GlobalKey<FlipCardState>> keys = [];
 
+  ///Calls backend POST function to delete outfit from user's dressing room.
   Future<void> deleteOutfit(String id) async {
     print("Delete $id");
     await api_client
@@ -49,6 +52,7 @@ class _OutfitContainerState extends State<OutfitContainer> {
     });
   }
 
+  /// Calculates the total carma points user will gain by wearing outfit.
   int getTotalCarmaGain(OutfitListItem oF) {
     double total = 0;
     oF.data.clothing.forEach((item) {
@@ -58,6 +62,8 @@ class _OutfitContainerState extends State<OutfitContainer> {
   }
 
   Widget buildOutfitCard(OutfitListItem oF, int idx) {
+    /// To manage flip state of each outfit card.
+    /// E.g. automatic flip of card upon wear
     if (idx >= keys.length) {
       keys.add(GlobalKey<FlipCardState>());
     }

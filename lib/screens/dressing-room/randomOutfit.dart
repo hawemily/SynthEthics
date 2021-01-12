@@ -11,6 +11,7 @@ import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import '../../routes.dart';
 
+/// Class to display Random Outfit Generator
 class RandomOutfit extends StatefulWidget {
   const RandomOutfit(this.clothingItems, {Key key}) : super(key: key);
   final Map<String, List<ClothingItemObject>> clothingItems;

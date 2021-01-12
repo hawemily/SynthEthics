@@ -6,6 +6,8 @@ import 'package:synthetics/screens/closet_page/clothing_card.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:synthetics/responseObjects/clothingItemObject.dart';
 
+/// Class to display the Outfit card from Dressing Room
+/// Allows users to toggle through the Clothing Cards of items in outfit.
 class OutfitCard extends ClothingCard {
   const OutfitCard({Key key, this.outfitClothingList, this.resetDressingRoom})
       : super(key: key);
@@ -30,6 +32,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
     this.currClothingItemImage = getImage();
   }
 
+  /// Generate image of current clothing item and show left and right toggles
   List<Widget> getLeftRightControls() {
     return <Widget>[
       Positioned(
@@ -92,6 +95,7 @@ class _OutfitCardState extends ClothingCardState<OutfitCard> {
     widget.resetDressingRoom();
   }
 
+  /// Function to display corresponding item dashboard of clothing item
   void tapAction() {
     Navigator.push(
         context,
