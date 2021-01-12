@@ -35,16 +35,19 @@ class CurrentUser {
     _initials = firstName[0] + lastName[0];
   }
 
-
   setGoogleSignIn(GoogleSignIn gSI) {
     _googleSignIn = gSI;
     _signInMethod = SignInMethod.Google;
   }
 
   SignInMethod get signInMethod => _signInMethod;
+
   String get initials => _initials;
+
   GoogleSignIn get googleSignIn => _googleSignIn;
+
   String get bgImage => _bgImage;
+
   User get user => _user;
 
   getUID() {
@@ -61,5 +64,3 @@ class CurrentUser {
 
   CurrentUser._internal();
 }
-
-

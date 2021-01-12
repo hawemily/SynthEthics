@@ -73,7 +73,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     confirmedDonations = this.getDonatedItems();
     clothingItems = this.getClothes();
 
-    print(categories);
     _tabs = <Tab>[for (String c in categories) Tab(text: c)];
 
     _tabController = TabController(
@@ -89,7 +88,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   setMode(ClosetMode mode) {
-    print("set mode is called $mode");
     setState(() {
       _mode = mode;
     });
@@ -106,52 +104,25 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   Future<ClothingTypeObject> getDonatedItems() async {
-    print("get all items marked as to be donated from backend");
     final response =
         await api_client.get("/closet/allDonatedItems/" + user.getUID());
 
     if (response.statusCode == 200) {
-      print("respBodyInGetDonatedIitems: ${response.body}");
       final resBody = jsonDecode(response.body);
       final toBeDonated = ClothingTypeObject.fromJson(resBody);
-      print("final to be donated list: ");
-      toBeDonated.clothingItems.forEach((element) {
-        print(element);
-      });
       return toBeDonated;
     } else {
       throw Exception("Failed to load donatedItems");
     }
   }
 
-//  Future<ClothingTypeObject> getDonationCenterClothes() async {
-//    final resp = await api_client.get("/closet/allItemsSentToDonation" + user.getUID());
-//
-//    if (resp.statusCode == 200) {
-//      print("donationCenterResponseBody, line 127: ${resp.body}");
-//      final resBody = jsonDecode(resp.body);
-//      final donationItems = ClothingTypeObject.fromJson(resBody);
-//      print("final donation items: ");
-//      donationItems.clothingItems.forEach((e) {
-//        print(e);
-//      });
-//      return donationItems;
-//    } else {
-//      throw Exception("Failed to load donation center items at line 136 of closet_page.dart!");
-//    }
-//  }
-
   Future<GetClosetResponse> getClothes() async {
-    print("trying get all clothes from backend");
     final response =
         await api_client.get("/closet/allClothes/" + user.getUID());
 
     if (response.statusCode == 200) {
-//      print("respBody: ${response.body}");
       final resBody = jsonDecode(response.body);
       final closet = GetClosetResponse.fromJson(resBody);
-//      print("itemsInCloset");
-//      closet.clothingTypes.forEach((element) {print(element.clothingType); print(element.clothingItems);});
       return closet;
     } else {
       throw Exception("Failed to load closet");
@@ -170,8 +141,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
 
   void addToOutfit(String id, bool toAddToOutfit) {
     if (toAddToOutfit) {
-      print("Adding item to outfit, the id is ");
-      print(id);
       outfitItems.add(id);
     } else {
       outfitItems.remove(id);
@@ -191,14 +160,12 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   Future<void> donateSelected() async {
-    print("DONATE SELECTED");
     if (tempClothingBin.isEmpty) {
       setState(() {
         _mode = ClosetMode.Normal;
       });
       return;
     }
-    print(tempClothingBin);
 
     var ls = tempClothingBin.map((each) => each.id).toList();
 
@@ -207,9 +174,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             body:
                 jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) async {
-      print("in closet container");
-      print(e.statusCode);
-      print(e.body);
       setState(() {
         confirmedDonations = this.getDonatedItems();
         clothingItems = this.getClothes();
@@ -230,7 +194,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       });
       return;
     }
-    print(tempClothingBin);
 
     var ls = tempClothingBin.map((each) => each.id).toList();
 
@@ -253,14 +216,12 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   }
 
   void sendToDonationCenter() {
-    print("DONATION CENTER SELECTED");
     if (tempClothingBin.isEmpty) {
       setState(() {
         _mode = ClosetMode.Normal;
       });
       return;
     }
-    print(tempClothingBin);
     var ls = tempClothingBin.map((each) => each.id).toList();
 
     api_client
@@ -268,9 +229,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             body:
                 jsonEncode(<String, dynamic>{'uid': user.getUID(), 'ids': ls}))
         .then((e) {
-      print("in closet container");
-      print(e.statusCode);
-      print(e.body);
       setState(() {
         tempClothingBin.clear();
         _mode = ClosetMode.Normal;
@@ -344,16 +302,12 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       _savingInProgress = true;
     });
 
-    print("OUTFIT SELECTED");
     if (outfitItems.isEmpty) {
       Navigator.pop(context, "none");
       return;
     }
     var items = outfitItems.toList();
-    print("printing list of items for outfit before pushing");
-    print(items);
 
-    print(jsonEncode(<String, dynamic>{'name': "outfitName", 'ids': items}));
     // put in try, loading icon
     await api_client
         .post("/postOutfit",
@@ -363,9 +317,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               'ids': items
             }))
         .then((e) {
-      print("in closet container");
-      print(e.statusCode);
-      print(e.body);
       setState(() {
         outfitItems.clear();
         _mode = ClosetMode.Normal;
@@ -402,7 +353,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
               isFlipped: isSelectedForDonation,
             );
           } else if (snapshot.hasError) {
-            print(snapshot.error);
             return Text(
                 "Unable to load clothes from closet! Please contact admin for support");
           }
@@ -419,9 +369,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     return FutureBuilder<ClothingTypeObject>(
         future: confirmedDonations,
         builder: (context, snapshot) {
-          print("generating donated items in generate donation page");
           if (snapshot.hasData) {
-            print(snapshot.data.clothingItems);
             return ClosetDonationPage(
                 setMode: setMode,
                 mode: _mode,
@@ -429,7 +377,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                 isInDonationList: isSelectedForDonation,
                 donatedItems: snapshot.data.clothingItems);
           } else if (snapshot.hasError) {
-            print(snapshot.error);
             return Text("Unable to load donated items");
           }
           return Center(child: CircularProgressIndicator());
@@ -460,7 +407,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
                 donate: donateClothingItem,
                 isUnconfirmedDonation: isSelectedForDonation);
           } else if (snapshot.hasError) {
-            print(snapshot.error);
             return Text("Unable to load suggested items");
           }
           return Center(child: CircularProgressIndicator());
@@ -569,7 +515,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
             .where(_notNull)
             .toList(),
       ),
-      bottomNavigationBar: NavBar( selected: widget.selectingOutfit ? 3 : 1),
+      bottomNavigationBar: NavBar(selected: widget.selectingOutfit ? 3 : 1),
     );
 //        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }

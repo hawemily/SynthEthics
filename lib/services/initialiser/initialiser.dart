@@ -4,12 +4,10 @@ import 'dart:core';
 import 'package:http/http.dart';
 import 'package:synthetics/services/api_client.dart';
 
-
 ///
 /// Local database initialiser service for testing purposes
 ///
 class LocalDatabaseInitialiser {
-
   static Future<Response> initUsers(String uid) async {
     return await api_client.post("/initUsers", body: jsonEncode({"uid": uid}));
   }

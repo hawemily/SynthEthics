@@ -35,7 +35,6 @@ class ClosetContainer extends StatelessWidget {
   // return the appropriate ClothingCard widget or one of its child widgets according to the current ClosetMode.
   @override
   Widget build(BuildContext context) {
-    print("Current Closet mode: ${this.mode}");
     return Stack(children: [
       Container(
           margin: const EdgeInsets.all(5.0),

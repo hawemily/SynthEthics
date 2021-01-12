@@ -1,4 +1,1 @@
-enum SignInMethod {
-  Google,
-  EmailPassword
-}
+enum SignInMethod { Google, EmailPassword }

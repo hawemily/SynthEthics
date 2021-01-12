@@ -74,8 +74,7 @@ class _ClothingItemState extends State<ClothingItem> {
     });
 
     if (validAction) {
-      await api_client
-          .post("/closet/updateItem",
+      await api_client.post("/closet/updateItem",
           body: jsonEncode(<String, dynamic>{
             'uid': user.getUID(),
             'clothingId': this.clothingID.id,
@@ -83,11 +82,7 @@ class _ClothingItemState extends State<ClothingItem> {
             'lastWorn': DateTime.now().toString(),
             'carmaGain': amount,
             'action': action
-          }))
-          .then((e) {
-        print(e.statusCode);
-        print(e.body);
-      });
+          }));
     }
 
     if (this.timesWorn == this.clothingID.data.maxNoOfTimesToBeWorn &&
@@ -135,17 +130,11 @@ class _ClothingItemState extends State<ClothingItem> {
   }
 
   void donateItem() {
-    api_client
-        .post("/markForDonation",
-            body: jsonEncode(<String, dynamic>{
-              'uid': user.getUID(),
-              'ids': [this.clothingID.id]
-            }))
-        .then((e) {
-      print("in closet container");
-      print(e.statusCode);
-      print(e.body);
-    });
+    api_client.post("/markForDonation",
+        body: jsonEncode(<String, dynamic>{
+          'uid': user.getUID(),
+          'ids': [this.clothingID.id]
+        }));
     Navigator.push(context, MaterialPageRoute(builder: (context) => Closet()));
   }
 

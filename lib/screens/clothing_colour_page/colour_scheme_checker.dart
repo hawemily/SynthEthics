@@ -1,6 +1,5 @@
 import 'package:synthetics/screens/clothing_colour_page/color_classifier.dart';
 
-
 ///
 /// Class checks whether given colour schemes contain clashes.
 ///
@@ -20,7 +19,6 @@ class ColourSchemeChecker {
   bool isValid(Set<OutfitColor> colors) {
     if (colors.length > 4) return false;
     for (int i = 0; i < clashes.length; i++) {
-       
       if (colors.contains(clashes[i][0]) && colors.contains(clashes[i][1])) {
         return false;
       }

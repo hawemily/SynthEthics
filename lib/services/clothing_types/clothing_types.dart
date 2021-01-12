@@ -1,4 +1,3 @@
-
 class ClothingTypes {
   Future<List<String>> types;
   static ClothingTypes _instance;
@@ -15,13 +14,7 @@ class ClothingTypes {
 
   static Future<List<String>> _getClothingTypes() async {
     // Assume backend will store types as all lowercase strings
-    final types = [
-      "tops",
-      "bottoms",
-      "dresses",
-      "outerwear",
-      "accessories"
-    ];
+    final types = ["tops", "bottoms", "dresses", "outerwear", "accessories"];
     return types;
   }
 }

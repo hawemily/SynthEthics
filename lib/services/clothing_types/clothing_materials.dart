@@ -1,4 +1,3 @@
-
 class ClothingMaterials {
   Future<List<String>> types;
   static ClothingMaterials _instance;

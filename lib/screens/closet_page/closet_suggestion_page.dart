@@ -15,10 +15,10 @@ class ClosetSuggestionPage extends StatelessWidget {
 
   ClosetSuggestionPage(
       {this.suggestedItems,
-        this.setMode,
-        this.donate,
-        this.isUnconfirmedDonation,
-        this.mode});
+      this.setMode,
+      this.donate,
+      this.isUnconfirmedDonation,
+      this.mode});
 
   Widget getActionButtons() {
     List<ActionIconsAndText> normalActionButtons = [

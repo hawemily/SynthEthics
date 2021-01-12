@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 ///
 /// Custom dropdown menu widget for use in this application, facilitates the
 /// selection of elements from a given list.
@@ -14,15 +13,18 @@ class ClothingLabelDropdown extends StatefulWidget {
 
   final padding;
 
-  ClothingLabelDropdown({this.data, this.selected, this.label, this.onChange,
-    this.padding = 20.0});
+  ClothingLabelDropdown(
+      {this.data,
+      this.selected,
+      this.label,
+      this.onChange,
+      this.padding = 20.0});
 
   @override
   ClothingLabelDropdownState createState() => ClothingLabelDropdownState();
 }
 
 class ClothingLabelDropdownState extends State<ClothingLabelDropdown> {
-
   @override
   Widget build(BuildContext context) {
     List<DropdownMenuItem> dropDownMenuItems = [];
@@ -40,9 +42,7 @@ class ClothingLabelDropdownState extends State<ClothingLabelDropdown> {
           ),
           child: DropdownButtonFormField(
             decoration: InputDecoration(
-                labelText: widget.label,
-                enabledBorder: InputBorder.none
-            ),
+                labelText: widget.label, enabledBorder: InputBorder.none),
             isExpanded: true,
             value: widget.selected,
             items: dropDownMenuItems,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 ///
 /// Class contains operations required for the classification of clothing items,
 /// or rather, their dominant colours into a colour category
@@ -16,8 +15,12 @@ class ColorClassifier {
 
     print("H: $hue, S: $sat, L: $lum");
 
-    if (lum < 20) {return OutfitColor.Black;}
-    if (lum > 80) {return OutfitColor.White;}
+    if (lum < 20) {
+      return OutfitColor.Black;
+    }
+    if (lum > 80) {
+      return OutfitColor.White;
+    }
 
     if (sat <= 8) {
       return OutfitColor.Grey;
@@ -33,9 +36,9 @@ class ColorClassifier {
       return OutfitColor.Yellow;
     } else if (hue < 150) {
       return OutfitColor.Green;
-    } else if(hue < 210){
+    } else if (hue < 210) {
       return OutfitColor.Cyan;
-    } else if(hue < 240) {
+    } else if (hue < 240) {
       return OutfitColor.Blue;
     } else if (hue < 280) {
       return OutfitColor.Magenta;
@@ -51,15 +54,10 @@ class ColorClassifier {
     final L = (hslColor.lightness * 100).round();
 
     print("HSL: $H, $S, $L");
-    Map<String, int> res = {
-      'H': H,
-      'S': S,
-      'L': L
-    };
+    Map<String, int> res = {'H': H, 'S': S, 'L': L};
     return res;
   }
 }
-
 
 /// Colour categories ==========================================================
 enum OutfitColor {
@@ -77,9 +75,6 @@ enum OutfitColor {
   Pink
 }
 
-enum AccentColor {
-  Red,
-  Blue,
-  Purple
-}
+enum AccentColor { Red, Blue, Purple }
+
 /// ============================================================================

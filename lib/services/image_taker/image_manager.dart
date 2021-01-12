@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-
 ///
 /// Helper service for managing the storing and loading of images
 ///

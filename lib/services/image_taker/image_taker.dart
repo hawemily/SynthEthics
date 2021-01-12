@@ -3,7 +3,6 @@ import 'dart:io';
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 
-
 /// Image Taker, called by the NavBar when adding items to the closet
 /// Currently goes to image display page, in the future it should go to a
 /// Confirmation page where an item instance is created
@@ -44,8 +43,8 @@ class ImageTaker {
     return image;
   }
 
-  static Future<File> _getPicture(BuildContext context,
-                                  ImageSource imageSource) async {
+  static Future<File> _getPicture(
+      BuildContext context, ImageSource imageSource) async {
     File image;
     ImagePicker imagePicker = ImagePicker();
     final pickedFile =

@@ -4,7 +4,12 @@ import 'package:synthetics/theme/custom_colours.dart';
 import '../../routes.dart';
 
 class SignInButton extends StatelessWidget {
-  SignInButton({this.img, this.signInScreen, this.name, this.signInMethod,});
+  SignInButton({
+    this.img,
+    this.signInScreen,
+    this.name,
+    this.signInMethod,
+  });
 
   final String img;
   final Screens signInScreen;
@@ -19,8 +24,7 @@ class SignInButton extends StatelessWidget {
             splashColor: Colors.grey,
             onPressed: () {
               if (signInScreen != null) {
-                Navigator.pushNamed(
-                    context, routeMapping[signInScreen]);
+                Navigator.pushNamed(context, routeMapping[signInScreen]);
               } else {
                 signInMethod(context);
               }

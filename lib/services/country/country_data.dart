@@ -4,7 +4,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-
 /// Helper service for getting list of country names, to ensure frontend uses
 /// the same list of country names as the backend
 class CountryData {
@@ -12,7 +11,7 @@ class CountryData {
   static CountryData _instance;
 
   CountryData._internal();
-  
+
   static CountryData getInstance() {
     if (_instance == null) {
       _instance = CountryData._internal();
@@ -33,12 +32,14 @@ class CountryData {
 
     // Copy data from asset
     final data = await rootBundle.load(localPath);
-    final bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    final bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
     // Wait for the write to complete
     await File(databasePath).writeAsBytes(bytes, flush: true);
-    
-    return (await openDatabase(databasePath, readOnly: true)).query('country_data');
+
+    return (await openDatabase(databasePath, readOnly: true))
+        .query('country_data');
   }
 
   // Returns index if found, -1 otherwise

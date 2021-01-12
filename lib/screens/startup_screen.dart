@@ -10,9 +10,9 @@ import 'home_page/home_page.dart';
 
 class StartupScreen extends StatelessWidget {
   final User result = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
-
     if (result != null) {
       print("Result in startup screen is not null!");
       CurrentUser user = CurrentUser.getInstance();
@@ -20,11 +20,16 @@ class StartupScreen extends StatelessWidget {
       user.setUser(result);
     }
     return new SplashScreen(
-      navigateAfterSeconds: result != null ? routeMapping[Screens.Home] : routeMapping[Screens.Login],
+      navigateAfterSeconds: result != null
+          ? routeMapping[Screens.Home]
+          : routeMapping[Screens.Login],
       seconds: 5,
       title: new Text(
         'Welcome to SynthEthics!',
-        style: new TextStyle(fontWeight: FontWeight.w300, fontSize: 25.0, color: CustomColours.offWhite()),
+        style: new TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: 25.0,
+            color: CustomColours.offWhite()),
       ),
       backgroundColor: CustomColours.greenNavy(),
       loaderColor: Colors.black,

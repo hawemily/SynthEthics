@@ -21,8 +21,10 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   routeMapping[Screens.Closet]: (BuildContext context) => Closet(),
   routeMapping[Screens.Start]: (BuildContext context) => StartupScreen(),
   routeMapping[Screens.DressingRoom]: (BuildContext context) => DressingRoom(),
-  routeMapping[Screens.ColourRoom]: (BuildContext context) => ClothingColourPage(),
-  routeMapping[Screens.EmailSignIn]: (BuildContext context) => SignInOrRegisterWithEmailPage(),
+  routeMapping[Screens.ColourRoom]: (BuildContext context) =>
+      ClothingColourPage(),
+  routeMapping[Screens.EmailSignIn]: (BuildContext context) =>
+      SignInOrRegisterWithEmailPage(),
 };
 
 // Enum representation of pages, so that we don't have to keep writing strings

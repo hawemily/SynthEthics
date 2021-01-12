@@ -44,7 +44,6 @@ class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> generateRandom() {
     int randomOutfitType;
     var clothingItems = widget.clothingItems;
-    
 
     if (clothingItems['Tops'] == null && clothingItems['Dresses'] == null) {
       this.insufficientCloset = true;
@@ -58,13 +57,12 @@ class _RandomOutfitState extends State<RandomOutfit> {
         randomOutfitType = random.nextInt(outfitTypes.length);
       }
     }
-    
 
     return generateRandomOutfit(randomOutfitType, clothingItems);
   }
 
-
-  Set<ClothingItemObject> generateRandomOutfit(int randomOutfitType, Map<String, List<ClothingItemObject>> clothingItems) {
+  Set<ClothingItemObject> generateRandomOutfit(int randomOutfitType,
+      Map<String, List<ClothingItemObject>> clothingItems) {
     Set<ClothingItemObject> newItems = Set();
     Set<OutfitColor> colors = Set();
 
@@ -180,40 +178,41 @@ class _RandomOutfitState extends State<RandomOutfit> {
               shrinkWrap: true,
               children: [
                 clothingcardbuild(),
-                Padding(padding: EdgeInsets.all(20), child: ButtonBar(
-                  alignment: MainAxisAlignment.spaceEvenly,
-                  buttonHeight: 20,
-                  buttonMinWidth: 60,
-                  children: [
-                    IconButton(
-                      color: CustomColours.greenNavy(),
-                      icon: Icon(Icons.close),
-                      tooltip: 'Close',
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    IconButton(
-                        icon: Icon(Icons.refresh),
-                        color: CustomColours.greenNavy(),
-                        tooltip: 'Refresh',
-                        onPressed: () {
-                          setState(() {
-                            this.randomItems.clear();
-                            this.randomItems = this.generateRandom();
-                            print("Random items regenerated");
-                            randomItems.forEach((element) {
-                              print(element.data.name);
-                            });
-                          });
-                        }),
-                    IconButton(
-                      color: CustomColours.greenNavy(),
-                      icon: Icon(Icons.check),
-                      tooltip: 'Save',
-                      onPressed: () => saveOutfit(),
-                    ),
-                  ],
-                )),
-
+                Padding(
+                    padding: EdgeInsets.all(20),
+                    child: ButtonBar(
+                      alignment: MainAxisAlignment.spaceEvenly,
+                      buttonHeight: 20,
+                      buttonMinWidth: 60,
+                      children: [
+                        IconButton(
+                          color: CustomColours.greenNavy(),
+                          icon: Icon(Icons.close),
+                          tooltip: 'Close',
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.refresh),
+                            color: CustomColours.greenNavy(),
+                            tooltip: 'Refresh',
+                            onPressed: () {
+                              setState(() {
+                                this.randomItems.clear();
+                                this.randomItems = this.generateRandom();
+                                print("Random items regenerated");
+                                randomItems.forEach((element) {
+                                  print(element.data.name);
+                                });
+                              });
+                            }),
+                        IconButton(
+                          color: CustomColours.greenNavy(),
+                          icon: Icon(Icons.check),
+                          tooltip: 'Save',
+                          onPressed: () => saveOutfit(),
+                        ),
+                      ],
+                    )),
               ],
             ),
       bottomNavigationBar: NavBar(selected: 3),

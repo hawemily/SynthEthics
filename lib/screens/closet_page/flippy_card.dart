@@ -95,7 +95,8 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
                                         color: CustomColours.accentGreen())))),
                         Expanded(
                             flex: 5,
-                            child: Text('+ ' + (donateGain.round()).toString() + ' ',
+                            child: Text(
+                                '+ ' + (donateGain.round()).toString() + ' ',
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -106,7 +107,7 @@ class _FlippyCardState extends ClothingCardState<FlippyCard> {
                           child: ConfettiWidget(
                               confettiController: _confettiControl,
                               blastDirectionality:
-                              BlastDirectionality.explosive,
+                                  BlastDirectionality.explosive,
                               // blastDirection: -pi / 2,
                               shouldLoop: false,
                               minBlastForce: 20,

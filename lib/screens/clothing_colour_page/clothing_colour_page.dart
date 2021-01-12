@@ -9,7 +9,6 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'package:image/image.dart' as ImageOps;
 
-
 ///
 /// Page previously created for image dominant colour display, left in the
 /// system for users to use.
@@ -23,7 +22,7 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
   Widget _colorContainer = Container();
   Widget _displayImage = Container();
   Widget _dominantColour = Container();
-  
+
   ImageOps.Image _cropToCenter(ImageOps.Image image, double portion) {
     print("height: ${image.height} width: ${image.width}");
     final int cropHeight = (image.height * portion).round();
@@ -34,15 +33,16 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
   }
 
   Future<void> fetchDominantColours(File fileImage) async {
-
-    ImageOps.Image customImage = ImageOps.decodeImage(fileImage.readAsBytesSync());
+    ImageOps.Image customImage =
+        ImageOps.decodeImage(fileImage.readAsBytesSync());
     customImage = _cropToCenter(customImage, 0.8);
 
-    ui.Codec codec = await ui.instantiateImageCodec(ImageOps.encodePng(customImage));
+    ui.Codec codec =
+        await ui.instantiateImageCodec(ImageOps.encodePng(customImage));
     ui.FrameInfo frameInfo = await codec.getNextFrame();
 
     final PaletteGenerator paletteGenerator =
-      await PaletteGenerator.fromImage(frameInfo.image);
+        await PaletteGenerator.fromImage(frameInfo.image);
 
     List<Widget> colourDisplays = [];
 
@@ -68,7 +68,8 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
 
     final dominant = paletteGenerator.dominantColor.color;
     print("RGB ${dominant.red}, ${dominant.green}, ${dominant.blue}");
-    print("${ColorClassifier().classifyColor(paletteGenerator.dominantColor.color)}");
+    print(
+        "${ColorClassifier().classifyColor(paletteGenerator.dominantColor.color)}");
 
     setState(() {
       _displayImage = Container(
@@ -76,11 +77,8 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
         width: 300,
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: FileImage(fileImage)
-          )
-        ),
+            image:
+                DecorationImage(fit: BoxFit.fill, image: FileImage(fileImage))),
       );
       _colorContainer = Container(
         padding: EdgeInsets.all(8),
@@ -91,14 +89,15 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
         ),
       );
       _dominantColour = Container(
-          height: 100,
-          width: 100,
-          margin: EdgeInsets.all(10),
-          color: paletteGenerator.dominantColor.color,
+        height: 100,
+        width: 100,
+        margin: EdgeInsets.all(10),
+        color: paletteGenerator.dominantColor.color,
       );
     });
 
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(fileImage);
+    final FirebaseVisionImage visionImage =
+        FirebaseVisionImage.fromFile(fileImage);
     final ImageLabeler labeler = FirebaseVision.instance.imageLabeler();
     final List<ImageLabel> labels = await labeler.processImage(visionImage);
 
@@ -121,38 +120,39 @@ class _ClothingColourPageState extends State<ClothingColourPage> {
         backgroundColor: CustomColours.greenNavy(),
       ),
       body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _displayImage,
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  border: Border.all(),
-                  color: CustomColours.greenNavy(),
+          child: Center(
+              child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _displayImage,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              border: Border.all(),
+              color: CustomColours.greenNavy(),
+            ),
+            child: IconButton(
+                icon: Icon(
+                  Icons.camera,
+                  color: CustomColours.offWhite(),
                 ),
-                child: IconButton(
-                    icon: Icon(Icons.camera, color: CustomColours.offWhite(),),
-                    onPressed: () => ImageTaker.settingModalBottomSheet(context,
+                onPressed: () => ImageTaker.settingModalBottomSheet(context,
                         (Future<File> fileFuture) {
-                          fileFuture.then((file) async {
-                            if (file != null) {
-                              // List<int> imageBytes = await file.readAsBytes();
-                              // print(imageBytes);
-                              // await fetchDominantColours(base64Encode(imageBytes));
-                              await fetchDominantColours(file);
-                            }
-                          });
-                        })),
-              ),
-              _colorContainer,
-              _dominantColour
-            ],
-          )
-        )
-      ),
+                      fileFuture.then((file) async {
+                        if (file != null) {
+                          // List<int> imageBytes = await file.readAsBytes();
+                          // print(imageBytes);
+                          // await fetchDominantColours(base64Encode(imageBytes));
+                          await fetchDominantColours(file);
+                        }
+                      });
+                    })),
+          ),
+          _colorContainer,
+          _dominantColour
+        ],
+      ))),
     );
   }
 }

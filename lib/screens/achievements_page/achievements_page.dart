@@ -26,13 +26,12 @@ class _AchievementsPageState extends State<AchievementsPage> {
   void getAchievements() async {
     String uid = CurrentUser.getInstance().getUID();
     print("uid: $uid");
-    await api_client.get("/getAchievements/" + uid)
-        .then((result) {
+    await api_client.get("/getAchievements/" + uid).then((result) {
       List<dynamic> jsonAchievements = json.decode(result.body);
 
       // First sort by ID
       jsonAchievements.sort((a, b) =>
-          a["data"]["achievementId"] < (b["data"]["achievementId"]) ? - 1 : 1);
+          a["data"]["achievementId"] < (b["data"]["achievementId"]) ? -1 : 1);
 
       // Then for each achievement we parse data and calculate the levelling
       // data if the achievement is tiered
@@ -41,24 +40,23 @@ class _AchievementsPageState extends State<AchievementsPage> {
           dynamic achievementData = achievementJson["data"];
           dynamic userData = achievementJson["user"];
 
-          AchievementType type = AchievementType
-              .values[achievementData["achievementType"]];
+          AchievementType type =
+              AchievementType.values[achievementData["achievementType"]];
 
           if (type == AchievementType.Tiered) {
             dynamic levelData = AchievementLevelCalculator.calculate(
-              achievementData["achievementTiers"],
-              userData[achievementData["achievementAttribute"]]);
+                achievementData["achievementTiers"],
+                userData[achievementData["achievementAttribute"]]);
             return Achievement(
-              id: achievementData["achievementId"],
-              name: achievementData["achievementName"],
-              description: achievementData["achievementDescription"],
-              type: type,
-              achieved: achievementJson["achievedStatus"],
-              level: levelData["level"],
-              previousTarget: levelData["previousAmount"],
-              nextTarget: levelData["targetAmount"],
-              progressToTarget: levelData["progress"]
-            );
+                id: achievementData["achievementId"],
+                name: achievementData["achievementName"],
+                description: achievementData["achievementDescription"],
+                type: type,
+                achieved: achievementJson["achievedStatus"],
+                level: levelData["level"],
+                previousTarget: levelData["previousAmount"],
+                nextTarget: levelData["targetAmount"],
+                progressToTarget: levelData["progress"]);
           }
           return Achievement(
             id: achievementData["achievementId"],

@@ -8,7 +8,6 @@ import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/services/record_dates_padder/record_dates_padder.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
-
 /// Widget for constructing user Carma record graphs
 class CarmaRecordViewer extends StatefulWidget {
   @override
@@ -16,7 +15,6 @@ class CarmaRecordViewer extends StatefulWidget {
 }
 
 class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
-
   List<CarmaSeries> daysRecord = [];
   List<CarmaSeries> monthsRecord = [];
   List<CarmaSeries> yearsRecord = [];
@@ -38,8 +36,7 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
   void getCarmaRecords() async {
     String uid = CurrentUser.getInstance().getUID();
     if (uid != null) {
-      await api_client.get("/getCarmaRecords/" + uid)
-          .then((result) {
+      await api_client.get("/getCarmaRecords/" + uid).then((result) {
         setState(() {
           var res = jsonDecode(result.body);
           daysRecord = RecordDatesPadder.padDays(res["days"]);
@@ -65,11 +62,10 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
                   color: CustomColours.greenNavy(),
                   child: TabBar(
                     labelColor: CustomColours.greenNavy(),
-                    unselectedLabelColor:
-                    CustomColours.offWhite(),
+                    unselectedLabelColor: CustomColours.offWhite(),
                     indicator: UnderlineTabIndicator(
-                        borderSide: BorderSide(
-                            color: CustomColours.offWhite())),
+                        borderSide:
+                            BorderSide(color: CustomColours.offWhite())),
                     tabs: [
                       CarmaResolutionTab(label: "WEEK"),
                       CarmaResolutionTab(label: "MONTH"),
@@ -82,22 +78,17 @@ class _CarmaRecordViewerState extends State<CarmaRecordViewer> {
                 flex: 6,
                 child: TabBarView(
                   children: [
-                    CarmaResolutionView(
-                        data: daysRecord),
-                    CarmaResolutionView(
-                        data: monthsRecord),
-                    CarmaResolutionView(
-                        data: yearsRecord),
+                    CarmaResolutionView(data: daysRecord),
+                    CarmaResolutionView(data: monthsRecord),
+                    CarmaResolutionView(data: yearsRecord),
                   ],
                 ),
               )
             ],
           ),
-        )
-    );
+        ));
   }
 }
-
 
 /// Widget for tab for controlling viewed carma record resolution
 /// (Day, Month, Year)

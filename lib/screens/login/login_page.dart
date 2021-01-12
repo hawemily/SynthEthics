@@ -22,59 +22,55 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget loadingOverlay() {
-    return _isLoggingIn ? new Container(color: Colors.white,
-        child: Center(child: CircularProgressIndicator())) : null;;
+    return _isLoggingIn
+        ? new Container(
+            color: Colors.white,
+            child: Center(child: CircularProgressIndicator()))
+        : null;
+    ;
   }
 
   bool notNull(Object o) => o != null;
 
   Widget _LoginPage() {
     return Center(
-        child: Stack(children: <Widget>[
-          ListView(shrinkWrap: true, children: <Widget>[
-            Container(
-                padding: EdgeInsets.all(20.0),
-                margin: EdgeInsets.all(16.0),
-                child: Column(children: <Widget>[
-                  Image(
-                      image: AssetImage("lib/assets/leaf.jpg"),
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 3,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 4),
-                  Text("SynthEthics",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: CustomColours.greenNavy(),
-                        fontSize: MediaQuery
-                            .of(context)
-                            .size
-                            .width / 13,
-                      )),
-                ])),
-            Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  SignInButton(
-                    img: "lib/assets/google_logo.png",
-                    name: "Google",
-                    signInMethod: (BuildContext context) {
-                      print("sign in method called!");
-                      onGoogleSignIn(context, toggleIsLoggingIn);
-                    },
-                  ),
-                  SignInButton(
-                      img: "lib/assets/email_logo.png",
-                      name: "Email",
-                      signInScreen: Screens.EmailSignIn),
-                ])
-          ]),
-          loadingOverlay(),
-        ].where(notNull).toList()));
+        child: Stack(
+            children: <Widget>[
+      ListView(shrinkWrap: true, children: <Widget>[
+        Container(
+            padding: EdgeInsets.all(20.0),
+            margin: EdgeInsets.all(16.0),
+            child: Column(children: <Widget>[
+              Image(
+                  image: AssetImage("lib/assets/leaf.jpg"),
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.height / 4),
+              Text("SynthEthics",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: CustomColours.greenNavy(),
+                    fontSize: MediaQuery.of(context).size.width / 13,
+                  )),
+            ])),
+        Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              SignInButton(
+                img: "lib/assets/google_logo.png",
+                name: "Google",
+                signInMethod: (BuildContext context) {
+                  print("sign in method called!");
+                  onGoogleSignIn(context, toggleIsLoggingIn);
+                },
+              ),
+              SignInButton(
+                  img: "lib/assets/email_logo.png",
+                  name: "Email",
+                  signInScreen: Screens.EmailSignIn),
+            ])
+      ]),
+      loadingOverlay(),
+    ].where(notNull).toList()));
   }
 
   @override

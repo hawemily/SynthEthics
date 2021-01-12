@@ -5,5 +5,5 @@ class ActionIconsAndText {
   Text text;
   Function onClick;
 
-  ActionIconsAndText( {this.icon, this.text,this.onClick});
+  ActionIconsAndText({this.icon, this.text, this.onClick});
 }

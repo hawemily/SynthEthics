@@ -13,7 +13,6 @@ void catch_API_calls(http.Client client) {
 }
 
 void closet_page_tests() {
-
   testWidgets('Check closet page is loaded', (WidgetTester tester) async {
     final client = MockClient();
 
@@ -38,5 +37,4 @@ void closet_page_tests() {
     final tabsFinder = find.byType(TabBarView);
     expect(tabsFinder, findsOneWidget);
   });
-
 }

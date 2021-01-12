@@ -20,7 +20,6 @@ import 'package:synthetics/theme/custom_colours.dart';
 import 'clothing_label_dropdown.dart';
 import 'carma_detail_display.dart';
 
-
 ///
 /// Page for displaying user label, detected text and clothing category.
 /// Responsible for displaying item's calculated Carma value to the user.
@@ -91,20 +90,23 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     if (position == null) {
       position = await Geolocator.getCurrentPosition();
     }
-     setState(() {
-       _positionData = {
-         'latitude': position.latitude,
-         'longitude': position.longitude,
-       };
+    setState(() {
+      _positionData = {
+        'latitude': position.latitude,
+        'longitude': position.longitude,
+      };
     });
   }
 
   /// Detected text in user submitted photograph, ideally a clothing label
   /// Attempt to obtain the item's place of origin and material
   void _detectText() async {
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(widget.image);
-    final TextRecognizer textRecognizer = FirebaseVision.instance.cloudTextRecognizer();
-    final VisionText visionText = await textRecognizer.processImage(visionImage);
+    final FirebaseVisionImage visionImage =
+        FirebaseVisionImage.fromFile(widget.image);
+    final TextRecognizer textRecognizer =
+        FirebaseVision.instance.cloudTextRecognizer();
+    final VisionText visionText =
+        await textRecognizer.processImage(visionImage);
 
     // Parse using regex parser with VisionText as label source
     var labelParser = RegexLabelParser(VisionTextLabelSource(visionText));
@@ -129,10 +131,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   /// Determine whether required data has been correctly fetched
   void _setValidData() {
-    _validData = (_clothingMaterial != ""
-        && _placeOfOrigin != ""
-        && _validClothingType
-    );
+    _validData =
+        (_clothingMaterial != "" && _placeOfOrigin != "" && _validClothingType);
   }
 
   /// Validate country data list and ensure the detected county (even blank) is
@@ -142,7 +142,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       return e['country'] as String;
     }).toList();
 
-    int countryIndex = CountryData.containsCountry(countryNames, _placeOfOrigin);
+    int countryIndex =
+        CountryData.containsCountry(countryNames, _placeOfOrigin);
     if (countryIndex == -1) {
       countryNames.insert(0, "");
       countryIndex = 0;
@@ -160,9 +161,8 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   /// Validate material data list and ensure the detected material (even blank)
   /// is placed within the list and displayed
   void _validateMaterialData() {
-    int materialIndex =
-          ClothingMaterials.getInstance().containsMaterial(_materialTypes,
-                                                       _clothingMaterial);
+    int materialIndex = ClothingMaterials.getInstance()
+        .containsMaterial(_materialTypes, _clothingMaterial);
     if (materialIndex == -1) {
       _materialTypes.insert(0, "");
       materialIndex = 0;
@@ -181,34 +181,32 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
   void _getCarmaPoints() async {
     _loadingCarma = true;
     if (_validData) {
-      print("position $_positionData");
-
-      api_client.post(
+      api_client
+          .post(
         "/carma",
-          headers: <String, String>{
-            'Content-Type': 'application/json'
-          },
-          body: jsonEncode(<String, dynamic>{
-            'category': _clothingType, // Convert to match backend
-            'materials': [ClothingMaterials.getInstance().materialMapping(_clothingMaterial)],
-            'currLocation': _positionData,
-            'origin': _placeOfOrigin
-          }),
-      ).then((queryResult) {
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'category': _clothingType, // Convert to match backend
+          'materials': [
+            ClothingMaterials.getInstance().materialMapping(_clothingMaterial)
+          ],
+          'currLocation': _positionData,
+          'origin': _placeOfOrigin
+        }),
+      )
+          .then((queryResult) {
         final response = jsonDecode(queryResult.body);
         int carma = 0;
         if (response['carma'] != null) {
           carma = response['carma'];
         }
 
-        print("carma points: $carma");
         setState(() {
           _carmaPoints = carma;
           _loadingCarma = false;
           _updatedCarma = false;
         });
       });
-
     }
   }
 
@@ -216,10 +214,10 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
 
   /// Determine if conditions permit an API call to calculate item Carma points
   bool _canCalculateCarma() {
-    return _updatedCarma
-        && _completedLoadingData
-        && _validData
-        && !_loadingCarma;
+    return _updatedCarma &&
+        _completedLoadingData &&
+        _validData &&
+        !_loadingCarma;
   }
 
   /// Build widgets for screen for displaying label data display page
@@ -261,22 +259,20 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
             _setValidData();
             _updatedCarma = true;
           });
-          print("SELECTED $item");
         },
       ),
       ClothingLabelDropdown(
-        data: _materialTypes,
-        selected: _materialIndex,
-        label: 'Material',
-        onChange: (value) {
-          setState(() {
-            _materialIndex = value;
-            _clothingMaterial = _materialTypes[value];
-            _setValidData();
-            _updatedCarma = true;
-          });
-        }
-      ),
+          data: _materialTypes,
+          selected: _materialIndex,
+          label: 'Material',
+          onChange: (value) {
+            setState(() {
+              _materialIndex = value;
+              _clothingMaterial = _materialTypes[value];
+              _setValidData();
+              _updatedCarma = true;
+            });
+          }),
       ClothingLabelDropdown(
         data: _clothingTypes,
         selected: _typeIndex,
@@ -302,8 +298,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                       padding: MaterialStateProperty.resolveWith((states) =>
                           EdgeInsets.only(
                               top: 15, bottom: 15, left: 30, right: 30))),
-                  child: Text("Next",
-                      style: TextStyle(color: Colors.white)),
+                  child: Text("Next", style: TextStyle(color: Colors.white)),
                   onPressed: (() {
                     Navigator.push(
                         context,
@@ -314,9 +309,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
                                   clothingType: _clothingType,
                                   location: _positionData,
                                   carmaPoints: _carmaPoints,
-                                )
-                        )
-                    );
+                                )));
                   }),
                 ),
               ),
@@ -341,7 +334,7 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
       ),
       body: Center(
           child: Container(
-        padding: EdgeInsets.only(left :20, right : 20, bottom : 20),
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
         child: (_completedLoadingPage)
             ? _buildDetectedText()
             : CircularProgressIndicator(),
@@ -349,4 +342,3 @@ class ImageDisplayPageState extends State<ImageDisplayPage> {
     );
   }
 }
-

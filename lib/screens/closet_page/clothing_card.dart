@@ -47,7 +47,6 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
 
   void _init() {
     currentClothingItem = widget.clothingItem;
-    print("CurrentClothingItem: ${currentClothingItem.data.name}");
     currClothingItemImage = getImage();
   }
 

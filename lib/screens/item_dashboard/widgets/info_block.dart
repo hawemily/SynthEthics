@@ -32,15 +32,15 @@ class InfoBlock extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Container(
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: 25,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text(
-              value,
-              style: TextStyle( color: color, fontWeight: FontWeight.w600),
-          ),
-        )),
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: 25,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                value,
+                style: TextStyle(color: color, fontWeight: FontWeight.w600),
+              ),
+            )),
         Padding(padding: EdgeInsets.only(top: 5.0)),
         Text(label,
             style: TextStyle(

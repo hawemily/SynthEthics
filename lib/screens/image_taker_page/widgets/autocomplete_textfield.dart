@@ -25,18 +25,14 @@ class _AutoTextFieldState extends State<AutoTextField> {
   }
 
   Widget _itemBuilder(context, suggestion) {
-    return Card(
-        child: Container(
-            child: Text(suggestion)
-        )
-    );
+    return Card(child: Container(child: Text(suggestion)));
   }
 
   bool _match(pattern, item) {
     return item.toLowerCase().startsWith(pattern.toLowerCase());
   }
 
-  Future<List> _suggestionsCallback(pattern) async{
+  Future<List> _suggestionsCallback(pattern) async {
     List matches = [];
     for (String item in widget.data) {
       if (_match(pattern, item)) {
@@ -54,20 +50,17 @@ class _AutoTextFieldState extends State<AutoTextField> {
   @override
   Widget build(BuildContext context) {
     return TypeAheadField(
-        textFieldConfiguration: TextFieldConfiguration(
+      textFieldConfiguration: TextFieldConfiguration(
           controller: this.controller,
           decoration: InputDecoration(
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            labelText: widget.label,
-            contentPadding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-            hintText: this.controller.text
-          )
-        ),
-        suggestionsCallback: _suggestionsCallback,
-        itemBuilder: _itemBuilder,
-        onSuggestionSelected: _onSuggestionSelected,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              labelText: widget.label,
+              contentPadding:
+                  EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+              hintText: this.controller.text)),
+      suggestionsCallback: _suggestionsCallback,
+      itemBuilder: _itemBuilder,
+      onSuggestionSelected: _onSuggestionSelected,
     );
   }
 }
-
-

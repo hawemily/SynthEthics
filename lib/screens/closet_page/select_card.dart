@@ -85,8 +85,7 @@ class _SelectCardState extends ClothingCardState<SelectCard> {
                                       color: CustomColours.accentCopper())))),
                       Expanded(
                           flex: 5,
-                          child: Text(
-                              (donateGain.round()).toString(),
+                          child: Text((donateGain.round()).toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 18,

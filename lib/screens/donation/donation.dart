@@ -18,7 +18,8 @@ class _DonationPageState extends State<DonationPage> {
   LatLng center;
   List<LatLng> latlngs = new List(2);
   var markers = new List<Marker>();
-  /* For testing: changed to 2 from 5*/
+
+  // For testing: changed to 2 from 5
   var names = new List(2);
   var addresses = new List(2);
   var distances = new List(2);

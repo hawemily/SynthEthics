@@ -7,7 +7,6 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 import '../../routes.dart';
 
-
 ///
 /// Widget containing navigation buttons for the five main modules/pages.
 /// Controls the direct routing between these pages and direct access to

@@ -14,12 +14,12 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 void onGoogleSignIn(BuildContext context, Function progressToggle) async {
-    CurrentUser currUser = CurrentUser.getInstance();
-    currUser.setGoogleSignIn(_googleSignIn);
-    User user = await _handleSignIn(progressToggle);
-    currUser.setUser(user);
+  CurrentUser currUser = CurrentUser.getInstance();
+  currUser.setGoogleSignIn(_googleSignIn);
+  User user = await _handleSignIn(progressToggle);
+  currUser.setUser(user);
 
-    Navigator.pushNamed(context, routeMapping[Screens.Home]);
+  Navigator.pushNamed(context, routeMapping[Screens.Home]);
 }
 
 Future<User> _handleSignIn(Function progressToggle) async {
@@ -27,10 +27,10 @@ Future<User> _handleSignIn(Function progressToggle) async {
   bool userSignedIn = await _googleSignIn.isSignedIn();
 
   if (userSignedIn) {
-      print("usersignedin!");
+    print("usersignedin!");
     user = _auth.currentUser;
     _googleSignIn.signOut();
-      print('user uid: ${user.uid}');
+    print('user uid: ${user.uid}');
   } else {
     print("signing in with Google!");
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();

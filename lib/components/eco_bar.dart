@@ -17,55 +17,44 @@ class EcoBar extends StatelessWidget {
     this.barWidth = MediaQuery.of(context).size.width * 0.25;
     this.maxWidth = barWidth * 0.8 - 5.5;
     return Container(
-      height: 13.0,
-      width: barWidth,
-      margin: EdgeInsets.only(bottom:5.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20)
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: (barWidth * 0.2) - 1.5,
-            margin: EdgeInsets.fromLTRB(1.5, 1.0, 0, 1.0),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Icon(
-                Icons.eco,
-                color: CustomColours.accentGreen(),
-                size: 11.0,
-              )
-            )
-          ),
-          Stack(
-              children: [
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      width: maxWidth,
-                      margin: EdgeInsets.fromLTRB(0.5, 2.5, 5.0, 2.5),
-                      decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                    )
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      width: min(maxWidth * current / max, maxWidth),
-                      margin: EdgeInsets.fromLTRB(0.5, 2.5, 3.0, 2.5),
-                      decoration: BoxDecoration(
-                          color: CustomColours.accentGreen(),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                    )
-                )
-              ]
-          )
-        ],
-      )
-    );
+        height: 13.0,
+        width: barWidth,
+        margin: EdgeInsets.only(bottom: 5.0),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        child: Row(
+          children: [
+            Container(
+                width: (barWidth * 0.2) - 1.5,
+                margin: EdgeInsets.fromLTRB(1.5, 1.0, 0, 1.0),
+                child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Icon(
+                      Icons.eco,
+                      color: CustomColours.accentGreen(),
+                      size: 11.0,
+                    ))),
+            Stack(children: [
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    width: maxWidth,
+                    margin: EdgeInsets.fromLTRB(0.5, 2.5, 5.0, 2.5),
+                    decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(20)),
+                  )),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    width: min(maxWidth * current / max, maxWidth),
+                    margin: EdgeInsets.fromLTRB(0.5, 2.5, 3.0, 2.5),
+                    decoration: BoxDecoration(
+                        color: CustomColours.accentGreen(),
+                        borderRadius: BorderRadius.circular(20)),
+                  ))
+            ])
+          ],
+        ));
   }
 }

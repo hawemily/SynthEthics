@@ -26,8 +26,9 @@ class AchievementLevelCalculator {
     // between the last level amount and its previous
 
     if (value >= tiers[tiers.length - 1]) {
-      int amountPerLevel = (tiers.length == 1) ? tiers[0] :
-        tiers[tiers.length - 1] - tiers[tiers.length - 2];
+      int amountPerLevel = (tiers.length == 1)
+          ? tiers[0]
+          : tiers[tiers.length - 1] - tiers[tiers.length - 2];
       int excess = value - tiers[tiers.length - 1];
       int extraLevels = excess ~/ amountPerLevel;
 
@@ -37,7 +38,11 @@ class AchievementLevelCalculator {
       value -= previousAmount;
     }
 
-    return {"level" : currentLevel, "previousAmount" : previousAmount,
-      "targetAmount" : targetAmount, "progress" : value};
+    return {
+      "level": currentLevel,
+      "previousAmount": previousAmount,
+      "targetAmount": targetAmount,
+      "progress": value
+    };
   }
 }

@@ -10,7 +10,5 @@ void main() {
 
   group('Closet', closet_page_tests);
 
-  group('Item Dashboard', () {
-
-  });
+  group('Item Dashboard', () {});
 }

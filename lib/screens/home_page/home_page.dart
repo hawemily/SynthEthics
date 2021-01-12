@@ -58,7 +58,7 @@ class HomePageState extends State<HomePage> {
           donated = body["donatedItems"];
         });
       } else {
-        print("Failed to fetch total num of donated items, line 58, home_page.dart");
+        print("Failed to fetch total num of donated items, home_page.dart");
       }
     }
   }
@@ -72,16 +72,14 @@ class HomePageState extends State<HomePage> {
 
       if (resp.statusCode == 200) {
         final body = jsonDecode(resp.body);
-        print("body:" + body.toString());
         setState(() {
           carmaPoints = body["carmaPoints"] == null ? 0 : body["carmaPoints"].round();
           bought = body["itemsBought"];
           wears = body["itemsWorn"];
         });
         currUser.setUsername(body["firstName"], body["lastName"]);
-        print("user.bgImage: ${user.bgImage}");
       } else {
-        print("Failed to fetch user records");
+        print("Failed to fetch user records, home_page.dart");
       }
     }
 

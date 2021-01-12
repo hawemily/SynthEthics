@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
-
 ///
 /// Custom widget for displaying a Carma value. Used in scanner image display to
 /// display item's calculated Carma value, or an error message if it fails to
@@ -40,7 +39,7 @@ class CarmaPointDetailsState extends State<CarmaPointDetails> {
         setState(() {
           carmaWidgetColour = Colors.red;
           carmaText =
-          "Oops. We can't seem to get accurate readings, is the information below correct?";
+              "Oops. We can't seem to get accurate readings, is the information below correct?";
         });
       }
     }

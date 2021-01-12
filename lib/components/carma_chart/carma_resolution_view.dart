@@ -14,9 +14,8 @@ class CarmaResolutionView extends StatefulWidget {
 class _CarmaResolutionViewState extends State<CarmaResolutionView> {
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      child : Column(
+      child: Column(
         children: [
           Expanded(
             flex: 6,

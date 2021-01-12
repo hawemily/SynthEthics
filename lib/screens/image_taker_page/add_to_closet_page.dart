@@ -15,7 +15,6 @@ import 'package:synthetics/theme/custom_colours.dart';
 
 import 'clothing_label_dropdown.dart';
 
-
 /// Page for user customisation of the item of clothing before adding the item
 /// to the user's closet. Including adding a photo for icon, name and brand.
 ///
@@ -56,10 +55,10 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
   /// Determine if save is currently occuring, this is to allow for prevention
   /// of redirection until save is complete
   bool _saveActive() {
-    return (_clothingImage != null
-        && _clothingName != ""
-        && _clothingBrand != null
-        && _hasMappedColour);
+    return (_clothingImage != null &&
+        _clothingName != "" &&
+        _clothingBrand != null &&
+        _hasMappedColour);
   }
 
   /// Save item to closet
@@ -69,8 +68,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
     });
 
     try {
-      final response = await api_client.post(
-          "/closet/addItem",
+      final response = await api_client.post("/closet/addItem",
           headers: <String, String>{
             'Content-Type': 'application/json',
           },
@@ -78,26 +76,26 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
             'uid': user.getUID(),
             'name': _clothingName,
             'brand': _clothingBrand,
-            'materials': [ClothingMaterials.getInstance().materialMapping(widget.clothingMaterial)],
+            'materials': [
+              ClothingMaterials.getInstance()
+                  .materialMapping(widget.clothingMaterial)
+            ],
             'clothingType': widget.clothingType,
             'currLocation': widget.location,
             'origin': widget.placeOfOrigin,
             'lastWorn': DateTime.now().toString(),
             'dateOfpurchase': DateTime.now().toString(),
             'dominantColor': OutfitColor.values.indexOf(_mappedColour),
-          })
-      );
+          }));
 
       if (response.statusCode == 200) {
         final clothingId = jsonDecode(response.body)['clothingID'];
-        await ImageManager.getInstance().savePictureToDevice(_clothingImage,
-                                                             clothingId);
+        await ImageManager.getInstance()
+            .savePictureToDevice(_clothingImage, clothingId);
 
         // Perform a clear stac and push back to the home page
         Navigator.popUntil(
-            context,
-            ModalRoute.withName(routeMapping[Screens.Home])
-        );
+            context, ModalRoute.withName(routeMapping[Screens.Home]));
 
         // Ensure that the home page is rebuilt in the event that relevant data
         // has been changed.
@@ -105,7 +103,7 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
         Navigator.pushNamed(context, routeMapping[Screens.Home]);
       }
     } catch (e) {
-      print("in add to closet page: $e");
+      print("Error in submitting item to closet");
     }
   }
 
@@ -116,11 +114,12 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
       child: Center(
         child: Card(
           child: Container(
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20, left: 20, right: 20),
-              child: Text("${widget.carmaPoints} Carma points!",
-                style: TextStyle(color: Colors.white),)
-          ),
+              padding:
+                  EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+              child: Text(
+                "${widget.carmaPoints} Carma points!",
+                style: TextStyle(color: Colors.white),
+              )),
           color: CustomColours.iconGreen(),
         ),
       ),
@@ -139,96 +138,93 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
             image: DecorationImage(
               fit: BoxFit.cover,
               image: FileImage(_clothingImage),
-            )
-        ),
+            )),
       );
     }
 
     return Scaffold(
         appBar: AppBar(
-            title: Text('Add To Closet'),
-            backgroundColor: CustomColours.greenNavy(),
+          title: Text('Add To Closet'),
+          backgroundColor: CustomColours.greenNavy(),
         ),
         body: Container(
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 20),
             child: Center(
                 child: ListView(
+              children: [
+                ButtonBar(
+                  alignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ButtonBar(
-                      alignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _ATCButtons(text: "Back", func: () {
+                    _ATCButtons(
+                        text: "Back",
+                        func: () {
                           Navigator.pop(context);
                         }),
-                        ((!_savingInProgress)
-                            ? _ATCButtons(
-                                text: "Save",
-                                func: _saveToCloset,
-                                active: _saveActive(),
-                              )
-                            : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(CustomColours.accentGreen()),)
-                        )
-                      ],
-                    ),
-                    Container(
-                      child: OutlinedButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.resolveWith((states) =>
-                                CircleBorder()),
-                            minimumSize: MaterialStateProperty.resolveWith((
-                                states) =>
-                                Size.fromHeight(150)),
-                            backgroundColor: MaterialStateProperty.resolveWith((
-                                states) =>
-                                CustomColours.offWhite())
-                        ),
-                        child: clothingImageWidget,
-                        onPressed: () => ImageTaker.settingModalBottomSheet(
-                            context, _imageGetterCallback
-                        ),
-                      ),
-                    ),
-                    carmaDisplay,
-                    _WritableCard(label: "Name", func: (text) {
+                    ((!_savingInProgress)
+                        ? _ATCButtons(
+                            text: "Save",
+                            func: _saveToCloset,
+                            active: _saveActive(),
+                          )
+                        : CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CustomColours.accentGreen()),
+                          ))
+                  ],
+                ),
+                Container(
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.resolveWith(
+                            (states) => CircleBorder()),
+                        minimumSize: MaterialStateProperty.resolveWith(
+                            (states) => Size.fromHeight(150)),
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => CustomColours.offWhite())),
+                    child: clothingImageWidget,
+                    onPressed: () => ImageTaker.settingModalBottomSheet(
+                        context, _imageGetterCallback),
+                  ),
+                ),
+                carmaDisplay,
+                _WritableCard(
+                    label: "Name",
+                    func: (text) {
                       setState(() {
                         _clothingName = text;
                       });
                     }),
-                    _WritableCard(label: "Brand", func: (text) {
+                _WritableCard(
+                    label: "Brand",
+                    func: (text) {
                       setState(() {
                         _clothingBrand = text;
                       });
                     }),
-                    _ReadOnlyCards(
-                        text: "Material: ${widget.clothingMaterial}"),
-                    _ReadOnlyCards(text: "Origin: ${widget.placeOfOrigin}"),
-                    _ReadOnlyCards(text: "Type: ${widget.clothingType}"),
-                    Container(
-                      padding: EdgeInsets.only(left: 40, right: 40),
-                      child: ClothingLabelDropdown(
-                        data: OutfitColor.values.map((e) {
-                          return StringOperator.enumTrim(e.toString());
-                        }).toList(),
-                        selected: (_hasMappedColour)
-                          ? _mappedColour.index
-                          : 1,
-                        label: (_hasMappedColour)
-                            ? "Colour Category"
-                            : "Select an image to see colour category",
-                        onChange: ((_hasMappedColour)
-                          ? (index) {
+                _ReadOnlyCards(text: "Material: ${widget.clothingMaterial}"),
+                _ReadOnlyCards(text: "Origin: ${widget.placeOfOrigin}"),
+                _ReadOnlyCards(text: "Type: ${widget.clothingType}"),
+                Container(
+                  padding: EdgeInsets.only(left: 40, right: 40),
+                  child: ClothingLabelDropdown(
+                    data: OutfitColor.values.map((e) {
+                      return StringOperator.enumTrim(e.toString());
+                    }).toList(),
+                    selected: (_hasMappedColour) ? _mappedColour.index : 1,
+                    label: (_hasMappedColour)
+                        ? "Colour Category"
+                        : "Select an image to see colour category",
+                    onChange: ((_hasMappedColour)
+                        ? (index) {
                             setState(() {
                               _mappedColour = OutfitColor.values[index];
                             });
                           }
-                          : null),
-                      ),
-                    ),
-                  ],
-                )
-            )
-        )
-    );
+                        : null),
+                  ),
+                ),
+              ],
+            ))));
   }
 
   /// Callback function to pass to image_taker such that the taken image is
@@ -248,11 +244,11 @@ class _AddToClosetPageState extends State<AddToClosetPage> {
   }
 }
 
-
 /// Local widget used for cards with writeable contents
 class _WritableCard extends StatefulWidget {
   final label;
   final func;
+
   _WritableCard({this.label, this.func});
 
   @override
@@ -278,29 +274,26 @@ class _WritableCardState extends State<_WritableCard> {
       child: Card(
           child: Container(
               padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
+                left: 20,
+                right: 20,
               ),
               child: TextField(
                 decoration: InputDecoration(
                     labelText: labelText,
                     border: InputBorder.none,
-                    hintText: "$text"
-                ),
+                    hintText: "$text"),
                 onSubmitted: (text) {
                   widget.func(text);
                 },
-              )
-          )
-      ),
+              ))),
     );
   }
 }
 
-
 /// Local widget used for cards with readonly content
 class _ReadOnlyCards extends StatelessWidget {
   final text;
+
   _ReadOnlyCards({this.text});
 
   @override
@@ -309,30 +302,22 @@ class _ReadOnlyCards extends StatelessWidget {
       padding: EdgeInsets.only(left: 40, right: 40),
       child: Card(
           child: Container(
-              padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 10,
-                  bottom: 10
-              ),
+              padding:
+                  EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
               child: TextField(
                 readOnly: true,
-                decoration: InputDecoration.collapsed(
-                    hintText: "${this.text}"
-                ),
-              )
-          )
-      ),
+                decoration: InputDecoration.collapsed(hintText: "${this.text}"),
+              ))),
     );
   }
 }
-
 
 /// Local widget for navigation buttons at the top of the page
 class _ATCButtons extends StatelessWidget {
   final Function func;
   final String text;
   final bool active;
+
   _ATCButtons({this.text, this.func, this.active: true});
 
   @override
@@ -340,20 +325,18 @@ class _ATCButtons extends StatelessWidget {
     if (this.active) {
       return Container(
           child: FlatButton(
-            onPressed: this.func,
-            child: Text(
-              this.text,
-              style: TextStyle(color:  CustomColours.accentGreen()),),
-          )
-      );
+        onPressed: this.func,
+        child: Text(
+          this.text,
+          style: TextStyle(color: CustomColours.accentGreen()),
+        ),
+      ));
     } else {
       return Container(
           child: FlatButton(
-            child: Text(this.text),
-            disabledTextColor: Colors.grey,
-          )
-      );
+        child: Text(this.text),
+        disabledTextColor: Colors.grey,
+      ));
     }
   }
 }
-

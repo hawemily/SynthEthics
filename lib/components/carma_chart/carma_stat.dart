@@ -8,6 +8,7 @@ class CarmaStat extends StatefulWidget {
 
   const CarmaStat({Key key, this.statColor, this.statLabel, this.statValue})
       : super(key: key);
+
   @override
   _CarmaStatState createState() => _CarmaStatState();
 }
@@ -18,25 +19,22 @@ class _CarmaStatState extends State<CarmaStat> {
     return Expanded(
       child: Container(
           color: CustomColours.offWhite(),
-          child : Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 widget.statValue.toString(),
                 style: TextStyle(
-                    color: widget.statColor,
-                    fontWeight: FontWeight.bold,
+                  color: widget.statColor,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 widget.statLabel,
-                style: TextStyle(
-                    color: CustomColours.baseBlack()
-                ),
+                style: TextStyle(color: CustomColours.baseBlack()),
               )
             ],
-          )
-      ),
+          )),
     );
   }
 }

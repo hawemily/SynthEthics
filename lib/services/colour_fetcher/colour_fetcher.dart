@@ -3,12 +3,10 @@ import 'dart:ui' as ui;
 import 'package:image/image.dart' as ImageOps;
 import 'package:palette_generator/palette_generator.dart';
 
-
 /// Class fetches the dominant colour of a given image by prioritising the value
 /// of the pixels closets to the center, thus disregarding the background in
 /// most instances
 class ColourFetcher {
-
   static ImageOps.Image _cropToCenter(ImageOps.Image image, double portion) {
     print("height: ${image.height} width: ${image.width}");
     final int cropHeight = (image.height * portion).round();
@@ -19,14 +17,16 @@ class ColourFetcher {
   }
 
   static Future<ui.Color> fetchDominantColour(File fileImage) async {
-    ImageOps.Image customImage = ImageOps.decodeImage(fileImage.readAsBytesSync());
+    ImageOps.Image customImage =
+        ImageOps.decodeImage(fileImage.readAsBytesSync());
     customImage = _cropToCenter(customImage, 0.8);
 
-    ui.Codec codec = await ui.instantiateImageCodec(ImageOps.encodePng(customImage));
+    ui.Codec codec =
+        await ui.instantiateImageCodec(ImageOps.encodePng(customImage));
     ui.FrameInfo frameInfo = await codec.getNextFrame();
 
     final PaletteGenerator paletteGenerator =
-      await PaletteGenerator.fromImage(frameInfo.image);
+        await PaletteGenerator.fromImage(frameInfo.image);
 
     return paletteGenerator.dominantColor.color;
   }

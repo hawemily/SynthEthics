@@ -8,7 +8,6 @@ import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 
-
 ///
 /// Widget for populating the right side drawer on the home page, place for
 /// storing additional functionality that are not accessed directly from the
@@ -53,7 +52,8 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
     Widget confirmButton = FlatButton(
         child: Text(
           "OK",
-          style: TextStyle(color: CustomColours.greenNavy(), fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: CustomColours.greenNavy(), fontWeight: FontWeight.bold),
         ),
         onPressed: () {
           Navigator.of(context).pop();
@@ -62,7 +62,9 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
         });
 
     Widget cancelButton = FlatButton(
-      child: Text("Cancel", style: TextStyle(color:CustomColours.negativeRed(), fontWeight: FontWeight.bold)),
+      child: Text("Cancel",
+          style: TextStyle(
+              color: CustomColours.negativeRed(), fontWeight: FontWeight.bold)),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -74,19 +76,15 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
         "Are you sure you want to delete your account? All your data will be lost when this happens.",
         textAlign: TextAlign.justify,
       ),
-      actions: [
-        confirmButton,
-        cancelButton
-      ],
+      actions: [confirmButton, cancelButton],
     );
 
     showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return alert;
-      }
-    );
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 
   @override
@@ -112,9 +110,8 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                 child: Center(
                     child: Text(
                   "SynthEthics",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: CustomColours.offWhite()),
+                  style:
+                      TextStyle(fontSize: 18, color: CustomColours.offWhite()),
                 ))),
             _HomeRightDrawerItem(
               // TODO: Remove this and implement functionalities to scanner
@@ -153,7 +150,6 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
   }
 }
 
-
 /// Local widget for representing a drawer item, provides uniformity without
 /// limiting user usability
 class _HomeRightDrawerItem extends StatefulWidget {
@@ -163,14 +159,14 @@ class _HomeRightDrawerItem extends StatefulWidget {
   final Color color;
   final Color backgroundColor;
 
-  _HomeRightDrawerItem({this.icon,
+  _HomeRightDrawerItem({
+    this.icon,
     this.text,
     this.onTap,
     Color color,
     Color backgroundColor,
-  })
-    : color = color ?? CustomColours.greenNavy(),
-      backgroundColor = backgroundColor ?? CustomColours.offWhite();
+  })  : color = color ?? CustomColours.greenNavy(),
+        backgroundColor = backgroundColor ?? CustomColours.offWhite();
 
   @override
   __HomeRightDrawerItemState createState() => __HomeRightDrawerItemState();
@@ -192,8 +188,7 @@ class __HomeRightDrawerItemState extends State<_HomeRightDrawerItem> {
           size: 30.0,
           color: widget.color,
         ),
-        title: Text(widget.text,
-            style: TextStyle(color: widget.color)),
+        title: Text(widget.text, style: TextStyle(color: widget.color)),
         onTap: widget.onTap,
       ),
     );
