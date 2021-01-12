@@ -9,12 +9,10 @@ import 'package:synthetics/screens/clothing_colour_page/colour_scheme_checker.da
 import 'package:synthetics/services/api_client.dart';
 import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
-
 import '../../routes.dart';
 
 class RandomOutfit extends StatefulWidget {
   const RandomOutfit(this.clothingItems, {Key key}) : super(key: key);
-
   final Map<String, List<ClothingItemObject>> clothingItems;
 
   @override
@@ -24,11 +22,12 @@ class RandomOutfit extends StatefulWidget {
 class _RandomOutfitState extends State<RandomOutfit> {
   Set<ClothingItemObject> randomItems = Set();
   CurrentUser user = CurrentUser.getInstance();
-  Random random = new Random();
+  Random r1 = new Random();
   Random r2 = new Random();
   ColourSchemeChecker colourChecker = ColourSchemeChecker();
   bool insufficientCloset = false;
 
+  /// Enumeration of valid outfit types
   final List<Set<String>> outfitTypes = [
     {"Tops", "Bottoms", "Outerwear"},
     {"Dresses", "Outerwear"},
@@ -38,10 +37,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
   @override
   void initState() {
     super.initState();
-    this.randomItems = generateRandom();
+    this.randomItems = generateRandomType();
   }
 
-  Set<ClothingItemObject> generateRandom() {
+  /// Selects a random outfit type to create an outift based on items in closet.
+  Set<ClothingItemObject> generateRandomType() {
     int randomOutfitType;
     var clothingItems = widget.clothingItems;
 
@@ -54,13 +54,13 @@ class _RandomOutfitState extends State<RandomOutfit> {
       } else if (clothingItems['Bottoms'] == null) {
         randomOutfitType = 1;
       } else {
-        randomOutfitType = random.nextInt(outfitTypes.length);
+        randomOutfitType = r1.nextInt(outfitTypes.length);
       }
     }
-
     return generateRandomOutfit(randomOutfitType, clothingItems);
   }
 
+  /// Generates a random outfit of given type based on items in closet.
   Set<ClothingItemObject> generateRandomOutfit(int randomOutfitType,
       Map<String, List<ClothingItemObject>> clothingItems) {
     Set<ClothingItemObject> newItems = Set();
@@ -78,10 +78,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
     if (colourChecker.isValid(colors)) {
       return newItems;
     } else {
-      return generateRandom();
+      return generateRandomType();
     }
   }
 
+  /// Calls backend POST function to save outfit to user's dressing room.
   void saveOutfit() async {
     print("OUTFIT SELECTED");
     if (randomItems.isEmpty) {
@@ -198,7 +199,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
                             onPressed: () {
                               setState(() {
                                 this.randomItems.clear();
-                                this.randomItems = this.generateRandom();
+                                this.randomItems = this.generateRandomType();
                                 print("Random items regenerated");
                                 randomItems.forEach((element) {
                                   print(element.data.name);
