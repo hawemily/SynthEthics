@@ -63,9 +63,9 @@ class _RandomOutfitState extends State<RandomOutfit> {
       } else {
         randomOutfitType = r1.nextInt(2);
       }
-      print("RANDOM OUTFIT BEFORE $randomOutfitType");
+      // print("RANDOM OUTFIT BEFORE $randomOutfitType");
       if (outerwearPresent) randomOutfitType += (r2.nextInt(2) * 2);
-      print("RANDOM OUTFIT BEFORE $randomOutfitType");
+      // print("RANDOM OUTFIT BEFORE $randomOutfitType");
     }
     return generateRandomOutfit(randomOutfitType, clothingItems);
   }
@@ -155,7 +155,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
         iconTheme: IconThemeData(color: Colors.white),
         title: Text('Generate Outfit'),
       ),
-      body: (insufficientCloset || this.randomItems.length < 2)
+      body: (insufficientCloset)
           ? AlertDialog(
               title: Text(
                 "Oh no!",
