@@ -30,9 +30,10 @@ class _RandomOutfitState extends State<RandomOutfit> {
 
   /// Enumeration of valid outfit types
   final List<Set<String>> outfitTypes = [
+    {"Tops", "Bottoms"},
+    {"Dresses"},
     {"Tops", "Bottoms", "Outerwear"},
-    {"Dresses", "Outerwear"},
-    {"Tops", "Bottoms"}
+    {"Dresses", "Outerwear"}
   ];
 
   @override
@@ -44,19 +45,27 @@ class _RandomOutfitState extends State<RandomOutfit> {
   /// Selects a random outfit type to create an outift based on items in closet.
   Set<ClothingItemObject> generateRandomType() {
     int randomOutfitType;
+    bool outerwearPresent = false;
     var clothingItems = widget.clothingItems;
 
-    if (clothingItems['Tops'] == null && clothingItems['Dresses'] == null) {
+    if (clothingItems['Outerwear'] != null) outerwearPresent = true;
+
+    if ((clothingItems['Tops'] == null || clothingItems['Bottoms'] == null) &&
+        clothingItems['Dresses'] == null) {
       this.insufficientCloset = true;
       return null;
     } else {
-      if (clothingItems['Outerwear'] == null) {
-        randomOutfitType = 2;
-      } else if (clothingItems['Bottoms'] == null) {
+      if (clothingItems['Dresses'] == null) {
+        randomOutfitType = 0;
+      } else if (clothingItems['Bottoms'] == null ||
+          clothingItems['Tops'] == null) {
         randomOutfitType = 1;
       } else {
-        randomOutfitType = r1.nextInt(outfitTypes.length);
+        randomOutfitType = r1.nextInt(2);
       }
+      print("RANDOM OUTFIT BEFORE $randomOutfitType");
+      if (outerwearPresent) randomOutfitType += (r2.nextInt(2) * 2);
+      print("RANDOM OUTFIT BEFORE $randomOutfitType");
     }
     return generateRandomOutfit(randomOutfitType, clothingItems);
   }
