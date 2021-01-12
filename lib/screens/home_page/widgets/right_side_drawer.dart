@@ -111,7 +111,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
                 padding: EdgeInsets.only(bottom: 50),
                 child: Center(
                     child: Text(
-                  "Synthethics",
+                  "SynthEthics",
                   style: TextStyle(
                     fontSize: 18,
                     color: CustomColours.offWhite()),

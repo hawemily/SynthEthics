@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                           .of(context)
                           .size
                           .height / 4),
-                  Text("Synthetics",
+                  Text("SynthEthics",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: CustomColours.greenNavy(),
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Welcome to Synthetics"),
+          title: Text("Welcome to SynthEthics"),
           centerTitle: true,
           backgroundColor: CustomColours.greenNavy(),
           automaticallyImplyLeading: false,

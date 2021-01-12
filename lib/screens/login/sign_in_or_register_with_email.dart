@@ -241,7 +241,7 @@ class SignInOrRegisterWithEmailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Welcome to Synthetics"),
+          title: Text("Welcome to SynthEthics"),
           centerTitle: true,
           backgroundColor: CustomColours.greenNavy(),
         ),

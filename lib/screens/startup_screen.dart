@@ -23,7 +23,7 @@ class StartupScreen extends StatelessWidget {
       navigateAfterSeconds: result != null ? routeMapping[Screens.Home] : routeMapping[Screens.Login],
       seconds: 5,
       title: new Text(
-        'Welcome to Synthethics!',
+        'Welcome to SynthEthics!',
         style: new TextStyle(fontWeight: FontWeight.w300, fontSize: 25.0, color: CustomColours.offWhite()),
       ),
       backgroundColor: CustomColours.greenNavy(),
