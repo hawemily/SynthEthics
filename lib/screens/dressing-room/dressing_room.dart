@@ -12,6 +12,8 @@ import 'package:synthetics/services/current_user.dart';
 import 'package:synthetics/theme/custom_colours.dart';
 import 'outfitContainer.dart';
 
+/// Displays the Dressing Room main page to show outfit cards and
+/// allows users to add outfit manually or use random outfit generator.
 class DressingRoom extends StatefulWidget {
   @override
   _DressingRoomState createState() => _DressingRoomState();
@@ -21,7 +23,6 @@ class _DressingRoomState extends State<DressingRoom> {
   Future<GetOutfitResponse> outfits;
   CurrentUser user = CurrentUser.getInstance();
 
-  //tentative: gets all clothing items from closet
   Future<GetClosetResponse> clothingItems;
   Map<String, List<ClothingItemObject>> randomClothing = new Map();
 
@@ -32,6 +33,8 @@ class _DressingRoomState extends State<DressingRoom> {
     outfits = this.getOutfits();
   }
 
+  /// Calls backend POST function to update stats (carma and times worn)
+  /// for each item in outfit, as well as update user's total carma points.
   Future<void> updateAllItems(OutfitListItem oF) async {
     List<ClothingItemObject> clothing = oF.data.clothing;
 
@@ -64,7 +67,7 @@ class _DressingRoomState extends State<DressingRoom> {
     resetDressingRoom();
   }
 
-  // Get all clothes from closet
+  /// Calls backend GET function to retrieve all clothes from user's closet doc.
   Future<GetClosetResponse> getClothes() async {
     final response =
         await api_client.get("/closet/allClothes/" + user.getUID());
@@ -82,6 +85,8 @@ class _DressingRoomState extends State<DressingRoom> {
     }
   }
 
+  /// Calls backend GET function to retrieve all outfits from user's outfit doc.
+  /// The function removes any outfit that is comprised of donated items.
   Future<GetOutfitResponse> getOutfits() async {
     final response = await api_client.get("/outfits/" + user.getUID());
 
@@ -102,6 +107,7 @@ class _DressingRoomState extends State<DressingRoom> {
     });
   }
 
+  /// Function to generate an outfit card for each outfit user has.
   Widget generateOutfits() {
     return FutureBuilder<GetOutfitResponse>(
         future: outfits,
