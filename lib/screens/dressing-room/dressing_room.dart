@@ -22,6 +22,7 @@ class DressingRoom extends StatefulWidget {
 class _DressingRoomState extends State<DressingRoom> {
   Future<GetOutfitResponse> outfits;
   CurrentUser user = CurrentUser.getInstance();
+  bool dressingRoomLoaded;
 
   Future<GetClosetResponse> clothingItems;
   Map<String, List<ClothingItemObject>> randomClothing = new Map();
@@ -29,8 +30,10 @@ class _DressingRoomState extends State<DressingRoom> {
   @override
   void initState() {
     super.initState();
+    dressingRoomLoaded = false;
     clothingItems = getClothes();
     outfits = this.getOutfits();
+    
   }
 
   /// Calls backend POST function to update stats (carma and times worn)
@@ -113,11 +116,13 @@ class _DressingRoomState extends State<DressingRoom> {
         future: outfits,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return OutfitContainer(
+            OutfitContainer outfitContainer =  OutfitContainer(
               outfits: snapshot.data.outfits,
               updateFunction: updateAllItems,
               resetDressingRoom: resetDressingRoom,
             );
+            dressingRoomLoaded = true;
+            return outfitContainer;
           } else if (snapshot.hasError) {
             return Text(
                 "Unable to load clothes from closet! Please contact admin for support");
@@ -176,17 +181,33 @@ class _DressingRoomState extends State<DressingRoom> {
                 backgroundColor: CustomColours.greenNavy(),
                 heroTag: null,
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              RandomOutfit(this.randomClothing))).then((value) {
-                    if (value != "none") {
-                      setState(() {
-                        outfits = this.getOutfits();
-                      });
-                    }
-                  });
+                  (dressingRoomLoaded)
+                      ? Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      RandomOutfit(this.randomClothing)))
+                          .then((value) {
+                          if (value != "none") {
+                            setState(() {
+                              outfits = this.getOutfits();
+                            });
+                          }
+                        })
+                      : showDialog(
+                          context: context,
+                          builder: (_) => new AlertDialog(
+                                title: new Text("Dressing Room is still loading.."),
+                                content: new Text("Hey, give the dressing room a second to load then try again!"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('Close me!'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              ));
                 },
                 child: Image.asset(
                   'lib/assets/random.png',
