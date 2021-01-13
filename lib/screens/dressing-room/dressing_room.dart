@@ -198,7 +198,7 @@ class _DressingRoomState extends State<DressingRoom> {
                           context: context,
                           builder: (_) => new AlertDialog(
                                 title: new Text("Dressing Room is still loading.."),
-                                content: new Text("Hey, give the dressing room a second to load then try again!"),
+                                content: new Text("Try again in a second or two!"),
                                 actions: <Widget>[
                                   FlatButton(
                                     child: Text('Close me!'),
