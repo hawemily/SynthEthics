@@ -64,7 +64,7 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                 getTimesWorn: returnTimesWorn)));
   }
 
-  // refreshes the status of the clothing item to ensure changes made in another widget is reflected in the closet.
+  /// Refreshes the status of the clothing item to track changes made in ClothingItem.
   Future<ClothingItemObject> getAClothingItem() async {
     if (this.currentClothingItem == null) return null;
     final response = await api_client.get("/closet/allClothes/" +
@@ -82,6 +82,8 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
     }
   }
 
+  /// Callback function which updates a ClothingCard's information 
+  /// after 'Wear' information gets updated in the item's dashboard
   void returnTimesWorn() {
     getAClothingItem().then((clothingItem) {
       setState(() {
@@ -109,7 +111,6 @@ class ClothingCardState<T extends ClothingCard> extends State<T> {
                 return Text("No image from file");
               }
               return Container();
-              // return LinearProgressIndicator();
             });
   }
 
