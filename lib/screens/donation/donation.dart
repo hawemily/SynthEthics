@@ -12,6 +12,7 @@ class DonationPage extends StatefulWidget {
   _DonationPageState createState() => _DonationPageState();
 }
 
+/// Donation Map to show users the clothing donation centres nearest to them
 class _DonationPageState extends State<DonationPage> {
   GoogleMapController mapController;
 
@@ -19,7 +20,6 @@ class _DonationPageState extends State<DonationPage> {
   List<LatLng> latlngs = new List(2);
   var markers = new List<Marker>();
 
-  // For testing: changed to 2 from 5
   var names = new List(2);
   var addresses = new List(2);
   var distances = new List(2);
@@ -36,6 +36,8 @@ class _DonationPageState extends State<DonationPage> {
     });
   }
 
+  /// Uses Flutter's Geolocater package to retrieve the user's location.
+  /// Finds nearest clothing donation centres using Google Maps Places API call
   Future getDistance() async {
     Position coords = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -48,6 +50,7 @@ class _DonationPageState extends State<DonationPage> {
     http.Response response = await http.get(str);
     var results = jsonDecode(response.body);
 
+    // Saves fields of each entry retrieved by the API call
     setState(() {
       this.center = LatLng(coords.latitude, coords.longitude);
       for (var i = 0; i < 2; i++) {
@@ -65,6 +68,8 @@ class _DonationPageState extends State<DonationPage> {
         this.markers.add(Marker(
             draggable: false, position: latlngs[i], markerId: MarkerId('$i')));
       }
+
+      // Builds markers for each donation center
       this.markers.add(Marker(
           markerId: MarkerId('center'),
           draggable: false,

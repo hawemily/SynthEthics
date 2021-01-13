@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'suggestion_list.dart';
 
+/// Creates Bottom Sheet which hides the donation centres
+/// The donation centres tapping the BottomSheetButton which displays all centres
+/// The Bottom Sheet can be hidden again by scrolling down
 class BottomSheetButton extends StatefulWidget {
   BottomSheetButton({Key key, this.names, this.addresses, this.distances})
       : super(key: key);

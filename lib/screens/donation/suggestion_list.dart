@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-
-// import 'package:http/http.dart' as http;
 import 'package:synthetics/screens/donation/donation_card.dart';
 
-// import 'dart:convert';
-// import 'package:geolocator/geolocator.dart';
-
+/// Displays Donation Cards for all donation centres
 class SuggestionsList extends StatefulWidget {
   SuggestionsList({Key key, this.names, this.addresses, this.distances})
       : super(key: key);

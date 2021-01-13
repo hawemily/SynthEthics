@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Displays information on each donation center
 class DonationCard extends StatelessWidget {
   final String name;
   final String address;

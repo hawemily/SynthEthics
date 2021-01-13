@@ -45,10 +45,8 @@ class _RandomOutfitState extends State<RandomOutfit> {
   /// Selects a random outfit type to create an outift based on items in closet.
   Set<ClothingItemObject> generateRandomType() {
     int randomOutfitType;
-    bool outerwearPresent = false;
     var clothingItems = widget.clothingItems;
-
-    if (clothingItems['Outerwear'] != null) outerwearPresent = true;
+    bool outerwearPresent = (clothingItems['Outerwear'] != null);
 
     if ((clothingItems['Tops'] == null || clothingItems['Bottoms'] == null) &&
         clothingItems['Dresses'] == null) {
@@ -63,16 +61,14 @@ class _RandomOutfitState extends State<RandomOutfit> {
       } else {
         randomOutfitType = r1.nextInt(2);
       }
-      // print("RANDOM OUTFIT BEFORE $randomOutfitType");
       if (outerwearPresent) randomOutfitType += (r2.nextInt(2) * 2);
-      // print("RANDOM OUTFIT BEFORE $randomOutfitType");
     }
     return generateRandomOutfit(randomOutfitType, clothingItems);
   }
 
   /// Generates a random outfit of given type based on items in closet.
   Set<ClothingItemObject> generateRandomOutfit(int randomOutfitType,
-      Map<String, List<ClothingItemObject>> clothingItems) {
+    Map<String, List<ClothingItemObject>> clothingItems) {
     Set<ClothingItemObject> newItems = Set();
     Set<OutfitColor> colors = Set();
 
@@ -94,7 +90,6 @@ class _RandomOutfitState extends State<RandomOutfit> {
 
   /// Calls backend POST function to save outfit to user's dressing room.
   void saveOutfit() async {
-    print("OUTFIT SELECTED");
     if (randomItems.isEmpty) {
       Navigator.pop(context, "none");
       return;
@@ -127,11 +122,11 @@ class _RandomOutfitState extends State<RandomOutfit> {
   }
 
   Widget clothingcardbuild() {
-    print("Build");
     return GridView.count(
       crossAxisCount: 2,
       childAspectRatio: 0.8,
       scrollDirection: Axis.vertical,
+      physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: [
         for (var item in this.randomItems)
@@ -149,6 +144,7 @@ class _RandomOutfitState extends State<RandomOutfit> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColours.greenNavy(),

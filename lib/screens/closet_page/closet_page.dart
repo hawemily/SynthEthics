@@ -53,7 +53,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
   // can use to hold unconfirmed 'to be donated' clothes, 'undonate' clothes etc
   Set<DonatedItemMetadata> tempClothingBin = Set();
 
-  //Outfit selection
+  /// Variables for outfit selection
   Set<String> outfitItems = Set();
   bool _savingInProgress = false;
 
@@ -135,10 +135,13 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         null;
   }
 
+  /// Checks if Clothing Item has been selected to be part of an outfit
   bool isSelectedForOutfit(String id) {
     return outfitItems.firstWhere((el) => el == id, orElse: () => null) != null;
   }
 
+  /// Adds item to outfit if not in outfit
+  /// Removes item if it already belongs to items selected for outfit
   void addToOutfit(String id, bool toAddToOutfit) {
     if (toAddToOutfit) {
       outfitItems.add(id);
@@ -297,6 +300,7 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
         });
   }
 
+  /// Sends information for outfit saved to the backend
   void outfitSelected() async {
     setState(() {
       _savingInProgress = true;
@@ -308,7 +312,6 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
     }
     var items = outfitItems.toList();
 
-    // put in try, loading icon
     await api_client
         .post("/postOutfit",
             body: jsonEncode(<String, dynamic>{
@@ -517,6 +520,5 @@ class _ClosetState extends State<Closet> with SingleTickerProviderStateMixin {
       ),
       bottomNavigationBar: NavBar(selected: widget.selectingOutfit ? 3 : 1),
     );
-//        ClosetContainer(clothingIds: List.generate(20, (index) => index))
   }
 }
