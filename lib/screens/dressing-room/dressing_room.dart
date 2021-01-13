@@ -82,6 +82,7 @@ class _DressingRoomState extends State<DressingRoom> {
           randomClothing[element.clothingType] = element.clothingItems;
       });
 
+      dressingRoomLoaded = true;
       return closet;
     } else {
       throw Exception("Failed to load closet");
@@ -121,7 +122,6 @@ class _DressingRoomState extends State<DressingRoom> {
               updateFunction: updateAllItems,
               resetDressingRoom: resetDressingRoom,
             );
-            dressingRoomLoaded = true;
             return outfitContainer;
           } else if (snapshot.hasError) {
             return Text(
